@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Export</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.3.0/github-markdown.min.css">
+  <style>
+      body {
+          background-color: #ffffff;
+          color: #24292e;
+      }
+      .markdown-body {
+          box-sizing: border-box;
+          min-width: 200px;
+          max-width: 980px;
+          margin: 0 auto;
+          padding: 45px;
+          background-color: #ffffff;
+          color: #24292e;
+      }
+
+      /* Syntax Highlighting */
+      .hljs-doctag, .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ { color: #d73a49; }
+      .hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ { color: #6f42c1; }
+      .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-variable, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id { color: #005cc5; }
+      .hljs-regexp, .hljs-string, .hljs-meta .hljs-string { color: #032f62; }
+      .hljs-built_in, .hljs-symbol { color: #e36209; }
+      .hljs-comment, .hljs-code, .hljs-formula { color: #6a737d; }
+      .hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo { color: #22863a; }
+      .hljs-subst { color: #24292e; }
+      .hljs-section { color: #005cc5; font-weight: bold; }
+      .hljs-bullet { color: #005cc5; }
+      .hljs-emphasis { font-style: italic; }
+      .hljs-strong { font-weight: bold; }
+      .hljs-addition { color: #22863a; background-color: #f0fff4; }
+      .hljs-deletion { color: #b31d28; background-color: #ffeef0; }
+
+      .markdown-alert {
+          padding: 0.5rem 1rem;
+          margin-bottom: 16px;
+          border-left: 0.25em solid;
+          border-radius: 0.375rem;
+      }
+      .markdown-alert > :last-child {
+          margin-bottom: 0;
+      }
+      .markdown-alert-title {
+          margin: 0 0 8px;
+          font-weight: 600;
+          line-height: 1.25;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .markdown-alert-icon {
+          display: inline-flex;
+          width: 16px;
+          height: 16px;
+      }
+      .markdown-alert-icon svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
+      }
+      .markdown-alert-note { color: #0969da; border-left-color: #0969da; background-color: #ddf4ff; }
+      .markdown-alert-tip { color: #1a7f37; border-left-color: #1a7f37; background-color: #dafbe1; }
+      .markdown-alert-important { color: #8250df; border-left-color: #8250df; background-color: #fbefff; }
+      .markdown-alert-warning { color: #9a6700; border-left-color: #9a6700; background-color: #fff8c5; }
+      .markdown-alert-caution { color: #cf222e; border-left-color: #cf222e; background-color: #ffebe9; }
+      .markdown-alert > *:not(.markdown-alert-title) { color: #24292e; }
+
+      @media (max-width: 767px) {
+          .markdown-body {
+              padding: 15px;
+          }
+      }
+  </style>
+</head>
+<body>
+  <article class="markdown-body">
+      <p>Here's an honest answer — yes, there's a lot left that the 20-week roadmap intentionally doesn't cover, because it's scoped to get you <em>hired</em> as an AI engineer, not to make you an expert in everything.</p>
+<hr>
+<h2>What the roadmap covers well ✅</h2>
+<p>The 20 weeks gives you a solid, hireable foundation in:</p>
+<ul>
+<li>ML fundamentals, transformers, and how LLMs work</li>
+<li>Prompt engineering with scientific measurement</li>
+<li>RAG systems end-to-end with evaluation</li>
+<li>Agent architectures (ReAct, memory, LangGraph, multi-agent, MCP)</li>
+<li>Production deployment basics</li>
+</ul>
+<hr>
+<h2>What's missing — by category</h2>
+<h3>🔬 Model Training &amp; Fine-tuning</h3>
+<p>The roadmap only uses pre-trained models via API. You haven't touched:</p>
+<ul>
+<li><strong>Fine-tuning</strong> — LoRA, QLoRA, full fine-tuning on custom datasets</li>
+<li><strong>SFT / RLHF / DPO</strong> — how instruction-following is actually trained into models</li>
+<li><strong>Hugging Face Transformers</strong> — loading, training, pushing your own models</li>
+<li><strong>Model evaluation</strong> — MMLU, HeliaSwag, custom benchmarks</li>
+<li><strong>Inference optimization</strong> — quantization (GGUF, AWQ), vLLM, TensorRT</li>
+</ul>
+<p>This is a big gap if your target company trains or fine-tunes models.</p>
+<h3>🏗️ Advanced RAG</h3>
+<p>The roadmap covers the core pipeline. Missing:</p>
+<ul>
+<li><strong>GraphRAG</strong> — Microsoft's graph-based retrieval, better for multi-hop reasoning</li>
+<li><strong>HyDE</strong> (Hypothetical Document Embeddings) — generate fake answer first, then search</li>
+<li><strong>Multi-vector retrieval</strong> — parent-child chunking, summary + full doc indexing</li>
+<li><strong>Agentic RAG</strong> — agent decides when/what to retrieve, not a fixed pipeline</li>
+<li><strong>Colpali</strong> — vision-based RAG for PDFs with figures and tables</li>
+</ul>
+<h3>🤖 Advanced Agent Topics</h3>
+<ul>
+<li><strong>Long-horizon planning</strong> — agents that plan over 50+ steps reliably</li>
+<li><strong>Mixture of Agents</strong> — routing between specialized models</li>
+<li><strong>OpenAI Swarm / AutoGen v2</strong> — alternative multi-agent frameworks</li>
+<li><strong>Agent benchmarks</strong> — SWE-bench, WebArena, GAIA — how to measure agent capability properly</li>
+<li><strong>Function calling vs tool use</strong> — OpenAI's model vs Anthropic's, tradeoffs</li>
+</ul>
+<h3>☁️ MLOps &amp; Infrastructure</h3>
+<ul>
+<li><strong>Model serving</strong> — vLLM, Triton, BentoML, Modal for GPU inference</li>
+<li><strong>Vector DB at scale</strong> — Pinecone, Weaviate, Qdrant internals, indexing strategies at 100M+ docs</li>
+<li><strong>Feature stores</strong> — connecting ML pipelines to production data</li>
+<li><strong>Experiment tracking</strong> — MLflow, Weights &amp; Biases beyond basic logging</li>
+<li><strong>CI/CD for ML</strong> — DVC, data versioning, model registry workflows</li>
+</ul>
+<h3>🔐 AI Safety &amp; Alignment (growing area)</h3>
+<ul>
+<li><strong>Red-teaming LLMs</strong> — systematic adversarial testing</li>
+<li><strong>Constitutional AI</strong> — how Claude is trained to be helpful/harmless</li>
+<li><strong>Interpretability basics</strong> — attention visualization, probing classifiers</li>
+<li><strong>Bias evaluation</strong> — measuring and mitigating demographic bias in model outputs</li>
+</ul>
+<h3>📊 Data Engineering for AI</h3>
+<ul>
+<li><strong>Dataset curation</strong> — how to build high-quality training datasets</li>
+<li><strong>Synthetic data generation</strong> — using LLMs to generate training data</li>
+<li><strong>Data flywheel</strong> — using production traffic to improve your model</li>
+<li><strong>Annotation workflows</strong> — Label Studio, human-in-the-loop pipelines at scale</li>
+</ul>
+<h3>🎨 Multimodal</h3>
+<ul>
+<li><strong>Vision-language models</strong> — Claude Vision, GPT-4V, LLaVA</li>
+<li><strong>Image/video generation</strong> — Stable Diffusion, ComfyUI pipelines</li>
+<li><strong>Audio models</strong> — Whisper (transcription), TTS, voice agents</li>
+<li><strong>Multimodal RAG</strong> — retrieving over images, tables, charts</li>
+</ul>
+<h3>💡 Emerging (2025 frontier)</h3>
+<ul>
+<li><strong>Reasoning models</strong> — o1/o3-style extended thinking, how to use them differently</li>
+<li><strong>Computer use / browser agents</strong> — Claude Computer Use, real-world automation</li>
+<li><strong>Long context techniques</strong> — effective use of 1M+ context windows, needle-in-a-haystack eval</li>
+<li><strong>Structured generation</strong> — constrained decoding with Outlines/Guidance</li>
+<li><strong>Memory systems at scale</strong> — Mem0, MemoryOS, cognitive architectures</li>
+</ul>
+<hr>
+<h2>Honest prioritization</h2>
+<p>If you're interviewing for <strong>AI Engineer / LLM Engineer</strong> roles at most companies right now, the 20-week roadmap covers ~80% of what gets tested. The gaps that matter most to close first, in order:</p>
+<ol>
+<li><strong>Fine-tuning with LoRA/QLoRA</strong> — comes up in ~40% of AI engineer interviews</li>
+<li><strong>vLLM or model serving</strong> — if you want infra-leaning roles</li>
+<li><strong>Advanced RAG patterns</strong> (HyDE, parent-child chunking) — quick wins on top of what you know</li>
+<li><strong>Reasoning models</strong> (o1/o3 usage patterns) — emerging but already in interviews</li>
+</ol>
+<p>Everything else is specialization — pick based on where you want to go (research, infra, application, safety).</p>
+<p>The roadmap is genuinely complete for getting hired. These are the things that take you from <em>hired</em> to <em>excellent</em> over the next year on the job.</p>
+
+  </article>
+</body>
+</html>

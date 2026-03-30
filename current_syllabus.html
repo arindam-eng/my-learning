@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Export</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.3.0/github-markdown.min.css">
+  <style>
+      body {
+          background-color: #ffffff;
+          color: #24292e;
+      }
+      .markdown-body {
+          box-sizing: border-box;
+          min-width: 200px;
+          max-width: 980px;
+          margin: 0 auto;
+          padding: 45px;
+          background-color: #ffffff;
+          color: #24292e;
+      }
+
+      /* Syntax Highlighting */
+      .hljs-doctag, .hljs-keyword, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-variable.language_ { color: #d73a49; }
+      .hljs-title, .hljs-title.class_, .hljs-title.class_.inherited__, .hljs-title.function_ { color: #6f42c1; }
+      .hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-variable, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id { color: #005cc5; }
+      .hljs-regexp, .hljs-string, .hljs-meta .hljs-string { color: #032f62; }
+      .hljs-built_in, .hljs-symbol { color: #e36209; }
+      .hljs-comment, .hljs-code, .hljs-formula { color: #6a737d; }
+      .hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo { color: #22863a; }
+      .hljs-subst { color: #24292e; }
+      .hljs-section { color: #005cc5; font-weight: bold; }
+      .hljs-bullet { color: #005cc5; }
+      .hljs-emphasis { font-style: italic; }
+      .hljs-strong { font-weight: bold; }
+      .hljs-addition { color: #22863a; background-color: #f0fff4; }
+      .hljs-deletion { color: #b31d28; background-color: #ffeef0; }
+
+      .markdown-alert {
+          padding: 0.5rem 1rem;
+          margin-bottom: 16px;
+          border-left: 0.25em solid;
+          border-radius: 0.375rem;
+      }
+      .markdown-alert > :last-child {
+          margin-bottom: 0;
+      }
+      .markdown-alert-title {
+          margin: 0 0 8px;
+          font-weight: 600;
+          line-height: 1.25;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .markdown-alert-icon {
+          display: inline-flex;
+          width: 16px;
+          height: 16px;
+      }
+      .markdown-alert-icon svg {
+          width: 16px;
+          height: 16px;
+          fill: currentColor;
+      }
+      .markdown-alert-note { color: #0969da; border-left-color: #0969da; background-color: #ddf4ff; }
+      .markdown-alert-tip { color: #1a7f37; border-left-color: #1a7f37; background-color: #dafbe1; }
+      .markdown-alert-important { color: #8250df; border-left-color: #8250df; background-color: #fbefff; }
+      .markdown-alert-warning { color: #9a6700; border-left-color: #9a6700; background-color: #fff8c5; }
+      .markdown-alert-caution { color: #cf222e; border-left-color: #cf222e; background-color: #ffebe9; }
+      .markdown-alert > *:not(.markdown-alert-title) { color: #24292e; }
+
+      @media (max-width: 767px) {
+          .markdown-body {
+              padding: 15px;
+          }
+      }
+  </style>
+</head>
+<body>
+  <article class="markdown-body">
+      <h1>🤖 AI Engineer Roadmap — Progress Tracker</h1>
+<blockquote>
+<p><strong>Profile:</strong> Software Engineer switching to AI | Goal: Get hired as AI Engineer
+<strong>Realistic Timeline:</strong> 7–8 months | <strong>Started:</strong> ___________
+<strong>Target Role:</strong> AI Engineer (LLMs · Agents · Agentic AI)</p>
+</blockquote>
+<hr>
+<h2>📊 Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Topic</th>
+<th>Duration</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase 1</td>
+<td>ML Foundations (fast-track)</td>
+<td>Weeks 1–2</td>
+<td>⬜ Not started</td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td>LLMs &amp; Prompt Engineering</td>
+<td>Weeks 3–8</td>
+<td>⬜ Not started</td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td>AI Agents &amp; Agentic Systems</td>
+<td>Weeks 9–16</td>
+<td>⬜ Not started</td>
+</tr>
+<tr>
+<td>Phase 4</td>
+<td>Production AI + Portfolio</td>
+<td>Weeks 17–20</td>
+<td>⬜ Not started</td>
+</tr>
+</tbody></table>
+<p><strong>Status key:</strong> ⬜ Not started · 🔄 In progress · ✅ Done · ⏸ Paused</p>
+<hr>
+<h2>🚀 This Week's Focus</h2>
+<blockquote>
+<p>Update every Monday</p>
+</blockquote>
+<ul>
+<li><strong>Current week:</strong> ___</li>
+<li><strong>Main goal:</strong> ___________________________________________</li>
+<li><strong>Project I'm building:</strong> ___________________________________________</li>
+<li><strong>Blocker / question:</strong> ___________________________________________</li>
+</ul>
+<hr>
+<hr>
+<h1>PHASE 1 — ML Foundations (Fast-track)</h1>
+<blockquote>
+<p>You're a software engineer — skip Python basics entirely. 2 weeks max.</p>
+</blockquote>
+<p><strong>Phase goal:</strong> Understand gradient descent, loss functions, and classical ML well enough to reason about LLM training.</p>
+<h2>Week 1 — ML Math &amp; Classical ML</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Vectors, matrices, dot products (NumPy)</li>
+<li><input type="checkbox" disabled=""> Derivatives, chain rule, partial derivatives</li>
+<li><input type="checkbox" disabled=""> Gradient descent — implement from scratch on a 2D surface</li>
+<li><input type="checkbox" disabled=""> Probability basics: distributions, Bayes theorem</li>
+<li><input type="checkbox" disabled=""> Linear regression, logistic regression (sklearn)</li>
+<li><input type="checkbox" disabled=""> Decision trees, random forests</li>
+<li><input type="checkbox" disabled=""> Train/val/test splits, overfitting, regularisation</li>
+</ul>
+<h3>Daily Schedule</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Task</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mon–Fri</td>
+<td>1h theory (video/reading) + 2h coding</td>
+</tr>
+<tr>
+<td>Sat</td>
+<td>Build the week project</td>
+</tr>
+<tr>
+<td>Sun</td>
+<td>Review gaps, push to GitHub</td>
+</tr>
+</tbody></table>
+<h3>Week 1 Project</h3>
+<p><strong>Gradient descent visualiser</strong> — implement gradient descent in pure NumPy on a 2D loss surface. Plot the steps. Push to GitHub.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Core logic working</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+<li><input type="checkbox" disabled=""> README written</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> 3Blue1Brown — Essence of Calculus (YouTube)</li>
+<li><input type="checkbox" disabled=""> Khan Academy — Linear Algebra</li>
+<li><input type="checkbox" disabled=""> fast.ai Practical ML (skim)</li>
+</ul>
+<hr>
+<h2>Week 2 — Evaluation, Pipelines &amp; Deep Learning Intro</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Cross-validation, precision/recall/F1/AUC</li>
+<li><input type="checkbox" disabled=""> sklearn Pipeline with preprocessing</li>
+<li><input type="checkbox" disabled=""> Hyperparameter tuning (GridSearchCV)</li>
+<li><input type="checkbox" disabled=""> Pandas advanced — groupby, merge, pivot</li>
+<li><input type="checkbox" disabled=""> Neural network basics — forward pass, backprop, activation functions</li>
+<li><input type="checkbox" disabled=""> PyTorch tensors &amp; autograd</li>
+</ul>
+<h3>Week 2 Project</h3>
+<p><strong>Kaggle classifier</strong> — pick any beginner Kaggle dataset. Build a full sklearn pipeline with cross-validation and a tuned random forest. Score on the leaderboard.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> sklearn pipeline built</li>
+<li><input type="checkbox" disabled=""> Eval metrics computed</li>
+<li><input type="checkbox" disabled=""> Submitted to Kaggle</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________
+<strong>Kaggle score:</strong> ___________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Hands-On Machine Learning (Aurélien Géron) — ch 1–7</li>
+<li><input type="checkbox" disabled=""> Kaggle Learn — Intro to ML</li>
+</ul>
+<h3>Phase 1 Complete? ✅</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Understand gradient descent intuitively</li>
+<li><input type="checkbox" disabled=""> Can build an sklearn pipeline from scratch</li>
+<li><input type="checkbox" disabled=""> Know what overfitting looks like and how to fix it</li>
+<li><input type="checkbox" disabled=""> 2 projects on GitHub</li>
+</ul>
+<hr>
+<hr>
+<h1>PHASE 2 — LLMs &amp; Prompt Engineering</h1>
+<blockquote>
+<p>Weeks 3–8 · 6 weeks · 6 projects</p>
+</blockquote>
+<p><strong>Phase goal:</strong> Call LLMs confidently, engineer prompts that are reliable and measurable, build a RAG system with evaluation.</p>
+<hr>
+<h2>Week 3 — LLM Fundamentals</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Transformer architecture — attention, positional encoding, layers</li>
+<li><input type="checkbox" disabled=""> Tokenisation — BPE, how tokens map to text, why numbers are expensive</li>
+<li><input type="checkbox" disabled=""> Context windows — limits per model, cost implications</li>
+<li><input type="checkbox" disabled=""> Temperature, top_p, max_tokens — what they actually do</li>
+<li><input type="checkbox" disabled=""> System vs user vs assistant roles</li>
+<li><input type="checkbox" disabled=""> Streaming responses</li>
+<li><input type="checkbox" disabled=""> Token counting &amp; cost estimation</li>
+</ul>
+<h3>Project 1 — LLM API Explorer</h3>
+<p>Call Claude, GPT-4, and Gemini with the same 10 prompts. Log: response, latency, token count, cost. Output a comparison CSV.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Claude API integrated</li>
+<li><input type="checkbox" disabled=""> OpenAI API integrated</li>
+<li><input type="checkbox" disabled=""> Gemini API integrated</li>
+<li><input type="checkbox" disabled=""> Comparison CSV generated</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub with README</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Project 2 — Tokenisation Visualiser</h3>
+<p>Streamlit app: paste any text, see each token highlighted in colour with token ID. Shows count, cost estimate, flags expensive patterns.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> tiktoken / tokenizer integrated</li>
+<li><input type="checkbox" disabled=""> Colour highlighting working</li>
+<li><input type="checkbox" disabled=""> Cost estimate calculated</li>
+<li><input type="checkbox" disabled=""> Deployed to Streamlit Cloud</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________
+<strong>Live demo:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Andrej Karpathy — Intro to Large Language Models (YouTube, 1h)</li>
+<li><input type="checkbox" disabled=""> Anthropic API docs</li>
+<li><input type="checkbox" disabled=""> OpenAI tokenizer playground</li>
+</ul>
+<hr>
+<h2>Week 4 — Prompt Engineering Fundamentals</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Zero-shot vs few-shot vs chain-of-thought</li>
+<li><input type="checkbox" disabled=""> System prompt design principles</li>
+<li><input type="checkbox" disabled=""> XML / JSON structured outputs</li>
+<li><input type="checkbox" disabled=""> Prompt prefilling trick (Claude)</li>
+<li><input type="checkbox" disabled=""> Hallucination causes and mitigation</li>
+<li><input type="checkbox" disabled=""> Role prompting and persona design</li>
+<li><input type="checkbox" disabled=""> Negative examples in prompts</li>
+</ul>
+<h3>Project 3 — Structured Output Engine</h3>
+<p>Extract structured Pydantic models from unstructured text (news articles, job postings, receipts). Handle: JSON refusals, extra text, nested objects, retry on validation failure.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Pydantic schemas defined</li>
+<li><input type="checkbox" disabled=""> Extraction working for 3 document types</li>
+<li><input type="checkbox" disabled=""> Retry logic implemented</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Anthropic Prompt Engineering docs (docs.anthropic.com)</li>
+<li><input type="checkbox" disabled=""> instructor library docs</li>
+<li><input type="checkbox" disabled=""> LearnPrompting.org</li>
+</ul>
+<hr>
+<h2>Week 5–6 — Prompt Engineering — Measurement</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LLM-as-judge pattern</li>
+<li><input type="checkbox" disabled=""> Designing eval sets with ground truth</li>
+<li><input type="checkbox" disabled=""> A/B testing prompt variants systematically</li>
+<li><input type="checkbox" disabled=""> Async parallel LLM calls (asyncio)</li>
+<li><input type="checkbox" disabled=""> Prompt chaining — when and how</li>
+<li><input type="checkbox" disabled=""> Self-critique and refinement loops</li>
+<li><input type="checkbox" disabled=""> Statistical significance in evals</li>
+</ul>
+<h3>Project 4 — Prompt A/B Testing Framework</h3>
+<p>Test 5 prompt variants on a task (e.g. summarise support tickets). Run all 5 on 20 inputs. Score with LLM judge (1–5 on accuracy, conciseness, tone). Plot leaderboard.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> 5 prompt variants written</li>
+<li><input type="checkbox" disabled=""> 20 test cases with ground truth</li>
+<li><input type="checkbox" disabled=""> LLM-as-judge scoring implemented</li>
+<li><input type="checkbox" disabled=""> Leaderboard chart generated</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________
+<strong>Best prompt score:</strong> _____ / 5</p>
+<h3>Project 5 — Multi-step Prompt Pipeline</h3>
+<p>Chain 4 specialised prompts for a complex task: extract requirements → research → draft → critique &amp; rewrite. Each step outputs structured data fed to the next.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Step 1 (extraction) working</li>
+<li><input type="checkbox" disabled=""> Step 2 (research) working</li>
+<li><input type="checkbox" disabled=""> Step 3 (draft) working</li>
+<li><input type="checkbox" disabled=""> Step 4 (critique + rewrite) working</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Prompt Engineering Guide (promptingguide.ai)</li>
+<li><input type="checkbox" disabled=""> Anthropic cookbook (GitHub)</li>
+</ul>
+<hr>
+<h2>Week 7–8 — RAG Systems</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Vector embeddings — what they are, how to generate them</li>
+<li><input type="checkbox" disabled=""> Cosine similarity and nearest neighbour search</li>
+<li><input type="checkbox" disabled=""> Chunking strategies: fixed, recursive, semantic</li>
+<li><input type="checkbox" disabled=""> Vector databases: ChromaDB, Pinecone, Weaviate</li>
+<li><input type="checkbox" disabled=""> Hybrid search: BM25 + vector</li>
+<li><input type="checkbox" disabled=""> Reranking with cross-encoder / Cohere</li>
+<li><input type="checkbox" disabled=""> RAG evaluation: faithfulness, relevance, context recall</li>
+<li><input type="checkbox" disabled=""> Context window management in RAG</li>
+</ul>
+<h3>Project 6 — Production RAG System</h3>
+<p>Ingest 50+ pages of docs. Implement: semantic search (embeddings), BM25 keyword search, reranker. Expose as FastAPI endpoint. Every answer cites source chunks. Measure RAGAS scores.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Document ingestion pipeline built</li>
+<li><input type="checkbox" disabled=""> ChromaDB vector store set up</li>
+<li><input type="checkbox" disabled=""> BM25 keyword search added</li>
+<li><input type="checkbox" disabled=""> Reranker integrated</li>
+<li><input type="checkbox" disabled=""> FastAPI endpoint live</li>
+<li><input type="checkbox" disabled=""> RAGAS evaluation run</li>
+<li><input type="checkbox" disabled=""> Deployed (Hugging Face Spaces / Railway)</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub with eval scores in README</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________
+<strong>Live demo:</strong> ___________________________________________
+<strong>RAGAS Faithfulness score:</strong> _____
+<strong>RAGAS Answer Relevance score:</strong> _____
+<strong>RAGAS Context Recall score:</strong> _____</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LangChain docs — RAG section</li>
+<li><input type="checkbox" disabled=""> RAGAS documentation</li>
+<li><input type="checkbox" disabled=""> Cohere reranker docs</li>
+</ul>
+<h3>Phase 2 Complete? ✅</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Can call 3 LLM APIs confidently</li>
+<li><input type="checkbox" disabled=""> Can design, test, and measure prompts scientifically</li>
+<li><input type="checkbox" disabled=""> Have a deployed RAG app with RAGAS scores</li>
+<li><input type="checkbox" disabled=""> 6 projects on GitHub</li>
+<li><input type="checkbox" disabled=""> At least 1 blog post drafted about what you built</li>
+</ul>
+<hr>
+<hr>
+<h1>PHASE 3 — AI Agents &amp; Agentic Systems</h1>
+<blockquote>
+<p>Weeks 9–16 · 8 weeks · 6 projects</p>
+</blockquote>
+<p><strong>Phase goal:</strong> Build agents from scratch, multi-agent systems, and MCP-connected tools. Make non-deterministic systems reliable.</p>
+<hr>
+<h2>Week 9 — ReAct Agent From Scratch</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> ReAct pattern: Thought → Action → Observation loop</li>
+<li><input type="checkbox" disabled=""> Parsing LLM output to detect tool calls</li>
+<li><input type="checkbox" disabled=""> Tool definitions and dispatch</li>
+<li><input type="checkbox" disabled=""> Stopping conditions and max step limits</li>
+<li><input type="checkbox" disabled=""> Error handling in agent loops</li>
+<li><input type="checkbox" disabled=""> Logging agent reasoning traces</li>
+</ul>
+<h3>Project 7 — ReAct Agent (Pure Python, No Framework)</h3>
+<p>Build the loop manually. Tools: calculator + web search. Test: "How many seconds has Elon Musk been alive?" — agent must search for birth date, then compute.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Tool parsing logic working</li>
+<li><input type="checkbox" disabled=""> Calculator tool implemented</li>
+<li><input type="checkbox" disabled=""> Search tool implemented</li>
+<li><input type="checkbox" disabled=""> Loop with stopping condition</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Original ReAct paper (arxiv)</li>
+<li><input type="checkbox" disabled=""> Anthropic tool use docs</li>
+</ul>
+<hr>
+<h2>Week 10 — RAG Agent With Memory</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Short-term memory (conversation history)</li>
+<li><input type="checkbox" disabled=""> Long-term memory (vector store)</li>
+<li><input type="checkbox" disabled=""> Episodic memory patterns</li>
+<li><input type="checkbox" disabled=""> Context window management across turns</li>
+<li><input type="checkbox" disabled=""> Memory consolidation strategies</li>
+</ul>
+<h3>Project 8 — RAG Agent With Memory</h3>
+<p>Feed it your own PDF notes or a book. Ask multi-turn questions connecting facts across pages. Agent must cite sources and remember what it found in prior turns.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Document ingestion working</li>
+<li><input type="checkbox" disabled=""> Short-term memory (conversation) implemented</li>
+<li><input type="checkbox" disabled=""> Long-term memory (vector) implemented</li>
+<li><input type="checkbox" disabled=""> Multi-turn Q&amp;A working</li>
+<li><input type="checkbox" disabled=""> Source citations included</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<hr>
+<h2>Week 11 — LangGraph &amp; Agent Frameworks</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LangGraph: nodes, edges, state, conditional routing</li>
+<li><input type="checkbox" disabled=""> Difference from LangChain chains</li>
+<li><input type="checkbox" disabled=""> State management in long-running agents</li>
+<li><input type="checkbox" disabled=""> Human-in-the-loop checkpoints</li>
+<li><input type="checkbox" disabled=""> Agent tracing with LangSmith</li>
+</ul>
+<h3>Project 9 — Autonomous Code Reviewer</h3>
+<p>Reads a GitHub repo, identifies issues, suggests improvements with diffs. Tools: file reader, shell executor, GitHub API.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> GitHub repo cloning tool built</li>
+<li><input type="checkbox" disabled=""> File reading &amp; parsing working</li>
+<li><input type="checkbox" disabled=""> Code analysis logic implemented</li>
+<li><input type="checkbox" disabled=""> Diff/suggestion output formatted</li>
+<li><input type="checkbox" disabled=""> LangSmith tracing added</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LangGraph documentation</li>
+<li><input type="checkbox" disabled=""> LangSmith docs</li>
+</ul>
+<hr>
+<h2>Week 12–13 — Multi-Agent Systems</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Orchestrator + worker pattern</li>
+<li><input type="checkbox" disabled=""> Agent message passing and shared state</li>
+<li><input type="checkbox" disabled=""> Role-based system prompts</li>
+<li><input type="checkbox" disabled=""> CrewAI vs LangGraph for multi-agent</li>
+<li><input type="checkbox" disabled=""> Parallel vs sequential agent execution</li>
+<li><input type="checkbox" disabled=""> Agent communication protocols</li>
+</ul>
+<h3>Project 10 — Multi-Agent Content Team</h3>
+<p>4 agents: Researcher → Writer → Editor → Fact-checker. Orchestrator assigns tasks. Agents pass work via shared state. Output must pass fact-checker before delivery.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Orchestrator logic built</li>
+<li><input type="checkbox" disabled=""> Researcher agent implemented</li>
+<li><input type="checkbox" disabled=""> Writer agent implemented</li>
+<li><input type="checkbox" disabled=""> Editor agent implemented</li>
+<li><input type="checkbox" disabled=""> Fact-checker agent implemented</li>
+<li><input type="checkbox" disabled=""> Agent conversation log visualised</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Project 11 — Self-Healing Data Pipeline Agent</h3>
+<p>Simulate a broken ETL pipeline. Agent reads error logs, hypothesises cause, attempts fix, verifies with test query. Escalates if can't fix in 3 attempts.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> Broken pipeline simulation built</li>
+<li><input type="checkbox" disabled=""> Log reading tool implemented</li>
+<li><input type="checkbox" disabled=""> Hypothesis + fix loop working</li>
+<li><input type="checkbox" disabled=""> Escalation logic added</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> CrewAI documentation</li>
+<li><input type="checkbox" disabled=""> AutoGen paper (arxiv)</li>
+</ul>
+<hr>
+<h2>Week 14–15 — MCP &amp; Production Agents</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Model Context Protocol (MCP) — what it is and why it matters</li>
+<li><input type="checkbox" disabled=""> MCP server setup and tool registration</li>
+<li><input type="checkbox" disabled=""> Tool discovery at runtime</li>
+<li><input type="checkbox" disabled=""> Agent-to-agent (A2A) communication</li>
+<li><input type="checkbox" disabled=""> Auth and security for agent tools</li>
+<li><input type="checkbox" disabled=""> Sandboxed code execution (Docker)</li>
+</ul>
+<h3>Project 12 — MCP-Powered Agent Hub</h3>
+<p>Agent connects to real tools via MCP: Slack, GitHub, calendar, Notion. Takes a single natural language command and coordinates across services.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> MCP Python SDK set up</li>
+<li><input type="checkbox" disabled=""> At least 2 MCP tool servers connected</li>
+<li><input type="checkbox" disabled=""> Natural language → multi-tool routing working</li>
+<li><input type="checkbox" disabled=""> Auth handling implemented</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Resources</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Anthropic MCP documentation (modelcontextprotocol.io)</li>
+<li><input type="checkbox" disabled=""> MCP Python SDK</li>
+</ul>
+<hr>
+<h2>Week 16 — Agent Evaluation Framework</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Evals design for agents (trajectory vs outcome)</li>
+<li><input type="checkbox" disabled=""> LLM-as-judge for agent outputs</li>
+<li><input type="checkbox" disabled=""> Regression testing for agents</li>
+<li><input type="checkbox" disabled=""> Safety evaluation: hallucinated tool calls, prompt injection</li>
+<li><input type="checkbox" disabled=""> Observability: tracing, latency, cost per agent run</li>
+</ul>
+<h3>Project 13 — Agent Evaluation Harness</h3>
+<p>Take any previous agent project. 50+ test cases with ground truth. Score: final answer correctness, tool call efficiency, safety. Generate a score dashboard.</p>
+<ul>
+<li><input type="checkbox" disabled=""> Project started</li>
+<li><input type="checkbox" disabled=""> 50+ test cases written</li>
+<li><input type="checkbox" disabled=""> Correctness scoring implemented</li>
+<li><input type="checkbox" disabled=""> Tool efficiency metric implemented</li>
+<li><input type="checkbox" disabled=""> Safety checks implemented</li>
+<li><input type="checkbox" disabled=""> Score dashboard built</li>
+<li><input type="checkbox" disabled=""> Pushed to GitHub</li>
+</ul>
+<p><strong>GitHub link:</strong> ___________________________________________</p>
+<h3>Phase 3 Complete? ✅</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Built a ReAct agent without a framework</li>
+<li><input type="checkbox" disabled=""> Built a multi-agent system with 3+ agents</li>
+<li><input type="checkbox" disabled=""> Connected an agent to real external tools via MCP</li>
+<li><input type="checkbox" disabled=""> Have an eval harness for at least one agent project</li>
+<li><input type="checkbox" disabled=""> LangSmith tracing set up on main projects</li>
+</ul>
+<hr>
+<hr>
+<h1>PHASE 4 — Production AI + Portfolio Polish</h1>
+<blockquote>
+<p>Weeks 17–20 · Run alongside job applications</p>
+</blockquote>
+<p><strong>Phase goal:</strong> Make your projects production-grade, polish your portfolio, and start applying.</p>
+<hr>
+<h2>Week 17–18 — Production AI Engineering</h2>
+<h3>Topics</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LLMOps: model versioning, deployment, monitoring</li>
+<li><input type="checkbox" disabled=""> Observability: LangSmith, Phoenix, tracing</li>
+<li><input type="checkbox" disabled=""> Cost monitoring and optimisation</li>
+<li><input type="checkbox" disabled=""> Async queues and streaming at scale</li>
+<li><input type="checkbox" disabled=""> Rate limiting and retry strategies</li>
+<li><input type="checkbox" disabled=""> Output validation and guardrails</li>
+<li><input type="checkbox" disabled=""> Prompt injection defence</li>
+<li><input type="checkbox" disabled=""> A/B testing prompts in production</li>
+</ul>
+<h3>Checklist</h3>
+<ul>
+<li><input type="checkbox" disabled=""> LangSmith tracing on all 3 portfolio projects</li>
+<li><input type="checkbox" disabled=""> Cost dashboard built for main RAG app</li>
+<li><input type="checkbox" disabled=""> Guardrails / output validation added</li>
+<li><input type="checkbox" disabled=""> Docker Compose setup for main project</li>
+<li><input type="checkbox" disabled=""> Error monitoring (Sentry or similar) added</li>
+</ul>
+<hr>
+<h2>Week 19–20 — Portfolio Polish</h2>
+<h3>GitHub Profile</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Professional headshot and real name</li>
+<li><input type="checkbox" disabled=""> Bio says "AI Engineer" + key skills (LLMs, RAG, Agents, Python)</li>
+<li><input type="checkbox" disabled=""> 6 repos pinned — only AI/ML projects</li>
+<li><input type="checkbox" disabled=""> Every pinned repo has a live demo link OR video</li>
+<li><input type="checkbox" disabled=""> Topic tags on all repos: <code>llm</code> <code>rag</code> <code>langchain</code> <code>agents</code> <code>python</code></li>
+<li><input type="checkbox" disabled=""> Commit history tells an iterative story (no single "initial commit")</li>
+<li><input type="checkbox" disabled=""> Every README has: description, demo link, architecture diagram, eval scores, "what didn't work" section</li>
+<li><input type="checkbox" disabled=""> All projects runnable in 2 commands (<code>pip install</code> + <code>python main.py</code>)</li>
+</ul>
+<h3>The 3 Must-Have Portfolio Projects (final review)</h3>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Live Demo</th>
+<th>Eval Scores</th>
+<th>Video</th>
+<th>README</th>
+<th>GitHub</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAG application</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>___</td>
+</tr>
+<tr>
+<td>AI agent with tools</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>___</td>
+</tr>
+<tr>
+<td>Prompt benchmark</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>⬜</td>
+<td>___</td>
+</tr>
+</tbody></table>
+<h3>LinkedIn</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Headline says "AI Engineer" not just "Software Engineer"</li>
+<li><input type="checkbox" disabled=""> Projects section links to 3 best GitHub repos</li>
+<li><input type="checkbox" disabled=""> Posting 1 technical update per week</li>
+<li><input type="checkbox" disabled=""> Connected with 5+ AI engineers at target companies</li>
+</ul>
+<h3>Content</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Blog post 1 published: ___________________________________________</li>
+<li><input type="checkbox" disabled=""> Blog post 2 published: ___________________________________________</li>
+<li><input type="checkbox" disabled=""> Model or dataset published to Hugging Face Hub</li>
+<li><input type="checkbox" disabled=""> Active in one AI community (Discord / Slack / Reddit)</li>
+</ul>
+<h3>Interview Prep</h3>
+<ul>
+<li><input type="checkbox" disabled=""> Can explain every project in 2 minutes with metrics</li>
+<li><input type="checkbox" disabled=""> Prepared "what failed and what I'd do differently" for each project</li>
+<li><input type="checkbox" disabled=""> System design prep: "design a RAG chatbot for a bank"</li>
+<li><input type="checkbox" disabled=""> Common AI engineer interview questions practiced</li>
+<li><input type="checkbox" disabled=""> LLM internals: can explain attention, tokenisation, context windows clearly</li>
+</ul>
+<hr>
+<hr>
+<h1>📚 Master Resource List</h1>
+<h2>Courses &amp; Videos</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Topic</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Andrej Karpathy — Intro to LLMs (YouTube)</td>
+<td>LLM fundamentals</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Andrej Karpathy — micrograd</td>
+<td>Backprop from scratch</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Andrej Karpathy — makemore</td>
+<td>Character-level LM</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>3Blue1Brown — Neural Networks series</td>
+<td>Deep learning intuition</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>fast.ai Part 1</td>
+<td>Practical DL / PyTorch</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Hugging Face NLP Course</td>
+<td>Transformers / fine-tuning</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>DeepLearning.AI — LangChain for LLM App Dev</td>
+<td>LangChain basics</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>DeepLearning.AI — AI Agents in LangGraph</td>
+<td>LangGraph agents</td>
+<td>⬜</td>
+</tr>
+</tbody></table>
+<h2>Documentation (bookmark these)</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Anthropic API docs</td>
+<td>docs.anthropic.com</td>
+</tr>
+<tr>
+<td>Anthropic Prompt Engineering</td>
+<td>docs.anthropic.com/en/docs/build-with-claude/prompt-engineering</td>
+</tr>
+<tr>
+<td>Anthropic MCP</td>
+<td>modelcontextprotocol.io</td>
+</tr>
+<tr>
+<td>LangChain docs</td>
+<td>python.langchain.com</td>
+</tr>
+<tr>
+<td>LangGraph docs</td>
+<td>langchain-ai.github.io/langgraph</td>
+</tr>
+<tr>
+<td>Hugging Face docs</td>
+<td>huggingface.co/docs</td>
+</tr>
+<tr>
+<td>RAGAS docs</td>
+<td>docs.ragas.io</td>
+</tr>
+<tr>
+<td>LangSmith docs</td>
+<td>docs.smith.langchain.com</td>
+</tr>
+</tbody></table>
+<h2>Books</h2>
+<table>
+<thead>
+<tr>
+<th>Book</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hands-On Machine Learning (Géron) — ch 1–10</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Fluent Python (Ramalho) — ch 1–6</td>
+<td>⬜</td>
+</tr>
+<tr>
+<td>Designing Machine Learning Systems (Huyen)</td>
+<td>⬜</td>
+</tr>
+</tbody></table>
+<hr>
+<hr>
+<h1>💼 Job Application Tracker</h1>
+<h2>Target Companies</h2>
+<table>
+<thead>
+<tr>
+<th>Company</th>
+<th>Role</th>
+<th>Applied</th>
+<th>Status</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2>Interview Log</h2>
+<table>
+<thead>
+<tr>
+<th>Company</th>
+<th>Stage</th>
+<th>Date</th>
+<th>Result</th>
+<th>What to improve</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<hr>
+<hr>
+<h1>📓 Weekly Log</h1>
+<blockquote>
+<p>Copy this block each week</p>
+</blockquote>
+<h2>Week ___ — Date: ___________</h2>
+<p><strong>What I built:</strong> ___________________________________________</p>
+<p><strong>What I learned:</strong> ___________________________________________</p>
+<p><strong>What broke and how I fixed it:</strong> ___________________________________________</p>
+<p><strong>GitHub commits this week:</strong> ___</p>
+<p><strong>Streak maintained?</strong> ✅ / ❌</p>
+<p><strong>Next week's focus:</strong> ___________________________________________</p>
+<hr>
+<h2>Week ___ — Date: ___________</h2>
+<p><strong>What I built:</strong> ___________________________________________</p>
+<p><strong>What I learned:</strong> ___________________________________________</p>
+<p><strong>What broke and how I fixed it:</strong> ___________________________________________</p>
+<p><strong>GitHub commits this week:</strong> ___</p>
+<p><strong>Streak maintained?</strong> ✅ / ❌</p>
+<p><strong>Next week's focus:</strong> ___________________________________________</p>
+<hr>
+<hr>
+<h1>🧠 Key Concepts to Master</h1>
+<blockquote>
+<p>Tick off when you can explain it confidently to someone else</p>
+</blockquote>
+<h2>LLM Internals</h2>
+<ul>
+<li><input type="checkbox" disabled=""> How attention mechanism works</li>
+<li><input type="checkbox" disabled=""> What tokenisation is and why it affects cost</li>
+<li><input type="checkbox" disabled=""> What a context window is and its limits</li>
+<li><input type="checkbox" disabled=""> Why temperature affects output randomness</li>
+<li><input type="checkbox" disabled=""> How RLHF shapes model behaviour</li>
+<li><input type="checkbox" disabled=""> Difference between base model and instruction-tuned model</li>
+</ul>
+<h2>Prompt Engineering</h2>
+<ul>
+<li><input type="checkbox" disabled=""> Zero-shot vs few-shot vs chain-of-thought — when to use each</li>
+<li><input type="checkbox" disabled=""> Why structured outputs improve reliability</li>
+<li><input type="checkbox" disabled=""> What prompt injection is and how to defend against it</li>
+<li><input type="checkbox" disabled=""> Why prompts degrade with longer contexts</li>
+<li><input type="checkbox" disabled=""> How to design a ground-truth eval set</li>
+</ul>
+<h2>RAG &amp; Retrieval</h2>
+<ul>
+<li><input type="checkbox" disabled=""> Why chunking strategy affects retrieval quality</li>
+<li><input type="checkbox" disabled=""> What embedding models do and how to choose one</li>
+<li><input type="checkbox" disabled=""> Why hybrid search beats pure vector search</li>
+<li><input type="checkbox" disabled=""> What RAGAS metrics actually measure</li>
+<li><input type="checkbox" disabled=""> The "lost in the middle" problem and its implications for RAG design</li>
+</ul>
+<h2>Agents</h2>
+<ul>
+<li><input type="checkbox" disabled=""> How the ReAct loop works</li>
+<li><input type="checkbox" disabled=""> What "tool use" means and how LLMs call tools</li>
+<li><input type="checkbox" disabled=""> Why agents hallucinate tool arguments and how to prevent it</li>
+<li><input type="checkbox" disabled=""> Difference between orchestrator and worker agents</li>
+<li><input type="checkbox" disabled=""> What MCP is and why it matters for agent tool integration</li>
+<li><input type="checkbox" disabled=""> How to evaluate an agent's trajectory vs just its final output</li>
+</ul>
+<h2>Production</h2>
+<ul>
+<li><input type="checkbox" disabled=""> What LLMOps means vs MLOps</li>
+<li><input type="checkbox" disabled=""> Why tracing is essential for debugging agents</li>
+<li><input type="checkbox" disabled=""> How to estimate and control LLM API costs at scale</li>
+<li><input type="checkbox" disabled=""> What guardrails are and how to implement them</li>
+</ul>
+<hr>
+<p><em>Last updated: ___________</em>
+<em>Total GitHub repos: ___</em>
+<em>Current phase: ___</em></p>
+
+  </article>
+</body>
+</html>
