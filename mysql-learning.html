@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MySQL Learning Hub — Arindam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+  <link rel="stylesheet" href="assets/theme-ui.css">
+  <link rel="stylesheet" href="assets/theme-hub.css">
+
+  <style>
+    :root {
+      --site-name: "MySQL Learning Hub";
+      --author: "Arindam";
+
+      --bg:          #06080f;
+      --surface:     #0d1117;
+      --surface-2:   #161b26;
+      --border:      #1e2738;
+      --border-glow: #e67e2244;
+      --text-1:      #f0f4ff;
+      --text-2:      #8b97b8;
+      --text-3:      #4f5b78;
+      --accent:      #e67e22;
+      --accent-2:    #f59e0b;
+      --mysql:       #e67e22;
+      --amber:       #f59e0b;
+      --green:       #10b981;
+
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: var(--font-body);
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    .ambient {
+      position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 500px;
+      background: radial-gradient(ellipse, rgba(230,126,34,0.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .wrap { max-width: 1080px; margin: auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 64px;
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-display);
+      font-size: 17px; font-weight: 700;
+      color: var(--text-1); text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--mysql), var(--accent-2));
+      border-radius: 8px;
+      display: grid; place-items: center;
+      font-size: 15px;
+    }
+
+    .nav-links { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+
+    .nav-links a {
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 13px; font-weight: 400;
+      color: var(--text-2);
+      transition: all .2s;
+      border: 1px solid transparent;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-1);
+      background: var(--surface-2);
+      border-color: var(--border);
+    }
+
+    .nav-badge {
+      padding: 7px 14px;
+      background: linear-gradient(135deg, rgba(230,126,34,0.14), rgba(245,158,11,0.08));
+      border: 1px solid rgba(230,126,34,0.35);
+      border-radius: 8px;
+      font-size: 13px; color: var(--accent-2);
+      font-family: var(--font-mono); cursor: default;
+    }
+
+    .hero { margin-bottom: 72px; }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 11px;
+      color: var(--mysql); letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 6px 12px;
+      background: rgba(230,126,34,0.09);
+      border: 1px solid rgba(230,126,34,0.28);
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--mysql); animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .4; transform: scale(.8); }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 58px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: var(--text-1);
+      margin-bottom: 20px;
+    }
+
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--mysql), var(--accent-2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 16px; color: var(--text-2); max-width: 520px;
+      line-height: 1.7;
+    }
+
+    .phase { margin-bottom: 56px; }
+
+    .phase-header {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .phase-num {
+      font-family: var(--font-mono); font-size: 10px;
+      color: var(--text-3); letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .phase-title {
+      font-family: var(--font-display);
+      font-size: 20px; font-weight: 700;
+      color: var(--text-1); letter-spacing: -.3px;
+    }
+
+    .phase-line { flex: 1; height: 1px; background: var(--border); }
+
+    .phase-count {
+      font-family: var(--font-mono); font-size: 11px;
+      color: var(--text-3);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      cursor: pointer;
+      animation: fadeUp .5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    .card:hover:not(.card--soon) {
+      transform: translateY(-5px);
+      border-color: rgba(230,126,34,0.45);
+      box-shadow: 0 20px 60px -12px rgba(230,126,34,0.18);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
+      transition: left .5s;
+    }
+    .card:hover:not(.card--soon)::before { left: 150%; }
+
+    .card--soon {
+      cursor: default;
+      opacity: .88;
+      border-style: dashed;
+    }
+
+    .card--soon:hover {
+      transform: none;
+      border-color: var(--border);
+      box-shadow: none;
+    }
+
+    .card--soon::before { display: none; }
+
+    .card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .week-badge {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: .8px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 6px;
+      border: 1px solid var(--border);
+      color: var(--text-3);
+    }
+
+    .week-badge.active {
+      border-color: rgba(245,158,11,0.35);
+      color: var(--amber);
+      background: rgba(245,158,11,0.1);
+    }
+
+    .card-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 18px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 18px; font-weight: 700;
+      color: var(--text-1); letter-spacing: -.3px;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px; color: var(--text-2);
+      line-height: 1.6; flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-topics {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+
+    .topic-chip {
+      font-size: 10px; font-family: var(--font-mono);
+      padding: 3px 8px; border-radius: 4px;
+      background: var(--surface-2);
+      color: var(--text-3);
+      border: 1px solid var(--border);
+    }
+
+    .open-link {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500;
+      color: var(--accent-2);
+      transition: gap .2s;
+      white-space: nowrap;
+    }
+
+    .card:hover:not(.card--soon) .open-link { gap: 9px; }
+
+    .open-link--muted {
+      color: var(--text-3);
+    }
+
+    footer {
+      margin-top: 80px; padding: 32px 0;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .footer-left {
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+
+    .footer-text { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
+
+    .footer-right { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); display: flex; align-items: center; gap: 16px; }
+    .footer-right a { color: var(--text-3); text-decoration: none; transition: color .2s; }
+    .footer-right a:hover { color: var(--text-2); }
+
+    @media (max-width: 600px) {
+      nav { flex-direction: column; gap: 16px; align-items: flex-start; }
+      .nav-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<div class="wrap">
+
+  <nav>
+    <a class="logo" href="mysql-learning.html">
+      <div class="logo-icon">🐬</div>
+      MySQL Learning Hub
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Hub</a>
+      <a href="mysql-interview-prep-part1.html">Interview prep</a>
+      <button type="button" class="theme-toggle theme-toggle--compact" data-theme-toggle aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle__icon" aria-hidden="true">☀</span><span class="theme-toggle__text">Light</span></button>
+      <div class="nav-badge">8.x</div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-eyebrow">
+      <span></span>
+      Relational data craft
+    </div>
+    <h1>From solid SQL to<br><em>production MySQL</em></h1>
+    <p class="hero-sub">
+      Same rhythm as the AI track: phases, module cards, and deep links into notes.
+      Interview prep is live; weekly topic pages can snap in as you add HTML files.
+    </p>
+  </div>
+
+  <div id="phases-root"></div>
+
+  <footer>
+    <div class="footer-left">
+      <div class="footer-dot"></div>
+      <div class="footer-text">Built by Arindam · MySQL Learning Journey</div>
+    </div>
+    <div class="footer-right">
+      <a href="ai-learning.html">AI Learning Hub</a>
+      <a href="index.html">All zones</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  /**
+   * MySQL track config — mirror of ai-learning.html pattern.
+   * `soon: true` → non-clickable placeholder card (add `link` when the page exists).
+   * `active: true` → highlights the module badge (current focus).
+   */
+  const SITE = {
+    phases: [
+      {
+        id:    "phase-1",
+        num:   "Phase 01",
+        title: "Interview prep & drills",
+        cards: [
+          {
+            week:   "Module A",
+            title:  "Query problems",
+            desc:   "Graded SQL drills, corrected queries, and Bengali walkthroughs — intermediate through advanced patterns.",
+            icon:   "📐",
+            link:   "mysql-interview-prep-part1.html",
+            topics: ["Aggregates", "JOINs", "Subqueries"],
+            done:   false,
+            active: true,
+          },
+          {
+            week:   "Module B",
+            title:  "Technical Q&A",
+            desc:   "Fast revision: InnoDB, indexes, transactions, replication, and common interviewer deep-dives.",
+            icon:   "💬",
+            link:   "mysql-interview-prep-part2.html",
+            topics: ["InnoDB", "Isolation", "Repl"],
+            done:   false,
+            active: false,
+          },
+        ],
+      },
+      {
+        id:    "phase-2",
+        num:   "Phase 02",
+        title: "Core SQL curriculum",
+        cards: [
+          {
+            week:   "Week 1",
+            title:  "Schema & modeling",
+            desc:   "DDL, types, keys, and normalization — drop in a week-notes HTML file when ready (same idea as AI phases).",
+            icon:   "🗂️",
+            topics: ["DDL", "Keys", "3NF"],
+            soon:   true,
+          },
+          {
+            week:   "Week 2",
+            title:  "Queries & windows",
+            desc:   "Advanced SELECT, CTEs, window functions, and performance-aware query design.",
+            icon:   "📊",
+            topics: ["CTE", "Windows", "Plans"],
+            soon:   true,
+          },
+        ],
+      },
+      {
+        id:    "phase-3",
+        num:   "Phase 03",
+        title: "Operations & production",
+        cards: [
+          {
+            week:   "Week 3",
+            title:  "Ops & reliability",
+            desc:   "Backups, HA, replication topologies, capacity, and failure modes — link your notes here later.",
+            icon:   "⚙️",
+            topics: ["Backup", "HA", "Tuning"],
+            soon:   true,
+          },
+        ],
+      },
+    ],
+  };
+
+  function render() {
+    const root = document.getElementById("phases-root");
+
+    root.innerHTML = SITE.phases.map((phase, pi) => {
+      const cards = phase.cards.map((c, ci) => {
+        const delay = (pi * phase.cards.length + ci) * 80;
+        const topics = (c.topics || []).map(t => `<span class="topic-chip">${t}</span>`).join("");
+        const isSoon = !!c.soon;
+        const badgeActive = !isSoon && c.active;
+        const weekLabel = c.week + (badgeActive ? " · Now" : "");
+        const footerLink = isSoon
+          ? `<div class="open-link open-link--muted">Coming soon</div>`
+          : `<div class="open-link">Open →</div>`;
+
+        const inner = `
+            <div class="card-top">
+              <div class="week-badge ${badgeActive ? "active" : ""}">${weekLabel}</div>
+              <div class="card-icon">${c.icon}</div>
+            </div>
+            <div class="card-title">${c.title}</div>
+            <div class="card-desc">${c.desc}</div>
+            <div class="card-footer">
+              <div class="card-topics">${topics}</div>
+              ${footerLink}
+            </div>`;
+
+        if (isSoon) {
+          return `<div class="card card--soon" style="animation-delay:${delay}ms">${inner}</div>`;
+        }
+        return `<a class="card" href="${c.link}" style="animation-delay:${delay}ms">${inner}</a>`;
+      }).join("");
+
+      return `
+        <div class="phase" id="${phase.id}">
+          <div class="phase-header">
+            <div class="phase-num">${phase.num}</div>
+            <div class="phase-title">${phase.title}</div>
+            <div class="phase-line"></div>
+            <div class="phase-count">${phase.cards.length} modules</div>
+          </div>
+          <div class="grid">${cards}</div>
+        </div>`;
+    }).join("");
+  }
+
+  render();
+</script>
+<script src="assets/theme-toggle.js" defer></script>
+</body>
+</html>

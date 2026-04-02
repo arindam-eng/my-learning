@@ -1,34 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Learning Hub — Arindam</title>
+  <title>Learning Hub — Arindam</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+  <link rel="stylesheet" href="assets/theme-ui.css">
+  <link rel="stylesheet" href="assets/theme-hub.css">
 
   <style>
-    /* ═══════════════════════════════════════════
-       CONFIG — Update site identity here
-    ═══════════════════════════════════════════ */
     :root {
-      --site-name: "AI Learning Hub";
-      --author: "Arindam";
-
-      /* Color tokens */
       --bg:          #06080f;
       --surface:     #0d1117;
       --surface-2:   #161b26;
       --border:      #1e2738;
-      --border-glow: #2563eb44;
       --text-1:      #f0f4ff;
       --text-2:      #8b97b8;
       --text-3:      #4f5b78;
       --accent:      #3b82f6;
       --accent-2:    #06b6d4;
-      --amber:       #f59e0b;
+      --mysql:       #e67e22;
+      --mysql-glow:  #e67e2222;
       --green:       #10b981;
 
-      /* Typography */
       --font-display: 'Syne', sans-serif;
       --font-body:    'DM Sans', sans-serif;
       --font-mono:    'DM Mono', monospace;
@@ -47,7 +42,6 @@
       overflow-x: hidden;
     }
 
-    /* ── Noise grain overlay ── */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 0;
@@ -56,35 +50,31 @@
       opacity: .5;
     }
 
-    /* ── Ambient glow ── */
     .ambient {
       position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
       width: 900px; height: 500px;
-      background: radial-gradient(ellipse, #1d4ed820 0%, transparent 70%);
+      background: radial-gradient(ellipse, #6366f118 0%, transparent 70%);
       pointer-events: none; z-index: 0;
     }
 
-    .wrap { max-width: 1080px; margin: auto; padding: 0 24px; position: relative; z-index: 1; }
+    .wrap { max-width: 960px; margin: auto; padding: 0 24px; position: relative; z-index: 1; }
 
-    /* ══════════════════════════════
-       NAVBAR
-    ══════════════════════════════ */
-    nav {
+    header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 24px 0;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 64px;
+      margin-bottom: 56px;
     }
 
-    .logo {
+    .brand {
       display: flex; align-items: center; gap: 10px;
       font-family: var(--font-display);
       font-size: 17px; font-weight: 700;
-      color: var(--text-1); text-decoration: none;
+      color: var(--text-1);
       letter-spacing: -0.3px;
     }
 
-    .logo-icon {
+    .brand-mark {
       width: 32px; height: 32px;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       border-radius: 8px;
@@ -92,25 +82,7 @@
       font-size: 15px;
     }
 
-    .nav-links { display: flex; gap: 6px; }
-
-    .nav-links a {
-      padding: 7px 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 13px; font-weight: 400;
-      color: var(--text-2);
-      transition: all .2s;
-      border: 1px solid transparent;
-    }
-
-    .nav-links a:hover {
-      color: var(--text-1);
-      background: var(--surface-2);
-      border-color: var(--border);
-    }
-
-    .nav-badge {
+    .brand-badge {
       padding: 7px 14px;
       background: linear-gradient(135deg, var(--accent)22, var(--accent-2)11);
       border: 1px solid var(--accent)44;
@@ -119,10 +91,7 @@
       font-family: var(--font-mono); cursor: default;
     }
 
-    /* ══════════════════════════════
-       HERO
-    ══════════════════════════════ */
-    .hero { margin-bottom: 72px; }
+    .hero { margin-bottom: 48px; }
 
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
@@ -132,10 +101,14 @@
       background: var(--accent)12;
       border: 1px solid var(--accent)33;
       border-radius: 100px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
-    .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+    .hero-eyebrow span {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
 
     @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
@@ -144,12 +117,11 @@
 
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(36px, 5vw, 58px);
+      font-size: clamp(32px, 4.5vw, 52px);
       font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -1.5px;
-      color: var(--text-1);
-      margin-bottom: 20px;
+      line-height: 1.1;
+      letter-spacing: -1.2px;
+      margin-bottom: 16px;
     }
 
     h1 em {
@@ -159,236 +131,144 @@
     }
 
     .hero-sub {
-      font-size: 16px; color: var(--text-2); max-width: 520px;
-      line-height: 1.7;
+      font-size: 16px; color: var(--text-2);
+      max-width: 540px;
+      line-height: 1.65;
     }
 
-    .hero-stats {
-      display: flex; gap: 32px;
-      margin-top: 36px; padding-top: 36px;
-      border-top: 1px solid var(--border);
-    }
-
-    .stat-val {
-      font-family: var(--font-display);
-      font-size: 28px; font-weight: 700;
-      color: var(--text-1);
-    }
-
-    .stat-lbl {
-      font-size: 12px; color: var(--text-3);
+    .zones-label {
       font-family: var(--font-mono);
-      text-transform: uppercase; letter-spacing: .8px;
-      margin-top: 3px;
-    }
-
-    /* ══════════════════════════════
-       PHASE SECTIONS
-    ══════════════════════════════ */
-    .phase { margin-bottom: 56px; }
-
-    .phase-header {
-      display: flex; align-items: center; gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .phase-num {
-      font-family: var(--font-mono); font-size: 10px;
-      color: var(--text-3); letter-spacing: 1px; text-transform: uppercase;
-    }
-
-    .phase-title {
-      font-family: var(--font-display);
-      font-size: 20px; font-weight: 700;
-      color: var(--text-1); letter-spacing: -.3px;
-    }
-
-    .phase-line { flex: 1; height: 1px; background: var(--border); }
-
-    .phase-count {
-      font-family: var(--font-mono); font-size: 11px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       color: var(--text-3);
+      margin-bottom: 18px;
     }
 
-    /* ══════════════════════════════
-       CARDS GRID
-    ══════════════════════════════ */
-    .grid {
+    .zones {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 16px;
     }
 
-    .card {
+    .zone {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
+      padding: 26px 24px;
       text-decoration: none;
+      color: inherit;
       display: flex; flex-direction: column;
       position: relative; overflow: hidden;
+      min-height: 200px;
       transition: transform .25s, border-color .25s, box-shadow .25s;
-      cursor: pointer;
-      animation: fadeUp .5s ease both;
+      animation: fadeUp .45s ease both;
     }
+
+    .zone:nth-child(1) { animation-delay: 0ms; }
+    .zone:nth-child(2) { animation-delay: 70ms; }
+    .zone:nth-child(3) { animation-delay: 140ms; }
 
     @keyframes fadeUp {
-      from { opacity:0; transform: translateY(16px); }
-      to   { opacity:1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent)66;
-      box-shadow: 0 20px 60px -12px var(--accent)22;
+    .zone:hover:not(.zone--soon) {
+      transform: translateY(-4px);
+      border-color: var(--accent)55;
+      box-shadow: 0 18px 50px -14px var(--accent)25;
     }
 
-    /* glint sweep on hover */
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
-      transition: left .5s;
+    .zone--mysql:hover:not(.zone--soon) {
+      border-color: color-mix(in srgb, var(--mysql) 70%, var(--border));
+      box-shadow: 0 18px 50px -14px var(--mysql-glow);
     }
-    .card:hover::before { left: 150%; }
 
-    .card-top {
+    .zone--soon {
+      opacity: .72;
+      cursor: default;
+      border-style: dashed;
+    }
+
+    .zone-top {
       display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
-    .week-badge {
+    .zone-tag {
       font-family: var(--font-mono);
-      font-size: 10px; letter-spacing: .8px; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 6px;
+      font-size: 10px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
       border: 1px solid var(--border);
       color: var(--text-3);
     }
 
-    .week-badge.active {
-      border-color: var(--amber)44;
-      color: var(--amber);
-      background: var(--amber)10;
+    .zone--live .zone-tag {
+      border-color: var(--green)44;
+      color: var(--green);
+      background: var(--green)0d;
     }
 
-    .card-icon {
-      width: 36px; height: 36px;
-      border-radius: 10px;
+    .zone-icon {
+      width: 40px; height: 40px;
+      border-radius: 11px;
       display: grid; place-items: center;
-      font-size: 18px;
+      font-size: 20px;
       background: var(--surface-2);
       border: 1px solid var(--border);
     }
 
-    .card-title {
+    .zone-title {
       font-family: var(--font-display);
-      font-size: 18px; font-weight: 700;
-      color: var(--text-1); letter-spacing: -.3px;
-      margin-bottom: 8px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+      margin-bottom: 10px;
     }
 
-    .card-desc {
-      font-size: 13px; color: var(--text-2);
-      line-height: 1.6; flex: 1;
-      margin-bottom: 20px;
+    .zone-desc {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+      flex: 1;
     }
 
-    .card-footer {
-      display: flex; align-items: center; justify-content: space-between;
+    .zone-cta {
+      margin-top: 22px;
       padding-top: 16px;
       border-top: 1px solid var(--border);
-    }
-
-    .card-topics {
-      display: flex; gap: 6px; flex-wrap: wrap;
-    }
-
-    .topic-chip {
-      font-size: 10px; font-family: var(--font-mono);
-      padding: 3px 8px; border-radius: 4px;
-      background: var(--surface-2);
-      color: var(--text-3);
-      border: 1px solid var(--border);
-    }
-
-    .open-link {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 12px; font-weight: 500;
+      font-size: 12px;
+      font-weight: 500;
       color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: gap .2s;
-      white-space: nowrap;
     }
 
-    .card:hover .open-link { gap: 9px; }
+    .zone:hover:not(.zone--soon) .zone-cta { gap: 10px; }
 
-    /* ══════════════════════════════
-       PROGRESS BAR
-    ══════════════════════════════ */
-    .progress-bar-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px 24px;
-      margin-bottom: 52px;
-      display: flex; align-items: center; gap: 20px;
-    }
+    .zone--mysql .zone-cta { color: var(--mysql); }
 
-    .progress-label {
-      font-family: var(--font-mono); font-size: 11px;
-      color: var(--text-3); text-transform: uppercase; letter-spacing: .8px;
-      white-space: nowrap;
-    }
-
-    .bar-track {
-      flex: 1; height: 6px; background: var(--surface-2);
-      border-radius: 100px; overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      border-radius: 100px;
-      width: 50%; /* 2 of 4 weeks done */
-      transition: width 1s ease;
-    }
-
-    .progress-pct {
-      font-family: var(--font-display);
-      font-size: 14px; font-weight: 700;
-      color: var(--accent-2);
-      white-space: nowrap;
-    }
-
-    /* ══════════════════════════════
-       FOOTER
-    ══════════════════════════════ */
     footer {
-      margin-top: 80px; padding: 32px 0;
+      margin-top: 72px; padding: 28px 0;
       border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
       flex-wrap: wrap; gap: 12px;
-    }
-
-    .footer-left {
-      display: flex; align-items: center; gap: 10px;
     }
 
     .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
 
     .footer-text { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
 
-    .footer-right { font-size: 12px; color: var(--text-3); font-family: var(--font-mono);  display: flex; align-items: center; gap: 16px; }
-    .footer-right a { color: var(--text-3); text-decoration: none; transition: color .2s; }
-    .footer-right a:hover { color: var(--text-2); }
-
-    /* ══════════════════════════════
-       RESPONSIVE
-    ══════════════════════════════ */
     @media (max-width: 600px) {
-      nav { flex-direction: column; gap: 16px; align-items: flex-start; }
-      .hero-stats { flex-wrap: wrap; gap: 20px; }
-      .nav-badge { display: none; }
-      .progress-bar-wrap { flex-wrap: wrap; }
+      header { flex-direction: column; gap: 14px; align-items: flex-start; }
+      .brand-badge { display: none; }
+      .header-actions { width: 100%; justify-content: space-between; }
     }
   </style>
 </head>
@@ -397,302 +277,73 @@
 <div class="ambient"></div>
 
 <div class="wrap">
-
-  <!-- ════════════════ NAV ════════════════ -->
-  <nav>
-    <a class="logo" href="#">
-      <div class="logo-icon">⚡</div>
-      AI Learning Hub
-    </a>
-    <div class="nav-links">
-      <a href="/index.html">Home</a>
-      <a href="AI_Engineer_Roadmap_Syllabus.html">Roadmap</a>
-      <a href="#">Projects</a>
-      <div class="nav-badge">v2.0</div>
+  <header>
+    <div class="brand">
+      <div class="brand-mark">◇</div>
+      Learning Hub
     </div>
-  </nav>
-
-  <!-- ════════════════ HERO ════════════════ -->
-  <div class="hero">
-    <div class="hero-eyebrow">
-      <span></span>
-      Active Learning Journey
+    <div class="header-actions">
+      <button type="button" class="theme-toggle theme-toggle--compact" data-theme-toggle aria-pressed="false" aria-label="Switch to light mode"><span class="theme-toggle__icon" aria-hidden="true">☀</span><span class="theme-toggle__text">Light</span></button>
+      <div class="brand-badge">Arindam</div>
     </div>
-    <h1>From Zero to<br><em>AI Engineer</em></h1>
+  </header>
+
+  <section class="hero">
+    <div class="hero-eyebrow"><span></span> Personal study spaces</div>
+    <h1>Pick a<br><em>learning zone</em></h1>
     <p class="hero-sub">
-      A structured path through machine learning, large language models, and
-      production-ready AI systems. Every week builds on the last.
+      Each zone is a self-contained track: structured notes, phases, and links.
+      More topics will show up here as they are added.
     </p>
-    <!-- <div class="hero-stats">
-      <div>
-        <div class="stat-val">4</div>
-        <div class="stat-lbl">Total Weeks</div>
+  </section>
+
+  <p class="zones-label">Zones</p>
+  <div class="zones">
+    <a class="zone zone--live" href="ai-learning.html">
+      <div class="zone-top">
+        <span class="zone-tag">Live</span>
+        <div class="zone-icon">⚡</div>
       </div>
-      <div>
-        <div class="stat-val">2</div>
-        <div class="stat-lbl">Phases</div>
+      <div class="zone-title">AI learning</div>
+      <p class="zone-desc">
+        Machine learning foundations through LLMs, agents, and production AI—weekly notes and phase cards.
+      </p>
+      <span class="zone-cta">Enter AI zone →</span>
+    </a>
+
+    <a class="zone zone--mysql zone--live" href="mysql-learning.html">
+      <div class="zone-top">
+        <span class="zone-tag">Live</span>
+        <div class="zone-icon">🐬</div>
       </div>
-      <div>
-        <div class="stat-val" id="completedCount">2</div>
-        <div class="stat-lbl">Completed</div>
+      <div class="zone-title">MySQL learning</div>
+      <p class="zone-desc">
+        Phased module cards like the AI hub: live interview prep now, with room to add weekly SQL and ops notes.
+      </p>
+      <span class="zone-cta">Enter MySQL zone →</span>
+    </a>
+
+    <div class="zone zone--soon" aria-disabled="true">
+      <div class="zone-top">
+        <span class="zone-tag">Soon</span>
+        <div class="zone-icon">＋</div>
       </div>
-    </div> -->
+      <div class="zone-title">More tracks</div>
+      <p class="zone-desc">
+        Additional zones (languages, tools, etc.) will appear on this hub when you add them.
+      </p>
+      <span class="zone-cta" style="color: var(--text-3);">—</span>
+    </div>
   </div>
 
-  <!-- ════════════════ PROGRESS ════════════════ -->
-  <!-- <div class="progress-bar-wrap">
-    <div class="progress-label">Overall Progress</div>
-    <div class="bar-track"><div class="bar-fill" id="progressFill"></div></div>
-    <div class="progress-pct" id="progressPct">50%</div>
-  </div> -->
-
-  <!-- ════════════════ DYNAMIC PHASES ════════════════ -->
-  <div id="phases-root"></div>
-
-  <!-- ════════════════ FOOTER ════════════════ -->
   <footer>
-    <div class="footer-left">
+    <div style="display:flex;align-items:center;gap:10px;">
       <div class="footer-dot"></div>
-      <div class="footer-text">Built by Arindam · AI Learning Journey</div>
-    </div>
-     <div class="footer-right">
-      <a href="current_syllabus.html">Exits Syllabus</a>
-      <a href="what_missed_from_syllabus.html">Missing?</a>
+      <div class="footer-text">Built by Arindam</div>
     </div>
   </footer>
-
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     ✏️  EDIT CONTENT HERE — All pages & titles live here
-═══════════════════════════════════════════════════════ -->
-<script>
-  /**
-   * SITE CONFIG
-   * To add a new week:  push a new object into any phase's `cards` array.
-   * To add a new phase: push a new object into the `phases` array.
-   * `active: true`  → highlights the week badge in amber (current week)
-   * `done: true`    → counts toward progress bar
-   */
-  const SITE = {
-    phases: [
-      {
-        id:    "phase-1",
-        num:   "Phase 01",
-        title: "ML Foundations",
-        cards: [
-          {
-            week:  "Week 1",
-            title: "Fundamentals",
-            desc:  "Core ML concepts, environment setup, and the supervised learning loop from scratch.",
-            icon:  "🧠",
-            link:  "AI_Engineer_Phase1_Week1_Notes.html",
-            topics: ["Python", "NumPy", "scikit-learn"],
-            done:  true,
-            active: false,
-          },
-          {
-            week:  "Week 2",
-            title: "Data & Models",
-            desc:  "Feature engineering, data pipelines, model evaluation, and bias–variance tradeoff.",
-            icon:  "📊",
-            link:  "AI_Engineer_Phase1_Week2_Notes.html",
-            topics: ["Pandas", "Pipelines", "Metrics"],
-            done:  true,
-            active: false,
-          },
-        ],
-      },
-      {
-        id:    "phase-2",
-        num:   "Phase 02",
-        title: "LLMs & Prompts",
-        cards: [
-          {
-            week:  "Week 3",
-            title: "LLM Basics",
-            desc:  "Transformer architecture, tokenization, and an intro to open-source LLM inference.",
-            icon:  "🤖",
-            link:  "AI_Engineer_Phase2_Week3_Notes.html",
-            topics: ["Transformers", "HuggingFace", "Tokens"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Week 4",
-            title: "Prompt Engineering",
-            desc:  "Chain-of-thought, few-shot prompting, structured output, and LLM evaluation frameworks.",
-            icon:  "✨",
-            link:  "AI_Engineer_Phase2_Week4_Notes.html",
-            topics: ["CoT", "Few-shot", "Evals"],
-            done:  false,
-            active: true,
-          },
-          {
-            week:  "Weeks 5–6",
-            title: "Prompt Measurement",
-            desc:  "Benchmarking prompts, A/B testing, and quantitative methods to improve prompt reliability.",
-            icon:  "📏",
-            link:  "AI_Engineer_Phase2_Week5_6_Notes.html",
-            topics: ["Metrics", "Testing", "Iteration"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Weeks 7–8",
-            title: "RAG Systems",
-            desc:  "Retrieval pipelines, embeddings, chunking, and building production-grade RAG.",
-            icon:  "🔎",
-            link:  "AI_Engineer_Phase2_Week7_8_Notes.html",
-            topics: ["Embeddings", "Vector DB", "Chunking"],
-            done:  false,
-            active: false,
-          },
-        ],
-      },
-      {
-        id:    "phase-3",
-        num:   "Phase 03",
-        title: "Agents & Tooling",
-        cards: [
-          {
-            week:  "Week 9",
-            title: "ReAct Agents",
-            desc:  "Reasoning + acting loops, tool use, and building agentic behavior on top of LLMs.",
-            icon:  "🔄",
-            link:  "AI_Engineer_Phase3_Week9_Notes.html",
-            topics: ["ReAct", "Tools", "Planning"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Week 10",
-            title: "RAG Agent with Memory",
-            desc:  "Combining retrieval with conversational memory and stateful agent workflows.",
-            icon:  "💾",
-            link:  "AI_Engineer_Phase3_Week10_Notes.html",
-            topics: ["RAG", "Memory", "State"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Week 11",
-            title: "LangGraph & Agent Frameworks",
-            desc:  "Graph-based orchestration with LangGraph and patterns for robust agent frameworks.",
-            icon:  "🕸️",
-            link:  "AI_Engineer_Phase3_Week11_Notes.html",
-            topics: ["LangGraph", "Orchestration", "Graphs"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Weeks 12–13",
-            title: "Multi-Agent Systems",
-            desc:  "Coordinating multiple agents, delegation, and communication between specialized sub-agents.",
-            icon:  "👥",
-            link:  "AI_Engineer_Phase3_Week12_13_Notes.html",
-            topics: ["Multi-agent", "Coordination", "Roles"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Weeks 14–15",
-            title: "MCP & Production Agents",
-            desc:  "Model Context Protocol, connecting agents to external systems, and hardened production patterns.",
-            icon:  "🔌",
-            link:  "AI_Engineer_Phase3_Week14_15_Notes.html",
-            topics: ["MCP", "Integrations", "Prod"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Week 16",
-            title: "Agent Evaluation",
-            desc:  "Frameworks for judging trajectories, tool use, and end-to-end agent quality.",
-            icon:  "✅",
-            link:  "AI_Engineer_Phase3_Week16_Notes.html",
-            topics: ["Evals", "Judges", "Quality"],
-            done:  false,
-            active: false,
-          },
-        ],
-      },
-      {
-        id:    "phase-4",
-        num:   "Phase 04",
-        title: "Production AI",
-        cards: [
-          {
-            week:  "Weeks 17–18",
-            title: "Production AI Engineering",
-            desc:  "Shipping AI to production: reliability, ops, monitoring, and engineering discipline at scale.",
-            icon:  "🚀",
-            link:  "AI_Engineer_Phase4_Week17_18_Notes.html",
-            topics: ["Prod", "Ops", "Reliability"],
-            done:  false,
-            active: false,
-          },
-          {
-            week:  "Weeks 19–20",
-            title: "Portfolio Polish & Interview Prep",
-            desc:  "Finalizing projects, storytelling your work, and systematic prep for AI/ML interviews.",
-            icon:  "🎯",
-            link:  "AI_Engineer_Phase4_Week19_20_Notes.html",
-            topics: ["Portfolio", "Behavioral", "Technical"],
-            done:  false,
-            active: false,
-          },
-        ],
-      },
-    ],
-  };
-
-  /* ── Render phases ── */
-  function render() {
-    const root = document.getElementById("phases-root");
-    let totalCards = 0, doneCards = 0;
-
-    root.innerHTML = SITE.phases.map((phase, pi) => {
-      const cards = phase.cards.map((c, ci) => {
-        totalCards++;
-        if (c.done) doneCards++;
-        const delay = (pi * phase.cards.length + ci) * 80;
-        const topics = c.topics.map(t => `<span class="topic-chip">${t}</span>`).join("");
-        return `
-          <a class="card" href="${c.link}" style="animation-delay:${delay}ms">
-            <div class="card-top">
-              <div class="week-badge ${c.active ? "active" : ""}">${c.week}${c.active ? " · Now" : ""}</div>
-              <div class="card-icon">${c.icon}</div>
-            </div>
-            <div class="card-title">${c.title}</div>
-            <div class="card-desc">${c.desc}</div>
-            <div class="card-footer">
-              <div class="card-topics">${topics}</div>
-              <div class="open-link">Open →</div>
-            </div>
-          </a>`;
-      }).join("");
-
-      return `
-        <div class="phase" id="${phase.id}">
-          <div class="phase-header">
-            <div class="phase-num">${phase.num}</div>
-            <div class="phase-title">${phase.title}</div>
-            <div class="phase-line"></div>
-            <div class="phase-count">${phase.cards.length} weeks</div>
-          </div>
-          <div class="grid">${cards}</div>
-        </div>`;
-    }).join("");
-
-    /* ── Progress ── */
-    const pct = Math.round((doneCards / totalCards) * 100);
-    document.getElementById("progressFill").style.width = pct + "%";
-    document.getElementById("progressPct").textContent = pct + "%";
-    document.getElementById("completedCount").textContent = doneCards;
-  }
-
-  render();
-</script>
+<script src="assets/theme-toggle.js" defer></script>
 </body>
 </html>

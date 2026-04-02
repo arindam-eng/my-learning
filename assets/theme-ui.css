@@ -1,0 +1,86 @@
+/* Shared theme toggle control — works with hub + docs pages */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  font-family: var(--font-mono, var(--mono, ui-monospace, monospace));
+  color: var(--text-2, var(--text2));
+  background: var(--surface-2, var(--bg3, var(--surface)));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--text-1, var(--text));
+  border-color: var(--border-glow, var(--border2));
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent, #3b82f6);
+  outline-offset: 2px;
+}
+
+.theme-toggle__icon {
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.theme-toggle__text {
+  min-width: 2.75rem;
+  text-align: left;
+}
+
+/* Hub / compact header */
+.theme-toggle--compact {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+/* Sidebar (docs + roadmap-style notes) */
+.theme-toggle--sb {
+  display: flex;
+  width: 100%;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 24px;
+  justify-content: flex-start;
+  background: transparent;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.theme-toggle--sb:hover {
+  background: var(--surface-glow, var(--bg3));
+}
+
+/* Roadmap header — match home-btn scale */
+.theme-toggle--header {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  background: transparent;
+}
+
+.theme-toggle--header:hover {
+  color: var(--text);
+  border-color: var(--border2);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MySQL Interview Prep — Part 1: Query Problems</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+<link rel="stylesheet" href="assets/theme-ui.css">
+<link rel="stylesheet" href="assets/theme-docs.css">
+<style>
+:root{
+  --bg:#07080c;--bg2:#0e0f14;--bg3:#14161c;--bg4:#1b1d25;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#e3e0d6;--text2:#8c8880;--text3:#46433e;
+  --emerald:#10b981;--indigo:#818cf8;--amber:#f59e0b;
+  --sky:#38bdf8;--rose:#f43f5e;--lime:#84cc16;--mysql:#e67e22;
+  --mono:'IBM Plex Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sb{width:268px;min-width:268px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-top{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.sb-badge{display:inline-block;background:var(--mysql);color:#1a0f06;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+.sb-top h1{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.3;}
+.sb-top p{font-size:12px;color:var(--text2);margin-top:4px;}
+.nav-s{padding:0 14px;margin-bottom:4px;}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text3);padding:0 8px;margin-bottom:5px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;font-size:12px;color:var(--text2);transition:all .15s;text-decoration:none;border:1px solid transparent;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--bg3);color:var(--emerald);border-color:var(--border);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.ni.active .ndot{background:var(--emerald);}
+.dbadge{margin-left:auto;font-family:var(--mono);font-size:9px;font-weight:600;padding:1px 7px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;}
+.dbadge.mid{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+.dbadge.adv{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.28);}
+.sb-home{display:block;padding:10px 24px;color:var(--text2);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;border-bottom:1px solid var(--border);transition:color .15s;}
+.sb-home:hover{color:var(--text);}
+
+/* MAIN */
+.main{flex:1;max-width:920px;padding:48px 56px;}
+
+/* HERO */
+.hero{padding:40px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;scroll-margin-top:24px;}
+.htag{font-family:var(--mono);font-size:11px;color:var(--mysql);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.htag::before{content:'';display:block;width:28px;height:1px;background:var(--mysql);}
+.hero h1{font-family:var(--serif);font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px;}
+.hero h1 em{font-style:italic;color:var(--indigo);}
+.hero p{font-size:16px;color:var(--text2);max-width:580px;line-height:1.7;}
+.hmeta{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap;}
+.hm{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);}
+.hm span,.hm a{color:var(--lime);}
+.hm a{text-decoration:none;}
+.hm a:hover{text-decoration:underline;}
+
+/* PROGRESS CARD */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:48px;}
+.prow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px;}
+.pbar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--mysql),var(--amber));border-radius:99px;width:50%;}
+
+/* QUESTION SECTIONS */
+.sec{margin-bottom:64px;scroll-margin-top:24px;}
+.snum{font-family:var(--mono);font-size:11px;color:var(--mysql);letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.snum-badges{display:flex;gap:6px;margin-left:4px;}
+.sbadge{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase;}
+.sbadge.mid{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+.sbadge.adv{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.28);}
+.sbadge.ok{background:rgba(16,185,129,.1);color:var(--emerald);border:1px solid rgba(16,185,129,.28);}
+.sbadge.fix{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.28);}
+.sbadge.miss{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.28);}
+.sec h2{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.25;margin-bottom:14px;}
+p{margin-bottom:14px;color:var(--text2);}
+strong{color:var(--text);font-weight:500;}
+
+/* CALLOUT BOXES */
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0;background:var(--bg2);}
+.box.em{border-color:var(--emerald);}
+.box.in{border-color:var(--indigo);}
+.box.am{border-color:var(--amber);}
+.box.sk{border-color:var(--sky);}
+.box.ro{border-color:var(--rose);}
+.bxt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.box.em .bxt{color:var(--emerald);}
+.box.in .bxt{color:var(--indigo);}
+.box.am .bxt{color:var(--amber);}
+.box.sk .bxt{color:var(--sky);}
+.box.ro .bxt{color:var(--rose);}
+.box p{margin:0;font-size:14px;line-height:1.65;}
+
+/* INSIGHT */
+.insight{background:linear-gradient(135deg,#0d0b1e 0%,#060c08 100%);border:1px solid var(--indigo);border-radius:12px;padding:18px 20px;margin:20px 0;}
+.insight h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;}
+.insight p{color:var(--text2);font-size:13.5px;margin:0;line-height:1.65;}
+
+/* CODE BLOCKS */
+.cb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin:20px 0;overflow:hidden;}
+.cb-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.cb-lang{font-family:var(--mono);font-size:10px;color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot:nth-child(1){background:rgba(244,63,94,.4);}
+.dot:nth-child(2){background:rgba(245,158,11,.4);}
+.dot:nth-child(3){background:rgba(16,185,129,.4);}
+pre{padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:#b5b0a8;white-space:pre-wrap;word-break:break-word;}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--emerald);}
+/* Syntax token colours (reused from source) */
+.ck{color:var(--indigo);}
+.cf{color:var(--emerald);}
+.cs{color:var(--amber);}
+.cn{color:#fb923c;}
+.ct{color:var(--sky);}
+.cc{color:#47443d;font-style:italic;}
+
+/* COMPARISON TABLE */
+.tw{overflow-x:auto;margin:18px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border2);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+td strong{color:var(--text);}
+td code{font-size:11px;}
+
+/* SECTION DIVIDERS */
+.ch-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin:52px 0 24px;display:flex;align-items:center;gap:16px;}
+.ch-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* POINT LIST */
+.pts{list-style:none;padding:0;margin:10px 0;}
+.pts li{display:flex;gap:10px;padding:7px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'▸';color:var(--sky);flex-shrink:0;font-size:11px;margin-top:3px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+@media(max-width:768px){.sb{display:none;}.main{padding:28px 20px;}.hero h1{font-size:34px;}}
+@media print{.sb{display:none;}body{background:white;color:black;}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sb">
+  <a href="index.html" class="sb-home">&#8592; Home</a>
+  <a href="mysql-learning.html" class="sb-home">&#8592; MySQL track</a>
+  <a href="mysql-interview-prep-part2.html" class="sb-home">Part 2 — Technical Q&amp;A &#8594;</a>
+  <button type="button" class="theme-toggle theme-toggle--sb" data-theme-toggle aria-pressed="false" aria-label="Switch theme"><span class="theme-toggle__icon" aria-hidden="true">☀</span><span class="theme-toggle__text">Light</span></button>
+  <div class="sb-top">
+    <div class="sb-badge">MYSQL · PART 1</div>
+    <h1>Query Problems</h1>
+    <p>19 questions · Sections A &amp; B</p>
+  </div>
+  <div class="nav-s">
+    <div class="nav-lbl">Section A — Intermediate</div>
+    <a class="ni active" href="#q1"><div class="ndot"></div>Q1 · Top 3 Customers<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q2"><div class="ndot"></div>Q2 · Dept Avg Salary<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q3"><div class="ndot"></div>Q3 · Never Ordered<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q4"><div class="ndot"></div>Q4 · Sessions Per Day<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q5"><div class="ndot"></div>Q5 · Self Join<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q6"><div class="ndot"></div>Q6 · Running Total<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q7"><div class="ndot"></div>Q7 · Duplicate Emails<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q8"><div class="ndot"></div>Q8 · 2nd Highest Salary<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q9"><div class="ndot"></div>Q9 · Order Value &gt;5000<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q10"><div class="ndot"></div>Q10 · Pivot / CASE<span class="dbadge mid">Mid</span></a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Section B — Advanced</div>
+    <a class="ni" href="#q11"><div class="ndot"></div>Q11 · DENSE_RANK Top 2<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q12"><div class="ndot"></div>Q12 · Event Funnel<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q13"><div class="ndot"></div>Q13 · Recursive CTE<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q14"><div class="ndot"></div>Q14 · Latest Per User<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q15"><div class="ndot"></div>Q15 · MoM Revenue<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q16"><div class="ndot"></div>Q16 · ROLLUP<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q17"><div class="ndot"></div>Q17 · Subscription Gap<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q18"><div class="ndot"></div>Q18 · Delete Duplicates<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q19"><div class="ndot"></div>Q19 · Collab Filtering<span class="dbadge adv">Adv</span></a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="hero" id="overview">
+    <div class="htag">MySQL learning · Interview prep</div>
+    <h1>Part 1 —<br><em>Query problems</em></h1>
+    <p>Each question shows an evaluation of your original attempt, the corrected SQL with explanation, and a quick recall line. Problem 20 (stored procedures) is omitted.</p>
+    <div class="hmeta">
+      <div class="hm">&#128218; <span><a href="mysql-interview-prep-part2.html">Continue to Part 2 — Technical Q&amp;A</a></span></div>
+      <div class="hm">&#128230; <span>19 questions · 2 sections</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="prow"><span>Interview prep</span><span>Part 1 of 2</span></div>
+    <div class="pbar"><div class="pfill"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">Section A: Q1–Q10 (Intermediate) · Section B: Q11–Q19 (Advanced)</p>
+  </div>
+
+  <div class="ch-lbl">Section A — Intermediate</div>
+
+  <!-- ── Q1 ── -->
+  <div class="sec" id="q1">
+    <div class="snum">Q01 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Top 3 customers by total spend in the last 30 days</h2>
+    <p>Table: <code>orders(order_id, customer_id, amount, created_at)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Your answer is correct. Logic, GROUP BY, ORDER BY, LIMIT — all fine. Only fix: typo <strong>cutomer_id</strong> &rarr; <strong>customer_id</strong>.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">customer_id</span>,
+    <span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">AS</span> total_spend
+<span class="ck">FROM</span> <span class="ct">orders</span>
+<span class="ck">WHERE</span> <span class="ct">created_at</span> &gt;= <span class="cf">NOW</span>() - <span class="ck">INTERVAL</span> <span class="cn">30</span> <span class="ck">DAY</span>  <span class="cc">-- filter trailing 30 days; index-friendly</span>
+<span class="ck">GROUP BY</span> <span class="ct">customer_id</span>
+<span class="ck">ORDER BY</span> total_spend <span class="ck">DESC</span>
+<span class="ck">LIMIT</span> <span class="cn">3</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Explain</div><p><code>NOW() - INTERVAL 30 DAY</code> preserves index usage. <code>DATE_SUB(NOW(), INTERVAL 30 DAY)</code> is equivalent. <code>LIMIT</code> always follows <code>ORDER BY</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>SQL execution order: <strong>WHERE &rarr; GROUP BY &rarr; HAVING &rarr; ORDER BY &rarr; LIMIT</strong>. Keep this sequence in mind — SQL processes clauses in this exact order.</p></div>
+  </div>
+
+  <!-- ── Q2 ── -->
+  <div class="sec" id="q2">
+    <div class="snum">Q02 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Employees earning above their own department average</h2>
+    <p>Table: <code>employees(id, name, dept_id, salary)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Correlated subquery is correctly written. Using <code>e.dept_id</code> to correlate with the outer query — perfect.</p></div>
+    <div class="box sk"><div class="bxt">Bonus</div><p>Can also be solved with a window function — more efficient on large tables since it computes the department average in a single pass.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Correlated Subquery (your answer)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span> <span class="ct">id</span>, <span class="ct">name</span>, <span class="ct">dept_id</span>, <span class="ct">salary</span>
+<span class="ck">FROM</span> <span class="ct">employees</span> e
+<span class="ck">WHERE</span> <span class="ct">salary</span> &gt; (
+    <span class="ck">SELECT</span> <span class="cf">AVG</span>(<span class="ct">salary</span>)
+    <span class="ck">FROM</span> <span class="ct">employees</span>
+    <span class="ck">WHERE</span> <span class="ct">dept_id</span> = <span class="ct">e.dept_id</span>  <span class="cc">-- correlated: uses outer row's dept_id</span>
+);</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Window Function (optimised bonus)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span> <span class="ct">id</span>, <span class="ct">name</span>, <span class="ct">dept_id</span>, <span class="ct">salary</span>
+<span class="ck">FROM</span> (
+    <span class="ck">SELECT</span> *,
+        <span class="cf">AVG</span>(<span class="ct">salary</span>) <span class="ck">OVER</span> (<span class="ck">PARTITION BY</span> <span class="ct">dept_id</span>) <span class="ck">AS</span> dept_avg
+        <span class="cc">-- computes avg for each department once across all rows</span>
+    <span class="ck">FROM</span> <span class="ct">employees</span>
+) t
+<span class="ck">WHERE</span> <span class="ct">salary</span> &gt; <span class="ct">dept_avg</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Correlated vs Window</div><p>Correlated subquery runs a separate inner query per row — effectively O(n&sup2;). Window function computes everything in one pass — much faster on large tables.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Correlated subquery = &ldquo;inner query sees outer row&rdquo;. Window function = &ldquo;compute everything in one pass&rdquo;. Both are valid; show the window function version as a bonus.</p></div>
+  </div>
+
+  <!-- ── Q3 ── -->
+  <div class="sec" id="q3">
+    <div class="snum">Q03 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge fix">⚠ Minor Fix</span></span></div>
+    <h2>Products that have never been ordered — LEFT JOIN and NOT EXISTS</h2>
+    <p>Schema usually links via <code>order_items(product_id, order_id)</code>, not <code>orders.product_id</code> directly.</p>
+    <div class="box am"><div class="bxt">Fix</div><p>In the <code>NOT EXISTS</code> query, the subquery had <code>FROM orders</code> without alias <code>o</code>, so <code>o.product_id</code> would throw an error. Add the alias.</p></div>
+    <div class="box em"><div class="bxt">Correct</div><p>The <code>LEFT JOIN</code> approach was perfectly written.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 1: LEFT JOIN</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span> <span class="ct">p.id</span>, <span class="ct">p.title</span>
+<span class="ck">FROM</span> <span class="ct">products</span> p
+<span class="ck">LEFT JOIN</span> <span class="ct">orders</span> o <span class="ck">ON</span> <span class="ct">o.product_id</span> = <span class="ct">p.id</span>  <span class="cc">-- bring all products; NULL where no match</span>
+<span class="ck">WHERE</span> <span class="ct">o.product_id</span> <span class="ck">IS NULL</span>;                  <span class="cc">-- NULL means never ordered</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 2: NOT EXISTS (fixed)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span> <span class="ct">p.id</span>, <span class="ct">p.title</span>
+<span class="ck">FROM</span> <span class="ct">products</span> p
+<span class="ck">WHERE NOT EXISTS</span> (
+    <span class="ck">SELECT</span> <span class="cn">1</span>
+    <span class="ck">FROM</span> <span class="ct">orders</span> <span class="ct">o</span>               <span class="cc">-- ← alias 'o' required here</span>
+    <span class="ck">WHERE</span> <span class="ct">o.product_id</span> = <span class="ct">p.id</span>
+);</pre></div>
+    <div class="box sk"><div class="bxt">Performance note</div><p><code>NOT EXISTS</code> is generally faster than <code>NOT IN</code> — it stops as soon as a match is found. <code>LEFT JOIN + IS NULL</code> is most widely used and readable.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>&ldquo;NULL means no match&rdquo; — after a LEFT JOIN, <code>WHERE right_table.col IS NULL</code> means &ldquo;never matched&rdquo;. This is the standard anti-join pattern.</p></div>
+  </div>
+
+  <!-- ── Q4 ── -->
+  <div class="sec" id="q4">
+    <div class="snum">Q04 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Users with more than 3 sessions on a single calendar day</h2>
+    <p>Table: <code>sessions(user_id, login_at, logout_at)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Perfect. <code>DATE()</code> to extract the date, <code>GROUP BY</code>, then <code>HAVING</code> — this is the correct pattern. Note: <code>HAVING COUNT(*) &gt; 3</code> correctly means four or more sessions.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">user_id</span>,
+    <span class="cf">DATE</span>(<span class="ct">login_at</span>) <span class="ck">AS</span> login_date,
+    <span class="cf">COUNT</span>(*) <span class="ck">AS</span> session_count
+<span class="ck">FROM</span> <span class="ct">sessions</span>
+<span class="ck">GROUP BY</span> <span class="ct">user_id</span>, <span class="cf">DATE</span>(<span class="ct">login_at</span>)  <span class="cc">-- group by user + calendar day</span>
+<span class="ck">HAVING</span> <span class="cf">COUNT</span>(*) &gt; <span class="cn">3</span>;              <span class="cc">-- filter after grouping (aggregate condition)</span></pre></div>
+    <div class="box sk"><div class="bxt">WHERE vs HAVING</div><p><code>WHERE</code> runs before aggregation (filters individual rows). <code>HAVING</code> runs after aggregation (filters grouped results). <code>COUNT(*) &gt; 3</code> is an aggregate condition, so it belongs in <code>HAVING</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>If the condition involves an aggregate function (COUNT, SUM, AVG) &rarr; use <code>HAVING</code>. If it&rsquo;s a plain column filter &rarr; use <code>WHERE</code>.</p></div>
+  </div>
+
+  <!-- ── Q5 ── -->
+  <div class="sec" id="q5">
+    <div class="snum">Q05 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge miss">✦ Missing</span></span></div>
+    <h2>Pairs of employees in the same department with the same job title — self join</h2>
+    <div class="box ro"><div class="bxt">Not submitted</div><p>This query was not in your submission. Self-join is an important concept worth knowing for interviews.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Self Join</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">e1.id</span>        <span class="ck">AS</span> emp1_id,
+    <span class="ct">e1.name</span>      <span class="ck">AS</span> emp1_name,
+    <span class="ct">e2.id</span>        <span class="ck">AS</span> emp2_id,
+    <span class="ct">e2.name</span>      <span class="ck">AS</span> emp2_name,
+    <span class="ct">e1.dept_id</span>,
+    <span class="ct">e1.job_title</span>
+<span class="ck">FROM</span> <span class="ct">employees</span> e1
+<span class="ck">JOIN</span> <span class="ct">employees</span> e2
+    <span class="ck">ON</span>  <span class="ct">e1.dept_id</span>   = <span class="ct">e2.dept_id</span>    <span class="cc">-- same department</span>
+    <span class="ck">AND</span> <span class="ct">e1.job_title</span> = <span class="ct">e2.job_title</span>  <span class="cc">-- same job title</span>
+    <span class="ck">AND</span> <span class="ct">e1.id</span>        &lt; <span class="ct">e2.id</span>          <span class="cc">-- prevent (A,B) and (B,A) duplication</span>
+<span class="ck">ORDER BY</span> <span class="ct">e1.dept_id</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Why a self join?</div><p>Give the same table two different aliases and join it to itself. The <code>e1.id &lt; e2.id</code> condition ensures each unordered pair appears exactly once — without it, every pair shows up twice.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Self join = call the same table by two names. Remember <code>id1 &lt; id2</code> to de-duplicate unordered pairs.</p></div>
+  </div>
+
+  <!-- ── Q6 ── -->
+  <div class="sec" id="q6">
+    <div class="snum">Q06 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct + Bonus</span></span></div>
+    <h2>Running total of transaction amounts per user</h2>
+    <p>Cumulative sum of <code>amount</code> ordered by <code>created_at</code>, partitioned by user.</p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Both approaches are correct — correlated subquery and window function. Showing the window function version is excellent.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Window Function (best answer)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">user_id</span>,
+    <span class="ct">created_at</span>,
+    <span class="ct">amount</span>,
+    <span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">OVER</span> (
+        <span class="ck">PARTITION BY</span> <span class="ct">user_id</span>
+        <span class="ck">ORDER BY</span> <span class="ct">created_at</span>
+        <span class="ck">ROWS BETWEEN UNBOUNDED PRECEDING</span>
+             <span class="ck">AND CURRENT ROW</span>  <span class="cc">-- sum from first row up to current</span>
+    ) <span class="ck">AS</span> running_total
+<span class="ck">FROM</span> <span class="ct">transactions</span>
+<span class="ck">ORDER BY</span> <span class="ct">user_id</span>, <span class="ct">created_at</span>;</pre></div>
+    <div class="box sk"><div class="bxt">ROWS vs RANGE</div><p><code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> uses physical row count. When there are ties (same timestamp), <code>ROWS</code> is safer. The default frame is <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Running total = <code>SUM() OVER (PARTITION BY user ORDER BY date)</code>. Showing the window function approach in interviews makes a strong impression.</p></div>
+  </div>
+
+  <!-- ── Q7 ── -->
+  <div class="sec" id="q7">
+    <div class="snum">Q07 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Find all duplicate email addresses and their count</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>Correct. <code>GROUP BY + HAVING COUNT(*) &gt; 1</code> — this is the standard approach. Align column names with the schema (may be <code>email_address</code> not <code>email</code>).</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">email_address</span>,
+    <span class="cf">COUNT</span>(*) <span class="ck">AS</span> email_count
+<span class="ck">FROM</span> <span class="ct">users</span>
+<span class="ck">GROUP BY</span> <span class="ct">email_address</span>
+<span class="ck">HAVING</span> <span class="cf">COUNT</span>(*) &gt; <span class="cn">1</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Bonus — see all duplicate rows</div><p>To fetch the actual duplicate rows (not just their counts), use <code>ROW_NUMBER() OVER (PARTITION BY email ORDER BY id)</code> and filter where <code>rn &gt; 1</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Filtering on aggregates belongs in <code>HAVING</code>, not <code>WHERE</code>.</p></div>
+  </div>
+
+  <!-- ── Q8 ── -->
+  <div class="sec" id="q8">
+    <div class="snum">Q08 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct + Bonus</span></span></div>
+    <h2>Second-highest salary — without LIMIT/OFFSET</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>Both approaches are correct — nested <code>MAX</code> subquery and <code>DENSE_RANK</code>. The <code>DENSE_RANK</code> version handles tied salaries more cleanly.</p></div>
+    <div class="box sk"><div class="bxt">Info</div><p><code>DENSE_RANK</code> approach handles tied salaries correctly — all employees with the joint-second salary are returned.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 1: Nested MAX</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span> <span class="cf">MAX</span>(<span class="ct">salary</span>) <span class="ck">AS</span> second_highest
+<span class="ck">FROM</span> <span class="ct">employees</span>
+<span class="ck">WHERE</span> <span class="ct">salary</span> &lt; (
+    <span class="ck">SELECT</span> <span class="cf">MAX</span>(<span class="ct">salary</span>) <span class="ck">FROM</span> <span class="ct">employees</span>  <span class="cc">-- exclude the highest</span>
+);                                          <span class="cc">-- then highest of the rest = 2nd</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 2: DENSE_RANK (handles ties)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> ranked <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">emp_id</span>, <span class="ct">name</span>, <span class="ct">salary</span>,
+        <span class="cf">DENSE_RANK</span>() <span class="ck">OVER</span> (<span class="ck">ORDER BY</span> <span class="ct">salary</span> <span class="ck">DESC</span>) <span class="ck">AS</span> rnk
+        <span class="cc">-- 100,100,90 → DENSE_RANK: 1,1,2  |  RANK: 1,1,3  |  ROW_NUMBER: 1,2,3</span>
+    <span class="ck">FROM</span> <span class="ct">employees</span>
+)
+<span class="ck">SELECT</span> <span class="ct">emp_id</span>, <span class="ct">name</span>, <span class="ct">salary</span>
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rnk = <span class="cn">2</span>;</pre></div>
+    <div class="box sk"><div class="bxt">RANK vs DENSE_RANK vs ROW_NUMBER</div><p><strong>ROW_NUMBER</strong>: always unique (1,2,3,4) even with ties. <strong>RANK</strong>: gaps after ties (1,1,3). <strong>DENSE_RANK</strong>: no gaps (1,1,2) — most intuitive for &ldquo;N-th highest&rdquo; problems.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>DENSE = no gap. Use <code>DENSE_RANK</code> for &ldquo;2nd highest&rdquo; questions — it handles ties correctly.</p></div>
+  </div>
+
+  <!-- ── Q9 ── -->
+  <div class="sec" id="q9">
+    <div class="snum">Q09 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge fix">⚠ Minor Fix</span></span></div>
+    <h2>Orders where total line value exceeds ₹5,000</h2>
+    <p>Tables: <code>orders</code>, <code>order_items(order_id, product_id, qty, price)</code></p>
+    <div class="box am"><div class="bxt">Fix</div><p>The final <code>INNER JOIN order_items ot</code> should reference the CTE alias, not the original table name. Whatever name follows <code>WITH ... AS</code> is what you join on.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Fixed Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> order_totals <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">order_id</span>,
+        <span class="cf">SUM</span>(<span class="ct">qty</span> * <span class="ct">price</span>) <span class="ck">AS</span> total_price  <span class="cc">-- total value per order</span>
+    <span class="ck">FROM</span> <span class="ct">order_items</span>
+    <span class="ck">GROUP BY</span> <span class="ct">order_id</span>
+)
+<span class="ck">SELECT</span> <span class="ct">o.order_id</span>, <span class="ct">ot.total_price</span>
+<span class="ck">FROM</span> <span class="ct">orders</span> o
+<span class="ck">INNER JOIN</span> order_totals ot <span class="ck">ON</span> <span class="ct">ot.order_id</span> = <span class="ct">o.order_id</span>  <span class="cc">-- join CTE alias, not original table</span>
+<span class="ck">WHERE</span> <span class="ct">ot.total_price</span> &gt; <span class="cn">5000</span>;</pre></div>
+    <div class="box sk"><div class="bxt">CTE naming</div><p>The name after <code>WITH</code> is your alias for that result set. You join on that name — not the original table. CTE = temporary named result set.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>WITH name AS (...)</code> — then use <code>name</code> exactly like a table in the outer query.</p></div>
+  </div>
+
+  <!-- ── Q10 ── -->
+  <div class="sec" id="q10">
+    <div class="snum">Q10 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Pivot rows into columns — Math, Science, English marks per student</h2>
+    <p>Table: <code>scores(student_id, subject, marks)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p><code>CASE WHEN + MAX()</code> pivot technique — perfect. This is MySQL's standard approach since there is no native <code>PIVOT</code> keyword.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Conditional Aggregation Pivot</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">student_id</span>,
+    <span class="cf">MAX</span>(<span class="ck">CASE WHEN</span> <span class="ct">subject</span> = <span class="cs">'Math'</span>    <span class="ck">THEN</span> <span class="ct">marks</span> <span class="ck">END</span>) <span class="ck">AS</span> Math,
+    <span class="cf">MAX</span>(<span class="ck">CASE WHEN</span> <span class="ct">subject</span> = <span class="cs">'Science'</span> <span class="ck">THEN</span> <span class="ct">marks</span> <span class="ck">END</span>) <span class="ck">AS</span> Science,
+    <span class="cf">MAX</span>(<span class="ck">CASE WHEN</span> <span class="ct">subject</span> = <span class="cs">'English'</span> <span class="ck">THEN</span> <span class="ct">marks</span> <span class="ck">END</span>) <span class="ck">AS</span> English
+<span class="ck">FROM</span> <span class="ct">scores</span>
+<span class="ck">GROUP BY</span> <span class="ct">student_id</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Why MAX()?</div><p>For a student&rsquo;s Math row, Science and English are <code>NULL</code>. <code>MAX()</code> ignores <code>NULL</code> and picks the real value. <code>SUM</code> also works but would add values if a student had multiple rows for the same subject. <code>MAX</code> is safer.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Pivot = <code>CASE WHEN col = 'value' THEN metric END</code> aggregated per group. MySQL has no <code>PIVOT</code> keyword — always use <code>CASE</code>.</p></div>
+  </div>
+
+  <div class="ch-lbl">Section B — Advanced</div>
+
+  <!-- ── Q11 ── -->
+  <div class="sec" id="q11">
+    <div class="snum">Q11 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Top 2 products per category by sales — DENSE_RANK</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>Excellent. <code>GROUP BY + DENSE_RANK</code> inside a CTE, then <code>WHERE rnk &lt;= 2</code> in the outer query — this is the industry-standard pattern for &ldquo;top N per group&rdquo; problems.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> ranked <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">category</span>,
+        <span class="ct">product_id</span>,
+        <span class="cf">SUM</span>(<span class="ct">sales</span>) <span class="ck">AS</span> total_sales,
+        <span class="cf">DENSE_RANK</span>() <span class="ck">OVER</span> (
+            <span class="ck">PARTITION BY</span> <span class="ct">category</span>         <span class="cc">-- separate rank per category</span>
+            <span class="ck">ORDER BY</span> <span class="cf">SUM</span>(<span class="ct">sales</span>) <span class="ck">DESC</span>    <span class="cc">-- highest sales = rank 1</span>
+        ) <span class="ck">AS</span> rnk
+    <span class="ck">FROM</span> <span class="ct">products</span>
+    <span class="ck">GROUP BY</span> <span class="ct">category</span>, <span class="ct">product_id</span>
+)
+<span class="ck">SELECT</span> <span class="ct">category</span>, <span class="ct">product_id</span>, <span class="ct">total_sales</span>, <span class="ct">rnk</span>
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rnk &lt;= <span class="cn">2</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Can window functions be used directly in WHERE?</div><p>No. Window functions cannot appear directly in <code>WHERE</code>. You must compute them first in a CTE or subquery, then filter in the outer query.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Pattern: window function in CTE &rarr; <code>WHERE rnk &lt;= N</code> in outer query. This is the go-to for any &ldquo;Top N per group&rdquo; problem.</p></div>
+  </div>
+
+  <!-- ── Q12 ── -->
+  <div class="sec" id="q12">
+    <div class="snum">Q12 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Users who signed up and purchased within 24 hours — event funnel</h2>
+    <p>Table: <code>events(user_id, event_type, event_time)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Self-join for the event funnel — correct approach. Using <code>DISTINCT</code> is the right call.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT DISTINCT</span> <span class="ct">e1.user_id</span>
+<span class="ck">FROM</span> <span class="ct">events</span> e1
+<span class="ck">JOIN</span> <span class="ct">events</span> e2
+    <span class="ck">ON</span>  <span class="ct">e1.user_id</span>   = <span class="ct">e2.user_id</span>         <span class="cc">-- same user</span>
+    <span class="ck">AND</span> <span class="ct">e2.event_time</span> &gt;  <span class="ct">e1.event_time</span>      <span class="cc">-- purchase strictly after signup</span>
+    <span class="ck">AND</span> <span class="ct">e2.event_time</span> &lt;= <span class="ct">e1.event_time</span>
+                       + <span class="ck">INTERVAL</span> <span class="cn">24</span> <span class="ck">HOUR</span>  <span class="cc">-- within 24 hours</span>
+<span class="ck">WHERE</span> <span class="ct">e1.event_type</span> = <span class="cs">'signup'</span>
+  <span class="ck">AND</span> <span class="ct">e2.event_type</span> = <span class="cs">'purchase'</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Funnel analysis</div><p>This pattern is central to product analytics — counting users who took action B within a window after action A. Divide by total signup count for the conversion rate.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Event sequence = self-join on same table. <code>e1</code> = first event, <code>e2</code> = second event; use a time condition to bound the window.</p></div>
+  </div>
+
+  <!-- ── Q13 ── -->
+  <div class="sec" id="q13">
+    <div class="snum">Q13 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Recursive CTE — full path for every leaf category</h2>
+    <p>Table: <code>categories(id, name, parent_id)</code></p>
+    <div class="box em"><div class="bxt">Your answer</div><p>Recursive CTE structure is entirely correct — anchor member, recursive member, termination logic — all right.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Recursive CTE</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH RECURSIVE</span> category_path <span class="ck">AS</span> (
+
+    <span class="cc">-- ① Anchor: start from root nodes</span>
+    <span class="ck">SELECT</span>
+        <span class="ct">id</span>, <span class="ct">name</span>, <span class="ct">parent_id</span>,
+        <span class="ct">name</span> <span class="ck">AS</span> path              <span class="cc">-- initial path = own name</span>
+    <span class="ck">FROM</span> <span class="ct">categories</span>
+    <span class="ck">WHERE</span> <span class="ct">parent_id</span> <span class="ck">IS NULL</span>   <span class="cc">-- no parent = root</span>
+
+    <span class="ck">UNION ALL</span>
+
+    <span class="cc">-- ② Recursive: find children and extend path</span>
+    <span class="ck">SELECT</span>
+        <span class="ct">c.id</span>, <span class="ct">c.name</span>, <span class="ct">c.parent_id</span>,
+        <span class="cf">CONCAT</span>(<span class="ct">cte.path</span>, <span class="cs">' &gt; '</span>, <span class="ct">c.name</span>) <span class="ck">AS</span> path
+    <span class="ck">FROM</span> <span class="ct">categories</span> c
+    <span class="ck">JOIN</span> category_path cte
+        <span class="ck">ON</span> <span class="ct">cte.id</span> = <span class="ct">c.parent_id</span>
+)
+
+<span class="ck">SELECT</span> path <span class="ck">FROM</span> category_path
+<span class="ck">WHERE</span> <span class="ct">id</span> <span class="ck">NOT IN</span> (
+    <span class="ck">SELECT DISTINCT</span> <span class="ct">parent_id</span>
+    <span class="ck">FROM</span> <span class="ct">categories</span>
+    <span class="ck">WHERE</span> <span class="ct">parent_id</span> <span class="ck">IS NOT NULL</span>
+);  <span class="cc">-- nodes that are no-one's parent = leaf</span></pre></div>
+    <div class="box sk"><div class="bxt">How it works</div><p>1. Anchor = start from root (no parent). 2. Recursive step = join children to the growing CTE and extend the path string. 3. When there are no more children, recursion terminates. Leaf nodes are those whose <code>id</code> never appears as a <code>parent_id</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Recursive CTE = Anchor <code>UNION ALL</code> Recursive. Use this for any tree or hierarchy traversal. Requires MySQL 8+.</p></div>
+  </div>
+
+  <!-- ── Q14 ── -->
+  <div class="sec" id="q14">
+    <div class="snum">Q14 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Most recent action per user from a large logs table</h2>
+    <p>Table: <code>logs(id, user_id, action, ts)</code> — include index strategy.</p>
+    <div class="box em"><div class="bxt">Your answer</div><p><code>ROW_NUMBER</code> approach is correct. Index suggestion including a covering index — excellent.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> ranked <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">user_id</span>, <span class="ct">action</span>, <span class="ct">ts</span>,
+        <span class="cf">ROW_NUMBER</span>() <span class="ck">OVER</span> (
+            <span class="ck">PARTITION BY</span> <span class="ct">user_id</span>
+            <span class="ck">ORDER BY</span> <span class="ct">ts</span> <span class="ck">DESC</span>    <span class="cc">-- latest timestamp gets rank 1</span>
+        ) <span class="ck">AS</span> rn
+    <span class="ck">FROM</span> <span class="ct">logs</span>
+)
+<span class="ck">SELECT</span> <span class="ct">user_id</span>, <span class="ct">action</span>, <span class="ct">ts</span>
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rn = <span class="cn">1</span>;
+
+<span class="cc">-- Composite index for the window partition + order</span>
+<span class="ck">CREATE INDEX</span> idx_user_ts <span class="ck">ON</span> <span class="ct">logs</span>(<span class="ct">user_id</span>, <span class="ct">ts</span> <span class="ck">DESC</span>);
+
+<span class="cc">-- Covering index: includes 'action' so table lookup is avoided entirely</span>
+<span class="ck">CREATE INDEX</span> idx_covering <span class="ck">ON</span> <span class="ct">logs</span>(<span class="ct">user_id</span>, <span class="ct">ts</span> <span class="ck">DESC</span>, <span class="ct">action</span>);</pre></div>
+    <div class="box sk"><div class="bxt">Covering index</div><p>When all columns the query needs are present in the index leaf pages, MySQL skips the table row lookup entirely. This is a covering index — look for <code>Extra: Using index</code> in <code>EXPLAIN</code> output.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>&ldquo;Latest per group&rdquo; = <code>ROW_NUMBER() OVER (PARTITION BY ... ORDER BY ts DESC)</code>, then filter <code>WHERE rn = 1</code>. <code>DISTINCT ON</code> (PostgreSQL) does not exist in MySQL.</p></div>
+  </div>
+
+  <!-- ── Q15 ── -->
+  <div class="sec" id="q15">
+    <div class="snum">Q15 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Month-over-month percentage revenue growth, handling zero-revenue months</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p><code>LAG() + NULLIF() + COALESCE</code> combination — excellent. Edge cases for first month and zero-revenue months are handled correctly.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Final Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> monthly_revenue <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="cf">DATE_FORMAT</span>(<span class="ct">created_at</span>, <span class="cs">'%Y-%m'</span>) <span class="ck">AS</span> month,
+        <span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">AS</span> revenue
+    <span class="ck">FROM</span> <span class="ct">orders</span>
+    <span class="ck">GROUP BY</span> <span class="cf">DATE_FORMAT</span>(<span class="ct">created_at</span>, <span class="cs">'%Y-%m'</span>)
+),
+with_prev <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        month, revenue,
+        <span class="cf">LAG</span>(revenue, <span class="cn">1</span>) <span class="ck">OVER</span> (<span class="ck">ORDER BY</span> month) <span class="ck">AS</span> prev_revenue
+        <span class="cc">-- LAG: bring previous row's value</span>
+    <span class="ck">FROM</span> monthly_revenue
+)
+<span class="ck">SELECT</span>
+    month, revenue,
+    <span class="cf">COALESCE</span>(prev_revenue, <span class="cn">0</span>) <span class="ck">AS</span> prev_revenue,
+    <span class="ck">CASE</span>
+        <span class="ck">WHEN</span> prev_revenue <span class="ck">IS NULL</span>  <span class="ck">THEN</span> <span class="cs">'First Month'</span>
+        <span class="ck">WHEN</span> prev_revenue = <span class="cn">0</span>     <span class="ck">THEN</span> <span class="cs">'No Prev Revenue'</span>
+        <span class="ck">ELSE</span> <span class="cf">CONCAT</span>(
+            <span class="cf">ROUND</span>((revenue - prev_revenue)
+                  / <span class="cf">NULLIF</span>(prev_revenue, <span class="cn">0</span>) * <span class="cn">100</span>, <span class="cn">2</span>),
+            <span class="cs">'%'</span>
+        )  <span class="cc">-- NULLIF: converts 0 to NULL, avoiding division-by-zero</span>
+    <span class="ck">END</span> <span class="ck">AS</span> growth_percent
+<span class="ck">FROM</span> with_prev
+<span class="ck">ORDER BY</span> month;</pre></div>
+    <div class="box sk"><div class="bxt">Why NULLIF?</div><p><code>NULLIF(x, 0)</code> returns <code>NULL</code> if <code>x</code> equals 0. Dividing by <code>NULL</code> gives <code>NULL</code> (safe), while dividing by 0 raises an error. This is the standard division-by-zero guard.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>LAG(col, 1)</code> = previous row. <code>LEAD(col, 1)</code> = next row. <code>LAG</code> is essential for MoM and YoY growth calculations.</p></div>
+  </div>
+
+  <!-- ── Q16 ── -->
+  <div class="sec" id="q16">
+    <div class="snum">Q16 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge fix">⚠ Syntax Fix</span></span></div>
+    <h2>Count and total amount by payment status, plus grand total — ROLLUP</h2>
+    <p>Table: <code>payments(status, amount)</code></p>
+    <div class="box am"><div class="bxt">Fix</div><p>Double comma <code>,,</code> after <code>COALESCE</code> — syntax error. Remove the extra comma and it is perfect.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Fixed Answer</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="cf">COALESCE</span>(<span class="ct">status</span>, <span class="cs">'Grand Total'</span>) <span class="ck">AS</span> status,
+    <span class="cc">-- ROLLUP adds a grand total row where status = NULL; label it</span>
+    <span class="cf">COUNT</span>(*) <span class="ck">AS</span> total_count,
+    <span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">AS</span> total_amount
+<span class="ck">FROM</span> <span class="ct">payments</span>
+<span class="ck">GROUP BY</span> <span class="ct">status</span> <span class="ck">WITH ROLLUP</span>;</pre></div>
+    <div class="box sk"><div class="bxt">WITH ROLLUP</div><p>Appending <code>WITH ROLLUP</code> to <code>GROUP BY</code> automatically adds subtotal and grand-total rows. The grand-total row has the grouped column set to <code>NULL</code>. Use <code>GROUPING()</code> function if you need to distinguish real <code>NULL</code> from rollup <code>NULL</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>ROLLUP = automatic grand total. Wrap grouped columns in <code>COALESCE(col, 'Total')</code> to make the summary row readable.</p></div>
+  </div>
+
+  <!-- ── Q17 ── -->
+  <div class="sec" id="q17">
+    <div class="snum">Q17 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Subscription lapse detection — gaps between periods</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>Self-join for gap detection — correct. <code>DATEDIFF &gt; 1</code> to filter actual lapses — excellent.</p></div>
+    <div class="box sk"><div class="bxt">Bonus</div><p>Can also be solved with a window function (<code>LEAD</code>), which is more elegant and avoids the potential pair-explosion of a self-join.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 1: Self Join (your answer)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">s1.user_id</span>,
+    <span class="ct">s1.end_date</span>   <span class="ck">AS</span> gap_start,
+    <span class="ct">s2.start_date</span> <span class="ck">AS</span> gap_end,
+    <span class="cf">DATEDIFF</span>(<span class="ct">s2.start_date</span>, <span class="ct">s1.end_date</span>) <span class="ck">AS</span> gap_days
+<span class="ck">FROM</span> <span class="ct">subscriptions</span> s1
+<span class="ck">JOIN</span> <span class="ct">subscriptions</span> s2
+    <span class="ck">ON</span>  <span class="ct">s1.user_id</span>    = <span class="ct">s2.user_id</span>
+    <span class="ck">AND</span> <span class="ct">s2.start_date</span> &gt; <span class="ct">s1.end_date</span>    <span class="cc">-- next subscription starts after current ends</span>
+<span class="ck">WHERE</span> <span class="cf">DATEDIFF</span>(<span class="ct">s2.start_date</span>, <span class="ct">s1.end_date</span>) &gt; <span class="cn">1</span>  <span class="cc">-- gap > 1 day = lapse</span>
+<span class="ck">ORDER BY</span> <span class="ct">s1.user_id</span>, <span class="ct">s1.end_date</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 2: LEAD Window Function (elegant)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">user_id</span>,
+    <span class="ct">end_date</span>   <span class="ck">AS</span> gap_start,
+    <span class="cf">LEAD</span>(<span class="ct">start_date</span>) <span class="ck">OVER</span> (
+        <span class="ck">PARTITION BY</span> <span class="ct">user_id</span>
+        <span class="ck">ORDER BY</span> <span class="ct">start_date</span>
+    ) <span class="ck">AS</span> gap_end
+<span class="ck">FROM</span> <span class="ct">subscriptions</span>
+<span class="ck">HAVING</span> <span class="cf">DATEDIFF</span>(gap_end, gap_start) &gt; <span class="cn">1</span>;
+<span class="cc">-- HAVING because window aliases are not available in WHERE</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Gap = from <code>current.end_date</code> to <code>next.start_date</code>. <code>LEAD(next_start) - current_end &gt; 1</code> day = lapse exists.</p></div>
+  </div>
+
+  <!-- ── Q18 ── -->
+  <div class="sec" id="q18">
+    <div class="snum">Q18 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Correct</span></span></div>
+    <h2>Delete duplicate rows — keep the lowest id per (email, phone)</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>Both approaches are correct. You understood the extra subquery wrapper that MySQL requires — excellent.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 1: MIN(id) with derived table wrapper</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">DELETE FROM</span> <span class="ct">users</span>
+<span class="ck">WHERE</span> <span class="ct">id</span> <span class="ck">NOT IN</span> (
+    <span class="ck">SELECT</span> keep_id <span class="ck">FROM</span> (   <span class="cc">-- extra derived table wrap — MySQL quirk</span>
+        <span class="ck">SELECT</span> <span class="cf">MIN</span>(<span class="ct">id</span>) <span class="ck">AS</span> keep_id
+        <span class="ck">FROM</span> <span class="ct">users</span>
+        <span class="ck">GROUP BY</span> <span class="ct">email</span>, <span class="ct">phone</span>  <span class="cc">-- keep one id per unique (email, phone)</span>
+    ) <span class="ck">AS</span> min_ids
+);</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Method 2: ROW_NUMBER (cleaner)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">DELETE FROM</span> <span class="ct">users</span>
+<span class="ck">WHERE</span> <span class="ct">id</span> <span class="ck">IN</span> (
+    <span class="ck">SELECT</span> id <span class="ck">FROM</span> (
+        <span class="ck">SELECT</span>
+            <span class="ct">id</span>,
+            <span class="cf">ROW_NUMBER</span>() <span class="ck">OVER</span> (
+                <span class="ck">PARTITION BY</span> <span class="ct">email</span>, <span class="ct">phone</span>
+                <span class="ck">ORDER BY</span> <span class="ct">id</span> <span class="ck">ASC</span>       <span class="cc">-- lowest id = rank 1 = keep</span>
+            ) <span class="ck">AS</span> rn
+        <span class="ck">FROM</span> <span class="ct">users</span>
+    ) ranked
+    <span class="ck">WHERE</span> rn &gt; <span class="cn">1</span>  <span class="cc">-- everything above rank 1 is a duplicate</span>
+);</pre></div>
+    <div class="box sk"><div class="bxt">MySQL quirk</div><p>In MySQL, you cannot reference the table you are deleting from in a subquery directly. Wrapping it in a derived table (an extra <code>SELECT</code> layer) makes MySQL treat it as a temporary result — this is the standard workaround.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>In production, run a <code>SELECT</code> to verify the rows you will delete before issuing the <code>DELETE</code>. Use batch deletes (<code>LIMIT 1000</code>) on large tables to avoid long-held locks.</p></div>
+  </div>
+
+  <!-- ── Q19 ── -->
+  <div class="sec" id="q19">
+    <div class="snum">Q19 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✓ Excellent</span></span></div>
+    <h2>Collaborative filtering — top 5 unseen products from similar users</h2>
+    <div class="box em"><div class="bxt">Your answer</div><p>4-step CTE pipeline — excellent! <code>similar_users → recommended_products → ranked → top 5</code>. This level of query will impress interviewers for senior roles.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Collaborative Filtering Pipeline</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> similar_users <span class="ck">AS</span> (
+    <span class="cc">-- Step 1: find users who viewed the same products</span>
+    <span class="ck">SELECT</span>
+        <span class="ct">u1.user_id</span>  <span class="ck">AS</span> target_user,
+        <span class="ct">u2.user_id</span>  <span class="ck">AS</span> similar_user_id,
+        <span class="cf">COUNT</span>(*) <span class="ck">AS</span> common_products
+    <span class="ck">FROM</span> <span class="ct">user_product_views</span> u1
+    <span class="ck">JOIN</span> <span class="ct">user_product_views</span> u2
+        <span class="ck">ON</span>  <span class="ct">u1.product_id</span> = <span class="ct">u2.product_id</span>   <span class="cc">-- same product viewed</span>
+        <span class="ck">AND</span> <span class="ct">u1.user_id</span>   != <span class="ct">u2.user_id</span>       <span class="cc">-- different users</span>
+    <span class="ck">GROUP BY</span> <span class="ct">u1.user_id</span>, <span class="ct">u2.user_id</span>
+),
+recommended_products <span class="ck">AS</span> (
+    <span class="cc">-- Step 2: products seen by similar users but NOT by target</span>
+    <span class="ck">SELECT</span>
+        <span class="ct">su.target_user</span> <span class="ck">AS</span> user_id,
+        <span class="ct">upv.product_id</span>,
+        <span class="cf">SUM</span>(<span class="ct">upv.view_count</span> * <span class="ct">su.common_products</span>) <span class="ck">AS</span> popularity_score
+        <span class="cc">-- more overlap with similar user = higher weight</span>
+    <span class="ck">FROM</span> similar_users su
+    <span class="ck">JOIN</span> <span class="ct">user_product_views</span> upv
+        <span class="ck">ON</span> <span class="ct">upv.user_id</span> = <span class="ct">su.similar_user_id</span>
+    <span class="ck">WHERE</span> <span class="ct">upv.product_id</span> <span class="ck">NOT IN</span> (
+        <span class="ck">SELECT</span> <span class="ct">product_id</span>
+        <span class="ck">FROM</span> <span class="ct">user_product_views</span> v
+        <span class="ck">WHERE</span> <span class="ct">v.user_id</span> = <span class="ct">su.target_user</span>  <span class="cc">-- exclude what target already viewed</span>
+    )
+    <span class="ck">GROUP BY</span> <span class="ct">su.target_user</span>, <span class="ct">upv.product_id</span>
+),
+ranked <span class="ck">AS</span> (
+    <span class="cc">-- Step 3: rank per user by score</span>
+    <span class="ck">SELECT</span> *,
+        <span class="cf">DENSE_RANK</span>() <span class="ck">OVER</span> (
+            <span class="ck">PARTITION BY</span> <span class="ct">user_id</span>
+            <span class="ck">ORDER BY</span> <span class="ct">popularity_score</span> <span class="ck">DESC</span>
+        ) <span class="ck">AS</span> rnk
+    <span class="ck">FROM</span> recommended_products
+)
+<span class="cc">-- Step 4: return top 5 per user</span>
+<span class="ck">SELECT</span> <span class="ct">user_id</span>, <span class="ct">product_id</span>, <span class="ct">popularity_score</span>, <span class="ct">rnk</span>
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rnk &lt;= <span class="cn">5</span>
+<span class="ck">ORDER BY</span> <span class="ct">user_id</span>, <span class="ct">rnk</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Context</div><p>Real production recommendation systems use Python or Spark, not raw SQL. But demonstrating this level of query in an interview shows deep mastery of complex JOINs, aggregation, and window functions — a strong signal for senior roles.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Complex problem — break it into CTE steps. Step 1: what do I need? Step 2: where from? Step 3: how to combine? Each CTE is one well-named step.</p></div>
+  </div>
+
+  <p style="margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text3);">
+    MySQL interview prep · Part 1 · 19 questions ·
+    <a href="mysql-interview-prep-part2.html" style="color:var(--emerald);">Continue to Part 2 — Technical Q&amp;A</a>
+  </p>
+
+</main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.sec, .hero');
+  const navItems = document.querySelectorAll('.ni');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { threshold: 0.15 });
+  sections.forEach(s => io.observe(s));
+</script>
+<script src="assets/theme-toggle.js" defer></script>
+</body>
+</html>

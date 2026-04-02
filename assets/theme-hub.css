@@ -1,0 +1,69 @@
+/* Light theme — Learning Hub, AI zone, MySQL zone (Syne / DM Sans tokens) */
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --text-1: #f1f4ff;
+  --text-2: #b8c4df;
+  --text-3: #8799b8;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f0f2f9;
+  --surface: #ffffff;
+  --surface-2: #e6eaf4;
+  --border: #c8d0e1;
+  --border-glow: #2563eb33;
+  --text-1: #0a0f18;
+  --text-2: #374151;
+  --text-3: #4b5563;
+  --accent: #1d4ed8;
+  --accent-2: #0e7490;
+  --mysql: #c2410c;
+  --mysql-glow: #ea580c28;
+  --green: #047857;
+}
+
+html[data-theme='light'] body::before {
+  opacity: 0.22;
+}
+
+html[data-theme='light'] .ambient {
+  background: radial-gradient(ellipse at 50% 0%, #6366f120 0%, transparent 65%);
+}
+
+html[data-theme='light'] .brand-badge {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(14, 116, 144, 0.08));
+  border-color: rgba(37, 99, 235, 0.35);
+  color: #0369a1;
+}
+
+html[data-theme='light'] .hero-eyebrow {
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.28);
+  color: #1d4ed8;
+}
+
+html[data-theme='light'] .hero-eyebrow span {
+  background: #1d4ed8;
+}
+
+html[data-theme='light'] .zone--soon {
+  opacity: 0.85;
+}
+
+/* Hub: file / path snippets */
+html[data-theme='light'] .panel code,
+html[data-theme='dark'] .panel code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--mysql);
+}

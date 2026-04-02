@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MySQL Interview Prep — Part 2: Technical Q&amp;A</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+<link rel="stylesheet" href="assets/theme-ui.css">
+<link rel="stylesheet" href="assets/theme-docs.css">
+<style>
+:root{
+  --bg:#07080c;--bg2:#0e0f14;--bg3:#14161c;--bg4:#1b1d25;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#e3e0d6;--text2:#8c8880;--text3:#46433e;
+  --emerald:#10b981;--indigo:#818cf8;--amber:#f59e0b;
+  --sky:#38bdf8;--rose:#f43f5e;--lime:#84cc16;--mysql:#e67e22;
+  --mono:'IBM Plex Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sb{width:268px;min-width:268px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-top{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.sb-badge{display:inline-block;background:var(--mysql);color:#1a0f06;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+.sb-top h1{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.3;}
+.sb-top p{font-size:12px;color:var(--text2);margin-top:4px;}
+.nav-s{padding:0 14px;margin-bottom:4px;}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text3);padding:0 8px;margin-bottom:5px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;font-size:12px;color:var(--text2);transition:all .15s;text-decoration:none;border:1px solid transparent;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--bg3);color:var(--emerald);border-color:var(--border);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.ni.active .ndot{background:var(--emerald);}
+.sb-home{display:block;padding:10px 24px;color:var(--text2);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;border-bottom:1px solid var(--border);transition:color .15s;}
+.sb-home:hover{color:var(--text);}
+
+/* MAIN */
+.main{flex:1;max-width:920px;padding:48px 56px;}
+
+/* HERO */
+.hero{padding:40px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;scroll-margin-top:24px;}
+.htag{font-family:var(--mono);font-size:11px;color:var(--mysql);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.htag::before{content:'';display:block;width:28px;height:1px;background:var(--mysql);}
+.hero h1{font-family:var(--serif);font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px;}
+.hero h1 em{font-style:italic;color:var(--indigo);}
+.hero p{font-size:16px;color:var(--text2);max-width:580px;line-height:1.7;}
+.hmeta{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap;}
+.hm{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);}
+.hm span,.hm a{color:var(--lime);}
+.hm a{text-decoration:none;}
+.hm a:hover{text-decoration:underline;}
+
+/* PROGRESS */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:48px;}
+.prow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px;}
+.pbar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--mysql),var(--amber));border-radius:99px;width:100%;}
+
+/* SECTIONS */
+.sec{margin-bottom:64px;scroll-margin-top:24px;}
+.snum{font-family:var(--mono);font-size:11px;color:var(--mysql);letter-spacing:.1em;margin-bottom:10px;}
+.sec h2{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.2;margin-bottom:18px;}
+p{margin-bottom:14px;color:var(--text2);}
+strong{color:var(--text);font-weight:500;}
+
+/* CALLOUT BOXES */
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0;background:var(--bg2);}
+.box.em{border-color:var(--emerald);}
+.box.in{border-color:var(--indigo);}
+.box.am{border-color:var(--amber);}
+.box.sk{border-color:var(--sky);}
+.box.ro{border-color:var(--rose);}
+.bxt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.box.em .bxt{color:var(--emerald);}
+.box.in .bxt{color:var(--indigo);}
+.box.am .bxt{color:var(--amber);}
+.box.sk .bxt{color:var(--sky);}
+.box.ro .bxt{color:var(--rose);}
+.box p{margin:0;font-size:14px;line-height:1.65;}
+
+/* INSIGHT */
+.insight{background:linear-gradient(135deg,#0d0b1e 0%,#060c08 100%);border:1px solid var(--indigo);border-radius:12px;padding:18px 20px;margin:20px 0;}
+.insight h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;}
+.insight p{color:var(--text2);font-size:13.5px;margin:0;line-height:1.65;}
+
+/* CODE */
+.cb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin:20px 0;overflow:hidden;}
+.cb-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.cb-lang{font-family:var(--mono);font-size:10px;color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot:nth-child(1){background:rgba(244,63,94,.4);}
+.dot:nth-child(2){background:rgba(245,158,11,.4);}
+.dot:nth-child(3){background:rgba(16,185,129,.4);}
+pre{padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:#b5b0a8;white-space:pre-wrap;word-break:break-word;}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--emerald);}
+.ck{color:var(--indigo);}
+.cf{color:var(--emerald);}
+.cs{color:var(--amber);}
+.cn{color:#fb923c;}
+.ct{color:var(--sky);}
+.cc{color:#47443d;font-style:italic;}
+
+/* TABLE */
+.tw{overflow-x:auto;margin:18px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border2);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+td strong{color:var(--text);}
+td code{font-size:11px;}
+
+/* CHAPTER DIVIDERS */
+.ch-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin:52px 0 24px;display:flex;align-items:center;gap:16px;}
+.ch-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* POINT LIST */
+.pts{list-style:none;padding:0;margin:10px 0;}
+.pts li{display:flex;gap:10px;padding:7px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'▸';color:var(--sky);flex-shrink:0;font-size:11px;margin-top:3px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+@media(max-width:768px){.sb{display:none;}.main{padding:28px 20px;}.hero h1{font-size:34px;}}
+@media print{.sb{display:none;}body{background:white;color:black;}}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<nav class="sb">
+  <a href="index.html" class="sb-home">&#8592; Home</a>
+  <a href="mysql-learning.html" class="sb-home">&#8592; MySQL track</a>
+  <a href="mysql-interview-prep-part1.html" class="sb-home">Part 1 — Query problems &#8594;</a>
+  <button type="button" class="theme-toggle theme-toggle--sb" data-theme-toggle aria-pressed="false" aria-label="Switch theme"><span class="theme-toggle__icon" aria-hidden="true">☀</span><span class="theme-toggle__text">Light</span></button>
+  <div class="sb-top">
+    <div class="sb-badge">MYSQL · PART 2</div>
+    <h1>Technical Q&amp;A</h1>
+    <p>22 topics · 6 chapters</p>
+  </div>
+  <div class="nav-s">
+    <div class="nav-lbl">Ch 1 — Indexing</div>
+    <a class="ni active" href="#t1"><div class="ndot"></div>T1 · Clustered vs Secondary</a>
+    <a class="ni" href="#t2"><div class="ndot"></div>T2 · Composite Index</a>
+    <a class="ni" href="#t3"><div class="ndot"></div>T3 · Cardinality</a>
+    <a class="ni" href="#t4"><div class="ndot"></div>T4 · EXPLAIN type: ALL</a>
+    <a class="ni" href="#t5"><div class="ndot"></div>T5 · When indexes hurt</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 2 — Transactions</div>
+    <a class="ni" href="#t6"><div class="ndot"></div>T6 · Isolation levels</a>
+    <a class="ni" href="#t7"><div class="ndot"></div>T7 · Deadlocks</a>
+    <a class="ni" href="#t8"><div class="ndot"></div>T8 · Locks &amp; FOR UPDATE</a>
+    <a class="ni" href="#t9"><div class="ndot"></div>T9 · MVCC</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 3 — Schema</div>
+    <a class="ni" href="#t10"><div class="ndot"></div>T10 · Normalisation</a>
+    <a class="ni" href="#t11"><div class="ndot"></div>T11 · Multi-tenant SaaS</a>
+    <a class="ni" href="#t12"><div class="ndot"></div>T12 · Flexible attributes</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 4 — Optimisation</div>
+    <a class="ni" href="#t13"><div class="ndot"></div>T13 · Reading EXPLAIN</a>
+    <a class="ni" href="#t14"><div class="ndot"></div>T14 · WHERE vs HAVING</a>
+    <a class="ni" href="#t15"><div class="ndot"></div>T15 · Slow JOIN at scale</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 5 — Scaling</div>
+    <a class="ni" href="#t16"><div class="ndot"></div>T16 · Replication lag</a>
+    <a class="ni" href="#t17"><div class="ndot"></div>T17 · Sharding</a>
+    <a class="ni" href="#t18"><div class="ndot"></div>T18 · Online DDL</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 6 — Internals</div>
+    <a class="ni" href="#t19"><div class="ndot"></div>T19 · Buffer pool</a>
+    <a class="ni" href="#t20"><div class="ndot"></div>T20 · UNION vs UNION ALL</a>
+    <a class="ni" href="#t21"><div class="ndot"></div>T21 · CHAR / VARCHAR / TEXT</a>
+    <a class="ni" href="#t22"><div class="ndot"></div>T22 · Covering index</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="hero" id="overview">
+    <div class="htag">MySQL learning · Interview prep</div>
+    <h1>Part 2 —<br><em>Technical Q&amp;A</em></h1>
+    <p>Short, interview-style answers with comparison tables, code examples, and quick recall lines — six chapters covering indexing through internals.</p>
+    <div class="hmeta">
+      <div class="hm">&#128218; <span><a href="mysql-interview-prep-part1.html">Back to Part 1 — Query problems</a></span></div>
+      <div class="hm">&#128172; <span>22 topics · 6 chapters</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="prow"><span>Interview prep</span><span>Part 2 of 2</span></div>
+    <div class="pbar"><div class="pfill"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">Chapters: Indexing · Transactions · Schema · Optimisation · Scaling · Internals</p>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 1 — INDEXING
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch1">Chapter 1 — Indexing &amp; Performance</div>
+
+  <div class="sec" id="t1">
+    <div class="snum">T1</div>
+    <h2>Clustered vs non-clustered index in InnoDB</h2>
+    <div class="tw"><table>
+      <tr><th>Aspect</th><th>Clustered Index</th><th>Secondary (Non-Clustered)</th></tr>
+      <tr><td><strong>What is it?</strong></td><td><strong>Row data physically stored in PK order</strong></td><td>Separate B-tree; leaf holds Primary Key value</td></tr>
+      <tr><td><strong>Per table</strong></td><td><strong>Exactly one</strong> (the PRIMARY KEY)</td><td>Up to 64 per table</td></tr>
+      <tr><td><strong>Leaf page holds</strong></td><td>Actual row data</td><td>Primary Key value only → double-read</td></tr>
+      <tr><td><strong>Range queries</strong></td><td>Very fast</td><td>Extra PK lookup required</td></tr>
+    </table></div>
+    <div class="box sk"><div class="bxt">InnoDB detail</div><p>In InnoDB, the PRIMARY KEY is the clustered index. If you define no PK, MySQL creates a hidden <code>rowid</code>. Secondary index lookups become: index scan + PK lookup (two reads).</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Clustered = data sorted in PK order. Only one per table. PK = Clustered. All others are Secondary (non-clustered).</p></div>
+  </div>
+
+  <div class="sec" id="t2">
+    <div class="snum">T2</div>
+    <h2>Composite index <code>(a, b, c)</code> — which queries use it?</h2>
+    <p>Composite index = one index across multiple columns. The key rule is the <strong>Leftmost Prefix Rule</strong>.</p>
+    <div class="tw"><table>
+      <tr><th>Query</th><th>Index used?</th><th>Reason</th></tr>
+      <tr><td><code>WHERE a = 1</code></td><td>✅ Yes</td><td>Leftmost prefix match</td></tr>
+      <tr><td><code>WHERE a = 1 AND b = 2</code></td><td>✅ Yes</td><td>a, b prefix match</td></tr>
+      <tr><td><code>WHERE a = 1 AND b = 2 AND c = 3</code></td><td>✅ Yes</td><td>Full match</td></tr>
+      <tr><td><code>WHERE b = 2</code></td><td>❌ No</td><td>Skipped leftmost column a</td></tr>
+      <tr><td><code>WHERE a = 1 AND c = 3</code></td><td>⚠ Partial</td><td>Only uses a; c skipped</td></tr>
+      <tr><td><code>WHERE a LIKE 'x%' AND b = 2</code></td><td>⚠ Range on a</td><td>After a range, subsequent columns not usable</td></tr>
+    </table></div>
+    <div class="insight"><h4>Quick recall</h4><p>Start from the left, never skip. A range condition (<code>LIKE</code>, <code>&gt;</code>, <code>&lt;</code>) stops further column use in the same index.</p></div>
+  </div>
+
+  <div class="sec" id="t3">
+    <div class="snum">T3</div>
+    <h2>Index cardinality and the query optimiser</h2>
+    <p><strong>Cardinality</strong> = the number of distinct values in an indexed column (an estimate, not exact).</p>
+    <ul class="pts">
+      <li><strong>High cardinality</strong> (e.g. <code>user_id</code>, <code>email</code>) = highly selective → index is very effective</li>
+      <li><strong>Low cardinality</strong> (e.g. <code>gender</code>, <code>status = 'active/inactive'</code>) = less selective → full scan may be faster</li>
+      <li>The optimiser reads statistics from <code>INFORMATION_SCHEMA.STATISTICS</code> and uses cardinality to decide whether to use an index</li>
+      <li>Run <code>ANALYZE TABLE</code> to refresh statistics — outdated stats lead to wrong query plans</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Indexing a low-cardinality column is often wasted — the optimiser ignores it. In composite indexes, place high-cardinality columns first.</p></div>
+  </div>
+
+  <div class="sec" id="t4">
+    <div class="snum">T4</div>
+    <h2>EXPLAIN output: <code>type: ALL</code> — what it means and how to fix it</h2>
+    <p><strong><code>type: ALL</code></strong> = full table scan. On a 10M-row table, this is a disaster for latency.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">EXPLAIN type hierarchy (best → worst)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">system &gt; const &gt; eq_ref &gt; ref &gt; range &gt; index &gt; ALL
+
+-- system:  single-row table (constant)
+-- const:   PK/UNIQUE equality — at most one row
+-- eq_ref:  PK match in a JOIN
+-- ref:     non-unique index equality
+-- range:   index range scan (BETWEEN, IN, &gt;, &lt;)
+-- index:   full index scan (better than ALL — index is smaller)
+-- ALL:     full table scan ← investigate if you see this</span></pre></div>
+    <p><strong>How to fix:</strong></p>
+    <ul class="pts">
+      <li>Verify that columns in <code>WHERE</code> / <code>JOIN</code> conditions are indexed</li>
+      <li>Avoid wrapping indexed columns in functions: <code>WHERE YEAR(created_at) = 2024</code> breaks index use. Use <code>WHERE created_at BETWEEN '2024-01-01' AND '2024-12-31'</code> instead</li>
+      <li>Avoid implicit type casts — comparing a string column to an integer causes a cast that bypasses the index</li>
+      <li><code>FORCE INDEX</code> hint is available as a last resort</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Always run <code>EXPLAIN</code> before optimising. <code>type = ALL</code> + <code>rows = millions</code> = red flag requiring immediate attention.</p></div>
+  </div>
+
+  <div class="sec" id="t5">
+    <div class="snum">T5</div>
+    <h2>When do indexes hurt performance?</h2>
+    <ul class="pts">
+      <li><strong>Write-heavy tables:</strong> every <code>INSERT</code> / <code>UPDATE</code> / <code>DELETE</code> must update all indexes. An order-processing table with many indexes slows writes significantly.</li>
+      <li><strong>Low-cardinality columns:</strong> an index on <code>is_deleted</code> (true/false) is often ignored by the optimiser — full scan can be faster.</li>
+      <li><strong>Small tables:</strong> the index overhead exceeds the benefit on a 100-row table.</li>
+      <li><strong>Unused indexes:</strong> even if no query uses them, they consume storage and slow every write. Identify and drop unused indexes via <code>INFORMATION_SCHEMA</code>.</li>
+      <li><strong>Over-indexing:</strong> adding an index to every column is a common startup mistake; write speed drops dramatically.</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Indexes speed reads and tax writes. Read-heavy workload → more indexes. Write-heavy workload → fewer, more targeted indexes.</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 2 — TRANSACTIONS
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch2">Chapter 2 — Transactions &amp; Locking</div>
+
+  <div class="sec" id="t6">
+    <div class="snum">T6</div>
+    <h2>Four transaction isolation levels — anomalies prevented</h2>
+    <div class="tw"><table>
+      <tr><th>Level</th><th>Dirty Read</th><th>Non-Repeatable Read</th><th>Phantom Read</th></tr>
+      <tr><td><strong>READ UNCOMMITTED</strong></td><td>❌ occurs</td><td>❌ occurs</td><td>❌ occurs</td></tr>
+      <tr><td><strong>READ COMMITTED</strong></td><td>✅ prevented</td><td>❌ occurs</td><td>❌ occurs</td></tr>
+      <tr><td><strong>REPEATABLE READ</strong> ← default</td><td>✅ prevented</td><td>✅ prevented</td><td>⚠ mostly prevented*</td></tr>
+      <tr><td><strong>SERIALIZABLE</strong></td><td>✅ prevented</td><td>✅ prevented</td><td>✅ prevented</td></tr>
+    </table></div>
+    <p>* InnoDB REPEATABLE READ uses MVCC to prevent phantom reads in most cases — but not in <code>SELECT ... FOR UPDATE</code> scenarios.</p>
+    <ul class="pts">
+      <li><strong>Dirty Read:</strong> reading uncommitted data — if the other transaction rolls back, you saw wrong data</li>
+      <li><strong>Non-Repeatable Read:</strong> same row read twice in one transaction yields different values</li>
+      <li><strong>Phantom Read:</strong> a range query run twice sees new rows inserted by another transaction</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Default = REPEATABLE READ. This is correct for most production applications. Use READ COMMITTED for audit logs where you need the latest committed data.</p></div>
+  </div>
+
+  <div class="sec" id="t7">
+    <div class="snum">T7</div>
+    <h2>Deadlocks — scenario and prevention</h2>
+    <p>Two transactions wait for each other&rsquo;s locks indefinitely. MySQL automatically rolls back one of them.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Deadlock Scenario</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Transaction 1                     Transaction 2
+START TRANSACTION;                   START TRANSACTION;
+UPDATE accounts SET bal=bal-100      UPDATE accounts SET bal=bal-200
+WHERE id = 1;  ← locks row 1        WHERE id = 2;  ← locks row 2
+
+UPDATE accounts SET bal=bal+100      UPDATE accounts SET bal=bal+100
+WHERE id = 2;  ← waiting for T2!    WHERE id = 1;  ← waiting for T1!
+-- DEADLOCK! MySQL kills one transaction.</span></pre></div>
+    <p><strong>Prevention strategies:</strong></p>
+    <ul class="pts">
+      <li>Always lock rows in the same order (e.g. ascending id) — if all transactions follow the same sequence, circular waits cannot form</li>
+      <li>Keep transactions short — hold locks for as little time as possible</li>
+      <li>Implement retry logic in the application — catch the deadlock error and retry</li>
+      <li>Use <code>SELECT ... FOR UPDATE</code> only when genuinely needed</li>
+    </ul>
+    <div class="box sk"><div class="bxt">Diagnose</div><p>Run <code>SHOW ENGINE INNODB STATUS\G</code> and look at the <code>LATEST DETECTED DEADLOCK</code> section for the exact lock chain.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Deadlock = circular wait. Break the cycle by enforcing a consistent lock-acquisition order across all code paths.</p></div>
+  </div>
+
+  <div class="sec" id="t8">
+    <div class="snum">T8</div>
+    <h2>Shared lock vs exclusive lock — and <code>SELECT ... FOR UPDATE</code></h2>
+    <div class="tw"><table>
+      <tr><th></th><th>Shared Lock (S)</th><th>Exclusive Lock (X)</th></tr>
+      <tr><td><strong>Acquired by</strong></td><td><code>SELECT ... LOCK IN SHARE MODE</code></td><td><code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> or <code>SELECT ... FOR UPDATE</code></td></tr>
+      <tr><td><strong>Compatible with other S</strong></td><td>✅ Yes</td><td>❌ No</td></tr>
+      <tr><td><strong>Compatible with X</strong></td><td>❌ No</td><td>❌ No</td></tr>
+      <tr><td><strong>Use case</strong></td><td>&ldquo;I&rsquo;m reading — don&rsquo;t delete this row&rdquo;</td><td>&ldquo;I&rsquo;m about to mutate — nobody touch this row&rdquo;</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SELECT ... FOR UPDATE example</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">START TRANSACTION</span>;
+
+<span class="cc">-- Acquire exclusive row lock; other transactions cannot update this row</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">inventory</span>
+<span class="ck">WHERE</span> <span class="ct">product_id</span> = <span class="cn">42</span>
+<span class="ck">FOR UPDATE</span>;
+
+<span class="cc">-- Now safely decrement stock — no concurrent update possible</span>
+<span class="ck">UPDATE</span> <span class="ct">inventory</span>
+<span class="ck">SET</span> <span class="ct">stock</span> = <span class="ct">stock</span> - <span class="cn">1</span>
+<span class="ck">WHERE</span> <span class="ct">product_id</span> = <span class="cn">42</span>;
+
+<span class="ck">COMMIT</span>;</pre></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>FOR UPDATE</code> = &ldquo;I will mutate this row — lock it exclusively until commit.&rdquo; Essential for inventory decrement, bank balance update, and similar read-modify-write patterns.</p></div>
+  </div>
+
+  <div class="sec" id="t9">
+    <div class="snum">T9</div>
+    <h2>MVCC — Multi-Version Concurrency Control</h2>
+    <p>MVCC keeps multiple row versions. Readers never block writers; writers never block readers. &ldquo;Readers don&rsquo;t block writers, writers don&rsquo;t block readers.&rdquo;</p>
+    <ul class="pts">
+      <li>Every row carries two hidden columns: <strong>DB_TRX_ID</strong> (which transaction created this version) and <strong>DB_ROLL_PTR</strong> (pointer to the undo log chain)</li>
+      <li>When a transaction reads, it uses a <strong>read view</strong> to see only the row version visible at transaction start</li>
+      <li>An <code>UPDATE</code> creates a new version; the old version moves to the undo log</li>
+      <li>The purge thread eventually cleans old versions when no active transaction needs them</li>
+    </ul>
+    <div class="box am"><div class="bxt">Production impact</div><p>A long-running transaction prevents old versions from being purged — the undo log grows and performance degrades. Always commit transactions quickly.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>MVCC = snapshot. You see the database as it was when your transaction started. Concurrent changes do not affect your view (under REPEATABLE READ).</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 3 — SCHEMA
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch3">Chapter 3 — Schema Design &amp; Normalisation</div>
+
+  <div class="sec" id="t10">
+    <div class="snum">T10</div>
+    <h2>1NF, 2NF, 3NF — and when to denormalise in a startup</h2>
+    <div class="tw"><table>
+      <tr><th>Normal Form</th><th>Rule</th><th>Example Violation</th></tr>
+      <tr><td><strong>1NF</strong></td><td>Atomic values; no repeating groups</td><td><code>phones = "01711, 01811"</code> (comma-separated in one cell)</td></tr>
+      <tr><td><strong>2NF</strong></td><td>1NF + no partial dependency on part of a composite PK</td><td><code>order_items(order_id, product_id, product_name)</code> — <code>product_name</code> depends only on <code>product_id</code></td></tr>
+      <tr><td><strong>3NF</strong></td><td>2NF + no transitive dependency</td><td><code>employees(emp_id, dept_id, dept_name)</code> — <code>dept_name</code> depends on <code>dept_id</code>, not directly on <code>emp_id</code></td></tr>
+    </table></div>
+    <p><strong>When to denormalise in a startup:</strong></p>
+    <ul class="pts">
+      <li>A dashboard or report query joins 5+ tables and runs slowly → denormalise into a pre-aggregated summary table</li>
+      <li>Read-to-write ratio is 100:1 or higher → some redundancy is acceptable</li>
+      <li>Use a separate analytics DB or materialised view rather than denormalising the transactional DB</li>
+      <li>Use JSON columns for flexible attributes (MySQL 5.7+) instead of wide denormalised tables</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Normalise for data integrity. Denormalise for read speed. In production: design 3NF first, then denormalise only where you have measured a bottleneck.</p></div>
+  </div>
+
+  <div class="sec" id="t11">
+    <div class="snum">T11</div>
+    <h2>Multi-tenant SaaS schema design — three approaches</h2>
+    <div class="tw"><table>
+      <tr><th>Approach</th><th>Description</th><th>Pros</th><th>Cons</th></tr>
+      <tr><td><strong>Shared Table</strong></td><td>One table, <code>tenant_id</code> column on every row</td><td>Simple, cheap, easy queries</td><td>Weaker isolation; one bad query affects all tenants</td></tr>
+      <tr><td><strong>Shared DB, Schema per Tenant</strong></td><td>Separate schema or prefix per tenant (MySQL: separate database)</td><td>Better isolation; easier per-tenant migration</td><td>Schema changes must be applied to every tenant</td></tr>
+      <tr><td><strong>DB per Tenant</strong></td><td>Separate MySQL instance or database per tenant</td><td>Maximum isolation; compliance-friendly</td><td>Expensive; complex connection pooling; high operational overhead</td></tr>
+    </table></div>
+    <div class="box em"><div class="bxt">Startup recommendation</div><p>Start with Shared Table (<code>tenant_id</code> on all tables). As you scale, move heavy tenants to their own database. Always place <code>tenant_id</code> as the first column in composite indexes.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>tenant_id</code> = first column in every composite index. Forgetting this destroys row-level security and performance at scale.</p></div>
+  </div>
+
+  <div class="sec" id="t12">
+    <div class="snum">T12</div>
+    <h2>EAV vs JSON column vs type-per-table — flexible product attributes</h2>
+    <div class="tw"><table>
+      <tr><th>Pattern</th><th>Structure</th><th>Best for</th><th>Weakness</th></tr>
+      <tr><td><strong>EAV</strong></td><td><code>(entity_id, attribute, value)</code></td><td>Highly dynamic / unknown attributes</td><td>Slow queries, no type safety, hard to index</td></tr>
+      <tr><td><strong>JSON Column</strong></td><td><code>attributes JSON</code> column</td><td>Semi-structured data, MySQL 5.7+</td><td>Full table scan without a generated-column index</td></tr>
+      <tr><td><strong>Separate type tables</strong></td><td><code>electronics_attrs</code>, <code>clothing_attrs</code></td><td>Known, stable types; type-safe</td><td>Schema change required for every new type</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JSON Column + Virtual Index (MySQL 8+)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">ALTER TABLE</span> products
+<span class="ck">ADD COLUMN</span> attributes <span class="ck">JSON</span>;
+
+<span class="cc">-- Extract a JSON path to a virtual column and index it</span>
+<span class="ck">ALTER TABLE</span> products
+<span class="ck">ADD COLUMN</span> color <span class="ck">VARCHAR</span>(<span class="cn">50</span>)
+    <span class="ck">GENERATED ALWAYS AS</span> (attributes -&gt;&gt; <span class="cs">'$.color'</span>) <span class="ck">VIRTUAL</span>,
+<span class="ck">ADD INDEX</span> idx_color (color);  <span class="cc">-- now color is fully indexable</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>JSON + Generated Column + Index = flexible structure and indexed lookups. This is the best balance for most startup use cases.</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 4 — OPTIMISATION
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch4">Chapter 4 — Query Optimisation &amp; EXPLAIN</div>
+
+  <div class="sec" id="t13">
+    <div class="snum">T13</div>
+    <h2>Key EXPLAIN columns — type, key, rows, Extra</h2>
+    <div class="tw"><table>
+      <tr><th>Column</th><th>Meaning</th><th>Watch for</th></tr>
+      <tr><td><strong>type</strong></td><td>Access path / scan type</td><td><code>ALL</code> = problem; <code>ref</code> / <code>eq_ref</code> = good</td></tr>
+      <tr><td><strong>key</strong></td><td>Which index is used</td><td><code>NULL</code> = no index = investigate</td></tr>
+      <tr><td><strong>rows</strong></td><td>Estimated rows examined</td><td>Large number + <code>type=ALL</code> = optimise</td></tr>
+      <tr><td><strong>Extra</strong></td><td>Additional execution info</td><td><code>Using filesort</code>, <code>Using temporary</code> = expensive</td></tr>
+      <tr><td><strong>key_len</strong></td><td>Bytes of composite index used</td><td>Larger = more index columns utilised</td></tr>
+      <tr><td><strong>filtered</strong></td><td>% of rows passing the condition</td><td>Lower % = more selective (good)</td></tr>
+    </table></div>
+    <p><strong>Extra red flags:</strong></p>
+    <ul class="pts">
+      <li><code>Using filesort</code> — ORDER BY column is not in the index; an extra sort step is required</li>
+      <li><code>Using temporary</code> — GROUP BY or ORDER BY requires a temporary table; typically slow</li>
+      <li><code>Using index</code> — covering index; no table lookup needed — this is what you want</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p><code>Extra: Using index</code> = covering index win. <code>Using filesort</code> + <code>Using temporary</code> together = expensive; add appropriate indexes to the ORDER BY / GROUP BY columns.</p></div>
+  </div>
+
+  <div class="sec" id="t14">
+    <div class="snum">T14</div>
+    <h2>WHERE vs HAVING — difference and performance impact</h2>
+    <div class="tw"><table>
+      <tr><th></th><th>WHERE</th><th>HAVING</th></tr>
+      <tr><td><strong>Executes when</strong></td><td>Before GROUP BY</td><td>After GROUP BY</td></tr>
+      <tr><td><strong>Filters</strong></td><td>Individual rows</td><td>Grouped results</td></tr>
+      <tr><td><strong>Aggregate functions</strong></td><td>❌ Not allowed</td><td>✅ Allowed (COUNT, SUM, etc.)</td></tr>
+      <tr><td><strong>Index used</strong></td><td>✅ Yes</td><td>❌ No — runs after aggregation</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Performance comparison</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- ❌ SLOW: groups all rows first, then filters</span>
+<span class="ck">SELECT</span> <span class="ct">dept_id</span>, <span class="cf">COUNT</span>(*) <span class="ck">FROM</span> <span class="ct">employees</span>
+<span class="ck">GROUP BY</span> <span class="ct">dept_id</span>
+<span class="ck">HAVING</span> <span class="ct">dept_id</span> = <span class="cn">5</span>;   <span class="cc">-- dept_id is not an aggregate — belongs in WHERE</span>
+
+<span class="cc">-- ✅ FAST: filter first (uses index), then group a smaller set</span>
+<span class="ck">SELECT</span> <span class="ct">dept_id</span>, <span class="cf">COUNT</span>(*) <span class="ck">FROM</span> <span class="ct">employees</span>
+<span class="ck">WHERE</span> <span class="ct">dept_id</span> = <span class="cn">5</span>
+<span class="ck">GROUP BY</span> <span class="ct">dept_id</span>;</pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>The earlier you filter, the less data gets processed. Non-aggregate condition → <code>WHERE</code>. Aggregate condition (e.g. <code>COUNT(*) &gt; 5</code>) → <code>HAVING</code>.</p></div>
+  </div>
+
+  <div class="sec" id="t15">
+    <div class="snum">T15</div>
+    <h2>Slow JOIN on 5M-row tables — systematic optimisation</h2>
+    <ul class="pts">
+      <li><strong>Step 1 — Run EXPLAIN:</strong> check <code>type</code>, <code>key</code>, <code>rows</code>. Which table is being full-scanned?</li>
+      <li><strong>Step 2 — Index join columns:</strong> <code>ON t1.user_id = t2.user_id</code> — both sides need indexes</li>
+      <li><strong>Step 3 — Filter selectivity:</strong> is the <code>WHERE</code> condition on an indexed column? Push filters as early as possible to reduce row count before the join</li>
+      <li><strong>Step 4 — Join order:</strong> MySQL usually drives from the smaller filtered table. Use <code>STRAIGHT_JOIN</code> to force a specific order if the optimiser chooses wrong</li>
+      <li><strong>Step 5 — Covering index:</strong> if all SELECTed columns are in the index, table lookups are eliminated entirely</li>
+      <li><strong>Step 6 — Query rewrite:</strong> convert correlated subqueries to JOINs. Compare <code>EXISTS</code> vs <code>IN</code> — test which the optimiser handles better for your data distribution</li>
+      <li><strong>Step 7 — Keyset pagination:</strong> large <code>OFFSET</code> values force MySQL to scan and discard. Use <code>WHERE id &gt; last_seen_id LIMIT 20</code> instead</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>In interviews, walk through this framework step by step — it shows systematic thinking, not just &ldquo;add an index.&rdquo;</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 5 — SCALING
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch5">Chapter 5 — Replication, Scaling &amp; Architecture</div>
+
+  <div class="sec" id="t16">
+    <div class="snum">T16</div>
+    <h2>Primary-Replica replication and read-after-write consistency</h2>
+    <ul class="pts">
+      <li>The primary accepts all writes and records changes in the binary log</li>
+      <li>Replicas read the binary log and apply changes — asynchronous by default</li>
+      <li>Routing read queries to replicas reduces primary load</li>
+    </ul>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Read-after-write lag problem</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- User updates their profile (write goes to Primary)</span>
+<span class="ck">UPDATE</span> users <span class="ck">SET</span> name = <span class="cs">'Rahul'</span> <span class="ck">WHERE</span> id = <span class="cn">1</span>;
+
+<span class="cc">-- Profile page loads immediately (read from Replica) ← lag!</span>
+<span class="ck">SELECT</span> name <span class="ck">FROM</span> users <span class="ck">WHERE</span> id = <span class="cn">1</span>;  <span class="cc">-- may still show the old name</span></pre></div>
+    <p><strong>Solutions:</strong></p>
+    <ul class="pts">
+      <li>For a user reading their own profile immediately after writing: read from Primary for that one request; use Replica for other users&rsquo; data</li>
+      <li>Sticky session: route the same user&rsquo;s reads to Primary for a short window after their write</li>
+      <li>Semi-synchronous replication: the write ACK waits for at least one replica to confirm</li>
+      <li>Monitor lag with GTID-based replication metrics</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>&ldquo;Write Primary, Read Replica&rdquo; is the first scaling step for most products. Handling replication lag is the tricky design challenge.</p></div>
+  </div>
+
+  <div class="sec" id="t17">
+    <div class="snum">T17</div>
+    <h2>Sharding — when to do it and the challenges</h2>
+    <p>Horizontal split: distribute a large table across multiple database servers by a <em>shard key</em> (e.g. user_id ranges or consistent hash).</p>
+    <p><strong>When to shard:</strong></p>
+    <ul class="pts">
+      <li>A single server can no longer handle the write throughput</li>
+      <li>The table is so large that even the index no longer fits in memory</li>
+      <li>Vertical scaling (bigger machine) is no longer cost-effective or available</li>
+    </ul>
+    <p><strong>Challenges:</strong></p>
+    <ul class="pts">
+      <li><strong>Cross-shard queries:</strong> JOINs across shards are not possible in SQL — data must be merged at the application layer</li>
+      <li><strong>Rebalancing:</strong> adding a new shard requires migrating existing data, which is operationally complex</li>
+      <li><strong>Distributed transactions:</strong> require Two-Phase Commit (2PC) — complex and slow</li>
+      <li><strong>Hotspot:</strong> if many users land on the same shard (e.g. with a sequential ID key), the load is uneven</li>
+    </ul>
+    <div class="insight"><h4>Quick recall</h4><p>Sharding is a last resort. Exhaust caching, replication, indexing, and denormalisation first. Use consistent hashing to minimise data movement when rebalancing.</p></div>
+  </div>
+
+  <div class="sec" id="t18">
+    <div class="snum">T18</div>
+    <h2>Adding a column to a 100M-row table with zero downtime</h2>
+    <p>Direct <code>ALTER TABLE</code> on a large table = table lock = downtime. Use online DDL instead.</p>
+    <ul class="pts">
+      <li><strong>pt-online-schema-change (Percona):</strong> creates a shadow table, syncs changes via triggers, then atomically renames — zero-downtime</li>
+      <li><strong>gh-ost (GitHub):</strong> trigger-less; tracks changes from the binary log. Preferred in high-traffic production systems</li>
+      <li><strong>MySQL 8+ Online DDL:</strong> <code>ALGORITHM=INPLACE, LOCK=NONE</code> supports many DDL operations without blocking — but not all change types qualify</li>
+    </ul>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">MySQL Online DDL (verify support first)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">ALTER TABLE</span> big_table
+<span class="ck">ADD COLUMN</span> new_col <span class="ck">VARCHAR</span>(<span class="cn">100</span>) <span class="ck">DEFAULT NULL</span>,
+<span class="ck">ALGORITHM</span>=<span class="ck">INPLACE</span>,   <span class="cc">-- modify in-place rather than creating a copy</span>
+<span class="ck">LOCK</span>=<span class="ck">NONE</span>;            <span class="cc">-- no read/write lock during the operation</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Production schema migration on large tables = gh-ost or pt-osc. Never run bare <code>ALTER TABLE</code> on a multi-million-row table in production without testing the DDL type first.</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 6 — INTERNALS
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch6">Chapter 6 — MySQL Internals</div>
+
+  <div class="sec" id="t19">
+    <div class="snum">T19</div>
+    <h2>InnoDB Buffer Pool — tuning for read-heavy vs write-heavy workloads</h2>
+    <p>The buffer pool is InnoDB&rsquo;s main memory cache for data and index pages. Reducing disk I/O is the primary goal. Default is 128 MB — wholly inadequate for production.</p>
+    <ul class="pts">
+      <li><strong>General rule:</strong> allocate 70–80% of available RAM to the buffer pool</li>
+      <li><strong>Read-heavy:</strong> larger buffer pool (keep hot data in memory); increase <code>innodb_read_io_threads</code></li>
+      <li><strong>Write-heavy:</strong> increase <code>innodb_log_file_size</code> (larger redo log); tune <code>innodb_flush_log_at_trx_commit=2</code> for a durability-vs-speed tradeoff; increase <code>innodb_write_io_threads</code></li>
+    </ul>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Key config (my.cnf) — 16 GB RAM server</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>innodb_buffer_pool_size      = <span class="cn">12G</span>  <span class="cc">-- ~75% of RAM</span>
+innodb_buffer_pool_instances = <span class="cn">8</span>    <span class="cc">-- improves concurrency</span>
+innodb_log_file_size         = <span class="cn">2G</span>   <span class="cc">-- larger for write-heavy</span>
+innodb_flush_log_at_trx_commit = <span class="cn">1</span>  <span class="cc">-- ACID safe (default)
+-- =2 speeds writes but risks ~1 sec data loss on crash</span></pre></div>
+    <div class="box sk"><div class="bxt">Monitor hit rate</div><p>Run <code>SHOW STATUS LIKE 'Innodb_buffer_pool_read%'</code>. A healthy buffer pool hit ratio is 99%+. If it drops below that, consider increasing pool size or adding read replicas.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Buffer pool = keep hot pages in RAM to avoid disk reads. Sizing it correctly is one of the highest-impact MySQL tuning moves.</p></div>
+  </div>
+
+  <div class="sec" id="t20">
+    <div class="snum">T20</div>
+    <h2>UNION vs UNION ALL — difference and performance</h2>
+    <div class="tw"><table>
+      <tr><th></th><th>UNION</th><th>UNION ALL</th></tr>
+      <tr><td><strong>Duplicates</strong></td><td>Removed (sort + deduplicate)</td><td>Kept as-is</td></tr>
+      <tr><td><strong>Performance</strong></td><td>Slower — temporary table + filesort</td><td>Faster — no extra step</td></tr>
+      <tr><td><strong>Use when</strong></td><td>Distinct results are required</td><td>No duplicates possible, or they don&rsquo;t matter</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">When UNION ALL is safe</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Partitioned archive tables: 2023 and 2024 rows can never overlap</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> orders_2023
+<span class="ck">UNION ALL</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> orders_2024;</pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Default to <code>UNION ALL</code>. Add deduplication only when you have confirmed the need. &ldquo;I know duplicates cannot exist&rdquo; → always <code>UNION ALL</code>.</p></div>
+  </div>
+
+  <div class="sec" id="t21">
+    <div class="snum">T21</div>
+    <h2>CHAR vs VARCHAR vs TEXT — storage and indexing impact</h2>
+    <div class="tw"><table>
+      <tr><th></th><th>CHAR(n)</th><th>VARCHAR(n)</th><th>TEXT</th></tr>
+      <tr><td><strong>Storage</strong></td><td>Fixed n bytes (space-padded)</td><td>Variable (value + 1–2 byte length prefix)</td><td>Off-page storage for large values</td></tr>
+      <tr><td><strong>Max length</strong></td><td>255</td><td>65,535</td><td>65,535 (MEDIUMTEXT: 16 MB)</td></tr>
+      <tr><td><strong>Index</strong></td><td>✅ Full column</td><td>✅ Full or prefix</td><td>⚠ Prefix index only</td></tr>
+      <tr><td><strong>Speed</strong></td><td>Fastest (fixed width)</td><td>Slightly slower</td><td>Slowest (off-page fetch)</td></tr>
+      <tr><td><strong>Use for</strong></td><td>MD5, phone, country code</td><td>Name, email, title</td><td>Article body, HTML, long descriptions</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Prefix index on TEXT column</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Full-column index is not allowed on TEXT</span>
+<span class="ck">CREATE INDEX</span> idx_content_prefix
+<span class="ck">ON</span> posts (<span class="ct">content</span>(<span class="cn">100</span>));  <span class="cc">-- index first 100 characters only</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>CHAR = fixed (faster). VARCHAR = variable (flexible). TEXT = large (off-page). Email/name → VARCHAR. Country code/hash → CHAR. Article body → TEXT.</p></div>
+  </div>
+
+  <div class="sec" id="t22">
+    <div class="snum">T22</div>
+    <h2>Covering index — eliminating table lookups</h2>
+    <p>A covering index contains all columns the query needs in its leaf pages — MySQL never reads the actual table row. Visible as <code>Extra: Using index</code> in <code>EXPLAIN</code>.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Covering Index Example</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Query: order summary per user for a given status</span>
+<span class="ck">SELECT</span> <span class="ct">user_id</span>, <span class="ct">status</span>, <span class="cf">COUNT</span>(*) <span class="ck">AS</span> cnt
+<span class="ck">FROM</span> <span class="ct">orders</span>
+<span class="ck">WHERE</span> <span class="ct">user_id</span> = <span class="cn">42</span>
+  <span class="ck">AND</span> <span class="ct">status</span> = <span class="cs">'delivered'</span>
+<span class="ck">GROUP BY</span> <span class="ct">user_id</span>, <span class="ct">status</span>;
+
+<span class="cc">-- Covering index: query only needs user_id and status</span>
+<span class="ck">CREATE INDEX</span> idx_covering
+<span class="ck">ON</span> <span class="ct">orders</span> (<span class="ct">user_id</span>, <span class="ct">status</span>);
+<span class="cc">-- EXPLAIN Extra: Using index ← no table lookup!</span>
+
+<span class="cc">-- If SELECT also includes 'amount', extend the index:</span>
+<span class="ck">CREATE INDEX</span> idx_covering_v2
+<span class="ck">ON</span> <span class="ct">orders</span> (<span class="ct">user_id</span>, <span class="ct">status</span>, <span class="ct">amount</span>);</pre></div>
+    <div class="box am"><div class="bxt">Tradeoff</div><p>Wider covering indexes cost more on writes and consume more storage. Build covering indexes only for hot, frequently executed queries — not for everything.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Covering index = all needed data lives in the index leaf. No table row fetch needed = fastest possible read. Goal: <code>Using index</code> in EXPLAIN.</p></div>
+  </div>
+
+  <p style="margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text3);">
+    MySQL interview prep · Part 2 · 22 topics ·
+    <a href="mysql-interview-prep-part1.html" style="color:var(--emerald);">Back to Part 1 — Query problems</a> ·
+    <a href="mysql-learning.html" style="color:var(--mysql);">MySQL track</a>
+  </p>
+
+</main>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.sec, .hero');
+  const navItems = document.querySelectorAll('.ni');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { threshold: 0.15 });
+  sections.forEach(s => io.observe(s));
+</script>
+<script src="assets/theme-toggle.js" defer></script>
+</body>
+</html>
