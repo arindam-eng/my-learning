@@ -159,24 +159,32 @@ td code{font-size:11px;}
     <a class="ni" href="#t7"><div class="ndot"></div>T7 · Deadlocks</a>
     <a class="ni" href="#t8"><div class="ndot"></div>T8 · Locks &amp; FOR UPDATE</a>
     <a class="ni" href="#t9"><div class="ndot"></div>T9 · MVCC</a>
+    <a class="ni" href="#t23"><div class="ndot"></div>T23 · ACID &amp; InnoDB</a>
+    <a class="ni" href="#t24"><div class="ndot"></div>T24 · Gap &amp; Next-key Locks</a>
+    <a class="ni" href="#t25"><div class="ndot"></div>T25 · Optimistic vs Pessimistic</a>
   </div>
   <div class="nav-s" style="margin-top:4px;">
     <div class="nav-lbl">Ch 3 — Schema</div>
     <a class="ni" href="#t10"><div class="ndot"></div>T10 · Normalisation</a>
     <a class="ni" href="#t11"><div class="ndot"></div>T11 · Multi-tenant SaaS</a>
     <a class="ni" href="#t12"><div class="ndot"></div>T12 · Flexible attributes</a>
+    <a class="ni" href="#t26"><div class="ndot"></div>T26 · FK Constraints</a>
   </div>
   <div class="nav-s" style="margin-top:4px;">
     <div class="nav-lbl">Ch 4 — Optimisation</div>
     <a class="ni" href="#t13"><div class="ndot"></div>T13 · Reading EXPLAIN</a>
     <a class="ni" href="#t14"><div class="ndot"></div>T14 · WHERE vs HAVING</a>
     <a class="ni" href="#t15"><div class="ndot"></div>T15 · Slow JOIN at scale</a>
+    <a class="ni" href="#t27"><div class="ndot"></div>T27 · IN vs EXISTS vs JOIN</a>
+    <a class="ni" href="#t28"><div class="ndot"></div>T28 · Slow Query Log</a>
   </div>
   <div class="nav-s" style="margin-top:4px;">
     <div class="nav-lbl">Ch 5 — Scaling</div>
     <a class="ni" href="#t16"><div class="ndot"></div>T16 · Replication lag</a>
     <a class="ni" href="#t17"><div class="ndot"></div>T17 · Sharding</a>
     <a class="ni" href="#t18"><div class="ndot"></div>T18 · Online DDL</a>
+    <a class="ni" href="#t29"><div class="ndot"></div>T29 · Table Partitioning</a>
+    <a class="ni" href="#t30"><div class="ndot"></div>T30 · Connection Pooling</a>
   </div>
   <div class="nav-s" style="margin-top:4px;">
     <div class="nav-lbl">Ch 6 — Internals</div>
@@ -195,14 +203,14 @@ td code{font-size:11px;}
     <p>Short, interview-style answers with comparison tables, code examples, and quick recall lines — six chapters covering indexing through internals.</p>
     <div class="hmeta">
       <div class="hm">&#128218; <span><a href="mysql-interview-prep-part1.html">Back to Part 1 — Query problems</a></span></div>
-      <div class="hm">&#128172; <span>22 topics · 6 chapters</span></div>
+      <div class="hm">&#128172; <span>30 topics · 6 chapters</span></div>
     </div>
   </div>
 
   <div class="pcard">
     <div class="prow"><span>Interview prep</span><span>Part 2 of 2</span></div>
     <div class="pbar"><div class="pfill"></div></div>
-    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">Chapters: Indexing · Transactions · Schema · Optimisation · Scaling · Internals</p>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">30 topics · Chapters: Indexing · Transactions · Schema · Optimisation · Scaling · Internals</p>
   </div>
 
   <!-- ══════════════════════════
@@ -376,6 +384,100 @@ WHERE id = 2;  ← waiting for T2!    WHERE id = 1;  ← waiting for T1!
     <div class="insight"><h4>Quick recall</h4><p>MVCC = snapshot. You see the database as it was when your transaction started. Concurrent changes do not affect your view (under REPEATABLE READ).</p></div>
   </div>
 
+  <!-- ── T23 ── -->
+  <div class="sec" id="t23">
+    <div class="snum">T23 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>ACID — what each property means at the InnoDB level</h2>
+    <p>The textbook definition is easy. Senior interviewers want to know <em>how</em> InnoDB actually implements each guarantee — not just what the acronym stands for.</p>
+    <div class="tw"><table>
+      <tr><th>Property</th><th>InnoDB mechanism</th><th>What breaks it</th></tr>
+      <tr><td><strong>Atomicity</strong></td><td>Undo log — every change is recorded so the entire transaction can be rolled back atomically</td><td>Application crash mid-transaction (InnoDB auto-rolls back on reconnect)</td></tr>
+      <tr><td><strong>Consistency</strong></td><td>Constraints enforced at commit: UNIQUE, NOT NULL, FK, CHECK</td><td>Disabling FK checks (<code>SET FOREIGN_KEY_CHECKS=0</code>), bypassing constraints</td></tr>
+      <tr><td><strong>Isolation</strong></td><td>MVCC for reads + row-level locks for writes, controlled by isolation level</td><td>Choosing too-low isolation (READ UNCOMMITTED) exposes dirty reads</td></tr>
+      <tr><td><strong>Durability</strong></td><td>Redo log (WAL) flushed to disk before the commit ACK is returned to the client</td><td><code>innodb_flush_log_at_trx_commit=2</code> — data in OS cache, lost on OS crash</td></tr>
+    </table></div>
+    <div class="box sk"><div class="bxt">The WAL angle interviewers love</div><p>WAL = Write-Ahead Log. InnoDB writes the change to the redo log on disk <strong>before</strong> touching the actual data page (which can be flushed lazily). On a crash, MySQL replays the redo log for committed transactions and uses the undo log to discard uncommitted ones. This is what makes durability possible without syncing every data page to disk on every commit. Setting <code>innodb_flush_log_at_trx_commit=1</code> is the only fully ACID-safe value.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><strong>A</strong> = undo log (rollback). <strong>C</strong> = constraints at commit. <strong>I</strong> = MVCC + locks. <strong>D</strong> = redo log (WAL) flushed before ACK. <code>innodb_flush_log_at_trx_commit=1</code> = fully durable.</p></div>
+  </div>
+
+  <!-- ── T24 ── -->
+  <div class="sec" id="t24">
+    <div class="snum">T24 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Gap locks and next-key locks — the hidden cause of range deadlocks</h2>
+    <p>Under REPEATABLE READ, InnoDB locks more than just the rows you touch. Understanding this prevents unexpected deadlocks in production that are impossible to reproduce with a single row.</p>
+    <div class="tw"><table>
+      <tr><th>Lock type</th><th>What it locks</th><th>When it appears</th></tr>
+      <tr><td><strong>Record lock</strong></td><td>A single existing index row</td><td>Any <code>WHERE</code> clause that hits a unique index with an exact match</td></tr>
+      <tr><td><strong>Gap lock</strong></td><td>The gap <em>between</em> index values (no row, just space)</td><td>Range queries (<code>BETWEEN</code>, <code>&lt;</code>, <code>&gt;</code>) on non-unique indexes under REPEATABLE READ</td></tr>
+      <tr><td><strong>Next-key lock</strong></td><td>Record lock + gap lock to the left</td><td>Default for most InnoDB row locking under REPEATABLE READ</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Gap lock scenario</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Table: orders(id PK, status, amount)</span>
+<span class="cc">-- Index on status</span>
+
+<span class="cc">-- Tx A — scans all 'pending' rows</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">orders</span>
+<span class="ck">WHERE</span> <span class="ct">status</span> = <span class="cs">'pending'</span>
+<span class="ck">FOR UPDATE</span>;
+
+<span class="cc">-- Tx B — tries to INSERT a new pending order → blocked!</span>
+<span class="cc">-- Tx A holds a gap lock on the 'pending' gap.</span>
+<span class="cc">-- Tx B must wait until Tx A commits or rolls back.</span>
+<span class="ck">INSERT INTO</span> <span class="ct">orders</span> (<span class="ct">status</span>, <span class="ct">amount</span>)
+<span class="ck">VALUES</span> (<span class="cs">'pending'</span>, <span class="cn">500</span>);</pre></div>
+    <div class="box em"><div class="bxt">How to reduce gap lock contention</div>
+      <ul class="pts" style="margin:0;">
+        <li>Use <code>READ COMMITTED</code> isolation — gap locks are disabled (dirty reads allowed; weaker guarantee)</li>
+        <li>Query by Primary Key when possible — a PK exact-match uses a record lock only, no gap</li>
+        <li>Narrow range queries: fewer gaps locked = less contention</li>
+        <li>Keep transactions short — the lock is released on commit</li>
+      </ul>
+    </div>
+    <div class="insight"><h4>Quick recall</h4><p>Gap lock = InnoDB locks the <em>space</em> between index values, not just the row. Prevents phantom reads. Exists only under REPEATABLE READ. A range <code>FOR UPDATE</code> blocks inserts into that range. Switch to READ COMMITTED to eliminate gap locks.</p></div>
+  </div>
+
+  <!-- ── T25 ── -->
+  <div class="sec" id="t25">
+    <div class="snum">T25 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Optimistic vs pessimistic locking — when to use each</h2>
+    <p>Both patterns solve the lost-update problem. The choice affects throughput, contention, and complexity at the application layer.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>Pessimistic locking</th><th>Optimistic locking</th></tr>
+      <tr><td><strong>Mechanism</strong></td><td><code>SELECT ... FOR UPDATE</code> — row locked immediately</td><td><code>version</code> column — lock-free read; check version on update</td></tr>
+      <tr><td><strong>When it blocks</strong></td><td>At read time — other writers queue up</td><td>At write time — transaction retried if version mismatch</td></tr>
+      <tr><td><strong>Best for</strong></td><td>High-contention resources (e.g. inventory, seat bookings, bank balance)</td><td>Low-contention reads where conflicts are rare (e.g. user profile edit)</td></tr>
+      <tr><td><strong>Throughput</strong></td><td>Lower — lock held for entire transaction duration</td><td>Higher — no lock held during read phase</td></tr>
+      <tr><td><strong>Failure mode</strong></td><td>Deadlock if lock ordering is wrong</td><td>Retry storm if contention is actually high</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Pessimistic — SELECT FOR UPDATE</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">START TRANSACTION</span>;
+
+<span class="cc">-- Lock the row immediately; other writers wait</span>
+<span class="ck">SELECT</span> <span class="ct">stock</span>
+<span class="ck">FROM</span>   <span class="ct">products</span>
+<span class="ck">WHERE</span>  <span class="ct">id</span> = <span class="cn">42</span>
+<span class="ck">FOR UPDATE</span>;
+
+<span class="ck">UPDATE</span> <span class="ct">products</span>
+<span class="ck">SET</span>    <span class="ct">stock</span> = <span class="ct">stock</span> - <span class="cn">1</span>
+<span class="ck">WHERE</span>  <span class="ct">id</span> = <span class="cn">42</span>;
+
+<span class="ck">COMMIT</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Optimistic — version column pattern</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Read without any lock</span>
+<span class="ck">SELECT</span> <span class="ct">id</span>, <span class="ct">stock</span>, <span class="ct">version</span>
+<span class="ck">FROM</span>   <span class="ct">products</span>
+<span class="ck">WHERE</span>  <span class="ct">id</span> = <span class="cn">42</span>;
+
+<span class="cc">-- Update only if version has not changed since we read it</span>
+<span class="ck">UPDATE</span> <span class="ct">products</span>
+<span class="ck">SET</span>    <span class="ct">stock</span>   = <span class="ct">stock</span> - <span class="cn">1</span>,
+       <span class="ct">version</span> = <span class="ct">version</span> + <span class="cn">1</span>
+<span class="ck">WHERE</span>  <span class="ct">id</span> = <span class="cn">42</span>
+  <span class="ck">AND</span>  <span class="ct">version</span> = <span class="cn">7</span>;   <span class="cc">-- 7 = value we read earlier</span>
+
+<span class="cc">-- If rows_affected = 0 → someone else updated; retry the whole flow</span></pre></div>
+    <div class="box am"><div class="bxt">Interview answer structure</div><p>State which pattern you would choose and <em>why</em> for the given scenario. E.g.: &ldquo;For a flash-sale inventory counter with 500 concurrent buyers, I would use pessimistic locking — the contention is guaranteed and retries would create a stampede. For a CMS where two editors might rarely touch the same article, optimistic locking is better — no lock overhead and conflicts surface as a clear error to the user.&rdquo;</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Pessimistic = lock at read (<code>FOR UPDATE</code>). Optimistic = check <code>version</code> at write. Pessimistic for <strong>high contention</strong>; Optimistic for <strong>low contention</strong>. Optimistic retry storms kill you if you chose wrong.</p></div>
+  </div>
+
   <!-- ══════════════════════════
        CHAPTER 3 — SCHEMA
   ══════════════════════════ -->
@@ -431,6 +533,35 @@ WHERE id = 2;  ← waiting for T2!    WHERE id = 1;  ← waiting for T1!
     <span class="ck">GENERATED ALWAYS AS</span> (attributes -&gt;&gt; <span class="cs">'$.color'</span>) <span class="ck">VIRTUAL</span>,
 <span class="ck">ADD INDEX</span> idx_color (color);  <span class="cc">-- now color is fully indexable</span></pre></div>
     <div class="insight"><h4>Quick recall</h4><p>JSON + Generated Column + Index = flexible structure and indexed lookups. This is the best balance for most startup use cases.</p></div>
+  </div>
+
+  <!-- ── T26 ── -->
+  <div class="sec" id="t26">
+    <div class="snum">T26 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Foreign key constraints — benefits, tradeoffs, and the startup debate</h2>
+    <p>Every senior engineer is asked this. The answer is not &ldquo;always use them&rdquo; or &ldquo;never use them&rdquo; — it is &ldquo;here is the tradeoff and here is when I choose each.&rdquo;</p>
+    <div class="tw"><table>
+      <tr><th></th><th>With FK constraints</th><th>Without FK constraints (app-level)</th></tr>
+      <tr><td><strong>Data integrity</strong></td><td>Enforced at DB level — orphan rows impossible</td><td>Depends entirely on application code</td></tr>
+      <tr><td><strong>Write performance</strong></td><td>Every INSERT/UPDATE/DELETE checks parent row — extra index lookup</td><td>No overhead; pure write throughput</td></tr>
+      <tr><td><strong>Schema migration</strong></td><td>Must drop FK before altering referenced table; more complex DDL</td><td>Alter freely without worrying about FK order</td></tr>
+      <tr><td><strong>Multi-shard / microservices</strong></td><td>Cannot enforce FK across databases or services</td><td>Application-level consistency checks are the only option</td></tr>
+      <tr><td><strong>Debugging</strong></td><td>DB tells you exactly what violated the constraint</td><td>Silent data corruption — discovered later via reports</td></tr>
+    </table></div>
+    <div class="box em"><div class="bxt">Common senior answer</div><p>Use FK constraints in monolithic relational schemas where all tables live in the same MySQL instance and data integrity is paramount (finance, healthcare, e-commerce orders). Drop FK constraints when you need maximum write throughput (event ingestion, logging), when tables are across different databases (sharding, microservices), or during bulk data loads (<code>SET FOREIGN_KEY_CHECKS=0</code>, re-enable and validate after load).</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — FK with cascade options</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">CREATE TABLE</span> <span class="ct">orders</span> (
+  <span class="ct">id</span>          <span class="ck">INT PRIMARY KEY</span>,
+  <span class="ct">customer_id</span> <span class="ck">INT NOT NULL</span>,
+  <span class="cc">-- ON DELETE CASCADE: delete orders when customer deleted</span>
+  <span class="cc">-- ON DELETE RESTRICT: block customer deletion if orders exist</span>
+  <span class="cc">-- ON DELETE SET NULL: orphan the row (customer_id = NULL)</span>
+  <span class="ck">FOREIGN KEY</span> (<span class="ct">customer_id</span>)
+    <span class="ck">REFERENCES</span> <span class="ct">customers</span>(<span class="ct">id</span>)
+    <span class="ck">ON DELETE RESTRICT</span>
+    <span class="ck">ON UPDATE CASCADE</span>
+);</pre></div>
+    <div class="box am"><div class="bxt">The bulk load pattern</div><p>When importing millions of rows, disable FK checks for the session, load the data, then re-enable and run a validation query. This is standard ETL practice — never leave FK checks off permanently.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>FK = DB-level integrity vs write overhead. Use in monolithic OLTP, skip across shards/services. CASCADE deletes child rows; RESTRICT prevents deletion; SET NULL orphans. Disable during bulk loads, validate after.</p></div>
   </div>
 
   <!-- ══════════════════════════
@@ -496,6 +627,84 @@ WHERE id = 2;  ← waiting for T2!    WHERE id = 1;  ← waiting for T1!
     <div class="insight"><h4>Quick recall</h4><p>In interviews, walk through this framework step by step — it shows systematic thinking, not just &ldquo;add an index.&rdquo;</p></div>
   </div>
 
+  <!-- ── T27 ── -->
+  <div class="sec" id="t27">
+    <div class="snum">T27 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>IN vs EXISTS vs JOIN — which to use and why</h2>
+    <p>This is one of the most common senior SQL optimisation questions. The right answer depends on table sizes, nullability, and how the optimiser rewrites the query.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>IN (subquery)</th><th>EXISTS</th><th>JOIN</th></tr>
+      <tr><td><strong>Best when</strong></td><td>Subquery result set is small; list is known at query time</td><td>Subquery table is large; early exit on first match</td><td>You also need columns from the joined table; deduplication with DISTINCT</td></tr>
+      <tr><td><strong>NULL behaviour</strong></td><td>Dangerous: <code>IN (1, NULL)</code> — if subquery returns any NULL, the outer query returns no rows for non-matching IDs</td><td>Safe with NULLs — returns TRUE/FALSE/FALSE (not NULL)</td><td>INNER JOIN excludes NULLs naturally</td></tr>
+      <tr><td><strong>Short-circuit</strong></td><td>No — evaluates full subquery</td><td>Yes — stops at first match</td><td>No — full join evaluation</td></tr>
+      <tr><td><strong>MySQL 8 optimiser</strong></td><td>Often rewrites as semi-join, identical to EXISTS in practice</td><td>Semi-join when possible</td><td>Most direct plan</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — IN vs EXISTS comparison</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- IN: good when the subquery list is short and has no NULLs</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">customers</span>
+<span class="ck">WHERE</span> <span class="ct">id</span> <span class="ck">IN</span> (<span class="ck">SELECT</span> <span class="ct">customer_id</span> <span class="ck">FROM</span> <span class="ct">orders</span> <span class="ck">WHERE</span> <span class="ct">status</span> = <span class="cs">'paid'</span>);
+
+<span class="cc">-- EXISTS: better when orders is large; stops on first match per customer</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">customers</span> c
+<span class="ck">WHERE</span> <span class="ck">EXISTS</span> (
+  <span class="ck">SELECT</span> <span class="cn">1</span> <span class="ck">FROM</span> <span class="ct">orders</span> o
+  <span class="ck">WHERE</span> <span class="ct">o.customer_id</span> = <span class="ct">c.id</span>
+    <span class="ck">AND</span> <span class="ct">o.status</span> = <span class="cs">'paid'</span>
+);
+
+<span class="cc">-- NOT IN is BROKEN when subquery can return NULL — use NOT EXISTS instead</span>
+<span class="cc">-- NOT IN (1, 2, NULL) → returns empty set for any outer value</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">customers</span> c
+<span class="ck">WHERE NOT EXISTS</span> (
+  <span class="ck">SELECT</span> <span class="cn">1</span> <span class="ck">FROM</span> <span class="ct">orders</span> o
+  <span class="ck">WHERE</span> <span class="ct">o.customer_id</span> = <span class="ct">c.id</span>
+);</pre></div>
+    <div class="box am"><div class="bxt">The NULL trap in NOT IN</div><p>This is the most common real bug. If <code>orders.customer_id</code> can be NULL and you write <code>WHERE c.id NOT IN (SELECT customer_id FROM orders)</code>, you get zero rows back because <code>x NOT IN (..., NULL)</code> is NULL (unknown), never TRUE. <strong>Always use NOT EXISTS instead of NOT IN when the subquery column is nullable.</strong></p></div>
+    <div class="insight"><h4>Quick recall</h4><p>IN = good for short lists. EXISTS = better for large right-side tables (short-circuits). JOIN when you need columns from both sides. <strong>Never use NOT IN on a nullable column — use NOT EXISTS.</strong></p></div>
+  </div>
+
+  <!-- ── T28 ── -->
+  <div class="sec" id="t28">
+    <div class="snum">T28 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Slow Query Log — enabling, reading, and acting on it</h2>
+    <p>The Slow Query Log is the primary production tool for finding queries that need optimisation. Senior engineers are expected to know how to enable and use it.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">MySQL config — enable slow query log</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- In my.cnf / my.ini (permanent)</span>
+slow_query_log          = 1
+slow_query_log_file     = /var/log/mysql/slow.log
+long_query_time         = 1          <span class="cc">-- log queries taking > 1 second</span>
+log_queries_not_using_indexes = 1    <span class="cc">-- also log full-scan queries</span>
+min_examined_row_limit  = 100        <span class="cc">-- skip trivial queries</span>
+
+<span class="cc">-- At runtime (no restart needed)</span>
+<span class="ck">SET GLOBAL</span> slow_query_log          = <span class="cn">ON</span>;
+<span class="ck">SET GLOBAL</span> long_query_time         = <span class="cn">0.5</span>;  <span class="cc">-- 500 ms threshold</span>
+<span class="ck">SET GLOBAL</span> log_queries_not_using_indexes = <span class="cn">ON</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Shell — analyse with mysqldumpslow</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Top 10 slowest queries by total time spent</span>
+mysqldumpslow -s t -t 10 /var/log/mysql/slow.log
+
+<span class="cc"># Top 10 by query count (frequently slow = high priority)</span>
+mysqldumpslow -s c -t 10 /var/log/mysql/slow.log
+
+<span class="cc"># pt-query-digest: richer analysis with percentiles and examples</span>
+pt-query-digest /var/log/mysql/slow.log | head -100</pre></div>
+    <div class="tw"><table>
+      <tr><th>Key metric</th><th>What it means</th><th>Action</th></tr>
+      <tr><td><strong>Query_time</strong></td><td>Wall-clock execution time</td><td>Over 1s on OLTP is a red flag</td></tr>
+      <tr><td><strong>Lock_time</strong></td><td>Time spent waiting for a lock</td><td>High = contention; check transaction isolation and long-running transactions</td></tr>
+      <tr><td><strong>Rows_examined</strong></td><td>Rows scanned</td><td>Much higher than <strong>Rows_sent</strong> = full scan, missing index</td></tr>
+      <tr><td><strong>Rows_sent</strong></td><td>Rows returned to client</td><td>Low rows_sent + high rows_examined = optimise the WHERE clause</td></tr>
+    </table></div>
+    <div class="box sk"><div class="bxt">Investigation workflow</div>
+      <ol class="pts" style="margin:0;">
+        <li>Enable slow query log with threshold 1s (or lower in staging)</li>
+        <li>Run <code>mysqldumpslow</code> or <code>pt-query-digest</code> to find top offenders</li>
+        <li>Take the worst query and run <code>EXPLAIN</code> on it</li>
+        <li>Add or fix the index, rewrite the query, or both</li>
+        <li>Verify improvement: re-run EXPLAIN, check <code>rows</code> and <code>Extra</code></li>
+      </ol>
+    </div>
+    <div class="insight"><h4>Quick recall</h4><p>Slow query log + <code>mysqldumpslow -s t -t 10</code> = find the worst queries fast. Rows_examined &gg; Rows_sent = missing index. Lock_time spike = transaction contention.</p></div>
+  </div>
+
   <!-- ══════════════════════════
        CHAPTER 5 — SCALING
   ══════════════════════════ -->
@@ -558,6 +767,86 @@ WHERE id = 2;  ← waiting for T2!    WHERE id = 1;  ← waiting for T1!
 <span class="ck">ALGORITHM</span>=<span class="ck">INPLACE</span>,   <span class="cc">-- modify in-place rather than creating a copy</span>
 <span class="ck">LOCK</span>=<span class="ck">NONE</span>;            <span class="cc">-- no read/write lock during the operation</span></pre></div>
     <div class="insight"><h4>Quick recall</h4><p>Production schema migration on large tables = gh-ost or pt-osc. Never run bare <code>ALTER TABLE</code> on a multi-million-row table in production without testing the DDL type first.</p></div>
+  </div>
+
+  <!-- ── T29 ── -->
+  <div class="sec" id="t29">
+    <div class="snum">T29 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Table partitioning — what it solves, when it does not help</h2>
+    <p>Partitioning splits one logical table into separate physical segments. It can dramatically speed up time-series queries but is often misused as a substitute for proper indexing.</p>
+    <div class="tw"><table>
+      <tr><th>Type</th><th>Partition key</th><th>Best for</th></tr>
+      <tr><td><strong>RANGE</strong></td><td>Date / integer range (<code>YEAR(created_at)</code>)</td><td>Time-series data: logs, events, orders by year</td></tr>
+      <tr><td><strong>LIST</strong></td><td>Discrete values (<code>region_id IN (1,2,3)</code>)</td><td>Geo or category segregation</td></tr>
+      <tr><td><strong>HASH</strong></td><td>Hash of a column</td><td>Even data distribution; no range queries</td></tr>
+      <tr><td><strong>KEY</strong></td><td>MySQL-controlled hash of PK/index</td><td>Similar to HASH; uses internal algorithm</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — RANGE partitioning on a logs table</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">CREATE TABLE</span> <span class="ct">events</span> (
+  <span class="ct">id</span>         <span class="ck">BIGINT AUTO_INCREMENT</span>,
+  <span class="ct">created_at</span> <span class="ck">DATE NOT NULL</span>,
+  <span class="ct">payload</span>    <span class="ck">JSON</span>,
+  <span class="ck">PRIMARY KEY</span> (<span class="ct">id</span>, <span class="ct">created_at</span>)   <span class="cc">-- partition key MUST be in PK</span>
+)
+<span class="ck">PARTITION BY RANGE</span> (<span class="cf">YEAR</span>(<span class="ct">created_at</span>)) (
+  <span class="ck">PARTITION</span> p2023 <span class="ck">VALUES LESS THAN</span> (<span class="cn">2024</span>),
+  <span class="ck">PARTITION</span> p2024 <span class="ck">VALUES LESS THAN</span> (<span class="cn">2025</span>),
+  <span class="ck">PARTITION</span> p2025 <span class="ck">VALUES LESS THAN</span> (<span class="cn">2026</span>),
+  <span class="ck">PARTITION</span> pmax  <span class="ck">VALUES LESS THAN MAXVALUE</span>
+);
+
+<span class="cc">-- Query touching only 2024 data → partition pruning → scans p2024 only</span>
+<span class="ck">SELECT</span> * <span class="ck">FROM</span> <span class="ct">events</span>
+<span class="ck">WHERE</span>  <span class="ct">created_at</span> <span class="ck">BETWEEN</span> <span class="cs">'2024-01-01'</span> <span class="ck">AND</span> <span class="cs">'2024-12-31'</span>;
+
+<span class="cc">-- Drop an entire year's data instantly (no row-by-row DELETE)</span>
+<span class="ck">ALTER TABLE</span> <span class="ct">events</span> <span class="ck">DROP PARTITION</span> p2023;</pre></div>
+    <div class="box am"><div class="bxt">When partitioning does NOT help</div>
+      <ul class="pts" style="margin:0;">
+        <li>Queries that do not filter on the partition key — all partitions are scanned anyway (worse than a good index)</li>
+        <li>The table has fewer than a few million rows — plain indexes are faster and simpler</li>
+        <li>You need foreign keys — MySQL does not support FK on partitioned tables</li>
+        <li>You are using it to avoid adding a proper index — partitioning ≠ indexing</li>
+      </ul>
+    </div>
+    <div class="box sk"><div class="bxt">Best use case: data archiving</div><p>The killer feature of RANGE partitioning is <code>ALTER TABLE ... DROP PARTITION</code>. Dropping a partition is a metadata operation — it removes millions of rows instantly with no row-by-row DELETE and minimal locking. This is the primary reason to use RANGE partitioning on time-series tables.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>RANGE by date → partition pruning on time-series queries. Best payoff: <code>DROP PARTITION</code> = instant archive. Limitation: no FK support; queries without partition key scan all partitions.</p></div>
+  </div>
+
+  <!-- ── T30 ── -->
+  <div class="sec" id="t30">
+    <div class="snum">T30 <span class="snum-badges"><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Connection pooling — why it matters and how to configure it</h2>
+    <p>Opening a MySQL connection takes ~5–50 ms (TCP handshake + auth). At high request rates, a new connection per request collapses the DB. Connection pooling reuses connections from a managed pool.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>No pooling</th><th>With pooling</th></tr>
+      <tr><td><strong>Connection cost</strong></td><td>~5–50 ms per request</td><td>Near zero — connection already open</td></tr>
+      <tr><td><strong>Max connections</strong></td><td>Easily exceeds <code>max_connections</code> (default 151)</td><td>Bounded by pool size — predictable load</td></tr>
+      <tr><td><strong>DB CPU</strong></td><td>High: thread creation + auth overhead</td><td>Low: DB sees stable, long-lived connections</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Node.js — mysql2 connection pool</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// node.js / mysql2 example</span>
+<span class="ck">const</span> pool = mysql.createPool({
+  host:            <span class="cs">'db.internal'</span>,
+  user:            <span class="cs">'app'</span>,
+  password:        process.env.DB_PASS,
+  database:        <span class="cs">'myapp'</span>,
+  <span class="cc">// Pool sizing</span>
+  connectionLimit: <span class="cn">10</span>,     <span class="cc">// max open connections at once</span>
+  waitForConnections: <span class="ck">true</span>,
+  queueLimit:      <span class="cn">0</span>,     <span class="cc">// 0 = unlimited queue (use carefully)</span>
+  <span class="cc">// Keep connections alive</span>
+  enableKeepAlive: <span class="ck">true</span>,
+  keepAliveInitialDelay: <span class="cn">0</span>,
+});</pre></div>
+    <div class="box em"><div class="bxt">How to size the pool</div>
+      <ul class="pts" style="margin:0;">
+        <li><strong>Formula:</strong> <code>pool_size = (core_count * 2) + effective_spindle_count</code> (HikariCP / Percona guideline). For most cloud DBs: 10–20 per app instance is a safe starting point.</li>
+        <li><strong>Too small:</strong> requests queue behind pool exhaustion → latency spikes</li>
+        <li><strong>Too large:</strong> DB CPU maxes from context switching across hundreds of threads</li>
+        <li><strong>With read replicas:</strong> maintain a separate pool per replica; route read queries to replicas, writes to primary</li>
+      </ul>
+    </div>
+    <div class="box am"><div class="bxt">ProxySQL and PgBouncer</div><p>For larger deployments, a connection proxy (ProxySQL for MySQL) sits between the app and DB. It multiplexes thousands of app connections onto a small DB connection pool, handles failover, and can route queries (writes to primary, reads to replicas) transparently.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Pool = reuse open connections. Size: ~10–20 per app pod. Too large = DB thread saturation. Too small = queue starvation. ProxySQL adds a proxy layer for multi-instance deployments.</p></div>
   </div>
 
   <!-- ══════════════════════════
@@ -640,7 +929,7 @@ innodb_flush_log_at_trx_commit = <span class="cn">1</span>  <span class="cc">-- 
   </div>
 
   <p style="margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text3);">
-    MySQL interview prep · Part 2 · 22 topics ·
+    MySQL interview prep · Part 2 · 30 topics ·
     <a href="mysql-interview-prep-part1.html" style="color:var(--emerald);">Back to Part 1 — Query problems</a> ·
     <a href="mysql-learning.html" style="color:var(--mysql);">MySQL track</a>
   </p>

@@ -154,7 +154,7 @@ td code{font-size:11px;}
   <div class="sb-top">
     <div class="sb-badge">MYSQL · PART 1</div>
     <h1>Query Problems</h1>
-    <p>19 questions · Sections A &amp; B</p>
+    <p>26 questions · Sections A, B &amp; C</p>
   </div>
   <div class="nav-s">
     <div class="nav-lbl">Section A — Intermediate</div>
@@ -168,6 +168,8 @@ td code{font-size:11px;}
     <a class="ni" href="#q8"><div class="ndot"></div>Q8 · 2nd Highest Salary<span class="dbadge mid">Mid</span></a>
     <a class="ni" href="#q9"><div class="ndot"></div>Q9 · Order Value &gt;5000<span class="dbadge mid">Mid</span></a>
     <a class="ni" href="#q10"><div class="ndot"></div>Q10 · Pivot / CASE<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q20"><div class="ndot"></div>Q20 · GROUP_CONCAT<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q21"><div class="ndot"></div>Q21 · 3-Table JOIN<span class="dbadge mid">Mid</span></a>
   </div>
   <div class="nav-s" style="margin-top:4px;">
     <div class="nav-lbl">Section B — Advanced</div>
@@ -180,6 +182,14 @@ td code{font-size:11px;}
     <a class="ni" href="#q17"><div class="ndot"></div>Q17 · Subscription Gap<span class="dbadge adv">Adv</span></a>
     <a class="ni" href="#q18"><div class="ndot"></div>Q18 · Delete Duplicates<span class="dbadge adv">Adv</span></a>
     <a class="ni" href="#q19"><div class="ndot"></div>Q19 · Collab Filtering<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q22"><div class="ndot"></div>Q22 · Median Salary<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q23"><div class="ndot"></div>Q23 · Running % of Total<span class="dbadge adv">Adv</span></a>
+    <a class="ni" href="#q24"><div class="ndot"></div>Q24 · Islands &amp; Gaps<span class="dbadge adv">Adv</span></a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Section C — Write Patterns</div>
+    <a class="ni" href="#q25"><div class="ndot"></div>Q25 · UPSERT (ON DUP KEY)<span class="dbadge mid">Mid</span></a>
+    <a class="ni" href="#q26"><div class="ndot"></div>Q26 · Conditional UPDATE<span class="dbadge mid">Mid</span></a>
   </div>
 </nav>
 
@@ -188,17 +198,17 @@ td code{font-size:11px;}
   <div class="hero" id="overview">
     <div class="htag">MySQL learning · Interview prep</div>
     <h1>Part 1 —<br><em>Query problems</em></h1>
-    <p>Each question shows an evaluation of your original attempt, the corrected SQL with explanation, and a quick recall line. Problem 20 (stored procedures) is omitted.</p>
+    <p>Each question has the corrected SQL, an explanation, and a quick recall. The 7 new questions (Q20–Q26) close the gaps that cause senior-level rejections: GROUP_CONCAT, 3-table JOINs, median salary, islands &amp; gaps, running percentage, UPSERT, and conditional UPDATE.</p>
     <div class="hmeta">
       <div class="hm">&#128218; <span><a href="mysql-interview-prep-part2.html">Continue to Part 2 — Technical Q&amp;A</a></span></div>
-      <div class="hm">&#128230; <span>19 questions · 2 sections</span></div>
+      <div class="hm">&#128230; <span>26 questions · 3 sections</span></div>
     </div>
   </div>
 
   <div class="pcard">
     <div class="prow"><span>Interview prep</span><span>Part 1 of 2</span></div>
-    <div class="pbar"><div class="pfill"></div></div>
-    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">Section A: Q1–Q10 (Intermediate) · Section B: Q11–Q19 (Advanced)</p>
+    <div class="pbar"><div class="pfill" style="width:70%"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">Section A: Q1–Q10, Q20–Q21 (Intermediate) · Section B: Q11–Q19, Q22–Q24 (Advanced) · Section C: Q25–Q26 (Write Patterns)</p>
   </div>
 
   <div class="ch-lbl">Section A — Intermediate</div>
@@ -406,6 +416,72 @@ td code{font-size:11px;}
 <span class="ck">GROUP BY</span> <span class="ct">student_id</span>;</pre></div>
     <div class="box sk"><div class="bxt">Why MAX()?</div><p>For a student&rsquo;s Math row, Science and English are <code>NULL</code>. <code>MAX()</code> ignores <code>NULL</code> and picks the real value. <code>SUM</code> also works but would add values if a student had multiple rows for the same subject. <code>MAX</code> is safer.</p></div>
     <div class="insight"><h4>Quick recall</h4><p>Pivot = <code>CASE WHEN col = 'value' THEN metric END</code> aggregated per group. MySQL has no <code>PIVOT</code> keyword — always use <code>CASE</code>.</p></div>
+  </div>
+
+  <!-- ── Q20 ── -->
+  <div class="sec" id="q20">
+    <div class="snum">Q20 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>GROUP_CONCAT — comma-separated list per group</h2>
+    <p>Table: <code>products(id, name, category_id)</code>, <code>categories(id, name)</code>. Return each category with its product names as a single comma-separated string.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Almost every reporting or admin query at a product company needs a flat list inside a group. <code>GROUP_CONCAT</code> is the MySQL answer — it collapses many rows into one string. Interviewers test whether you reach for it instead of post-processing in application code.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Basic GROUP_CONCAT</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">c.name</span>                                                           <span class="ck">AS</span> category,
+    <span class="cf">GROUP_CONCAT</span>(<span class="ct">p.name</span> <span class="ck">ORDER BY</span> <span class="ct">p.name</span> <span class="ck">SEPARATOR</span> <span class="cs">', '</span>)           <span class="ck">AS</span> product_list,
+    <span class="cf">COUNT</span>(<span class="ct">p.id</span>)                                                     <span class="ck">AS</span> product_count
+<span class="ck">FROM</span> <span class="ct">categories</span> c
+<span class="ck">LEFT JOIN</span> <span class="ct">products</span> p <span class="ck">ON</span> <span class="ct">p.category_id</span> = <span class="ct">c.id</span>
+<span class="ck">GROUP BY</span> <span class="ct">c.id</span>, <span class="ct">c.name</span>
+<span class="ck">ORDER BY</span> <span class="ct">c.name</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Bonus: DISTINCT + ORDER inside GROUP_CONCAT</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Increase default 1024-byte limit for large concatenations</span>
+<span class="ck">SET SESSION</span> group_concat_max_len = <span class="cn">10000</span>;
+
+<span class="ck">SELECT</span>
+    <span class="ct">dept_id</span>,
+    <span class="cf">GROUP_CONCAT</span>(<span class="ck">DISTINCT</span> <span class="ct">job_title</span>
+                  <span class="ck">ORDER BY</span> <span class="ct">job_title</span>
+                  <span class="ck">SEPARATOR</span> <span class="cs">' | '</span>)  <span class="ck">AS</span> unique_roles,
+    <span class="cf">GROUP_CONCAT</span>(<span class="ct">name</span>
+                  <span class="ck">ORDER BY</span> <span class="ct">salary</span> <span class="ck">DESC</span>
+                  <span class="ck">SEPARATOR</span> <span class="cs">', '</span>)    <span class="ck">AS</span> earners_high_to_low
+<span class="ck">FROM</span> <span class="ct">employees</span>
+<span class="ck">GROUP BY</span> <span class="ct">dept_id</span>;</pre></div>
+    <div class="box am"><div class="bxt">Production gotcha</div><p>Default <code>group_concat_max_len</code> is <strong>1024 bytes</strong>. Silent truncation happens when the concatenated string exceeds this — no error, just cut data. Always set the session variable for large payloads. MySQL 8.0.31+ supports <code>LIMIT N</code> inside <code>GROUP_CONCAT</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>GROUP_CONCAT(col ORDER BY col2 SEPARATOR ', ')</code>. Add <code>DISTINCT</code> to de-duplicate. Guard the max length with <code>SET SESSION group_concat_max_len</code>.</p></div>
+  </div>
+
+  <!-- ── Q21 ── -->
+  <div class="sec" id="q21">
+    <div class="snum">Q21 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>3-table JOIN — top customers by revenue with their city</h2>
+    <p>Tables: <code>orders(order_id, customer_id, amount)</code>, <code>customers(id, name, city_id)</code>, <code>cities(id, name)</code>. Return customers with total revenue &gt; ₹10,000, their city, and order count.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Every previous question joins 2 tables at most. Senior interviews always include a 3- or 4-table JOIN with aggregation to check whether candidates know how to chain JOINs correctly, use meaningful aliases, and push filters to the right clause.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — 3-Table JOIN with Aggregation</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">ci.name</span>              <span class="ck">AS</span> city,
+    <span class="ct">cu.name</span>              <span class="ck">AS</span> customer,
+    <span class="cf">COUNT</span>(<span class="ct">o.order_id</span>)   <span class="ck">AS</span> order_count,
+    <span class="cf">SUM</span>(<span class="ct">o.amount</span>)        <span class="ck">AS</span> total_revenue,
+    <span class="cf">ROUND</span>(<span class="cf">AVG</span>(<span class="ct">o.amount</span>), <span class="cn">2</span>) <span class="ck">AS</span> avg_order_value
+<span class="ck">FROM</span> <span class="ct">orders</span> o
+<span class="ck">JOIN</span> <span class="ct">customers</span> cu  <span class="ck">ON</span> <span class="ct">cu.id</span> = <span class="ct">o.customer_id</span>   <span class="cc">-- orders → customers</span>
+<span class="ck">JOIN</span> <span class="ct">cities</span>    ci  <span class="ck">ON</span> <span class="ct">ci.id</span> = <span class="ct">cu.city_id</span>      <span class="cc">-- customers → cities</span>
+<span class="ck">GROUP BY</span> <span class="ct">ci.id</span>, <span class="ct">ci.name</span>, <span class="ct">cu.id</span>, <span class="ct">cu.name</span>
+<span class="ck">HAVING</span> <span class="cf">SUM</span>(<span class="ct">o.amount</span>) &gt; <span class="cn">10000</span>
+<span class="ck">ORDER BY</span> total_revenue <span class="ck">DESC</span>
+<span class="ck">LIMIT</span> <span class="cn">10</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Bonus: 4-table JOIN (add product category)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- orders → order_items → products → categories</span>
+<span class="ck">SELECT</span>
+    <span class="ct">cat.name</span>                 <span class="ck">AS</span> category,
+    <span class="cf">COUNT</span>(<span class="ck">DISTINCT</span> <span class="ct">o.order_id</span>) <span class="ck">AS</span> orders,
+    <span class="cf">SUM</span>(<span class="ct">oi.qty</span> * <span class="ct">oi.price</span>)    <span class="ck">AS</span> revenue
+<span class="ck">FROM</span> <span class="ct">orders</span> o
+<span class="ck">JOIN</span> <span class="ct">order_items</span> oi  <span class="ck">ON</span> <span class="ct">oi.order_id</span>   = <span class="ct">o.order_id</span>
+<span class="ck">JOIN</span> <span class="ct">products</span>    p   <span class="ck">ON</span> <span class="ct">p.id</span>          = <span class="ct">oi.product_id</span>
+<span class="ck">JOIN</span> <span class="ct">categories</span>  cat <span class="ck">ON</span> <span class="ct">cat.id</span>        = <span class="ct">p.category_id</span>
+<span class="ck">WHERE</span> <span class="ct">o.created_at</span> &gt;= <span class="cs">'2024-01-01'</span>
+<span class="ck">GROUP BY</span> <span class="ct">cat.id</span>, <span class="ct">cat.name</span>
+<span class="ck">ORDER BY</span> revenue <span class="ck">DESC</span>;</pre></div>
+    <div class="box sk"><div class="bxt">JOIN chain rule</div><p>Chain JOINs in data flow order: the driving table → first lookup → second lookup. Always include the non-driving table&rsquo;s PK in <code>GROUP BY</code> (e.g. <code>ci.id</code>, <code>cu.id</code>) alongside the name — this prevents incorrect grouping if two cities or customers share a name.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>3-table JOIN = chain the foreign keys in order. Use <code>HAVING</code> for the aggregate filter. Always <code>GROUP BY</code> the PK, not just the name.</p></div>
   </div>
 
   <div class="ch-lbl">Section B — Advanced</div>
@@ -683,8 +759,211 @@ ranked <span class="ck">AS</span> (
     <div class="insight"><h4>Quick recall</h4><p>Complex problem — break it into CTE steps. Step 1: what do I need? Step 2: where from? Step 3: how to combine? Each CTE is one well-named step.</p></div>
   </div>
 
+  <!-- ── Q22 ── -->
+  <div class="sec" id="q22">
+    <div class="snum">Q22 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Median salary — no MEDIAN() function in MySQL</h2>
+    <p>Table: <code>employees(id, dept_id, salary)</code>. Return the median salary overall, and per department.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>MySQL has no built-in <code>MEDIAN()</code>. This is one of the most frequently asked senior-level questions precisely because it requires you to think mathematically and use <code>ROW_NUMBER + COUNT</code> correctly. Getting this wrong signals a gap in window function understanding.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Overall Median</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> ranked <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">salary</span>,
+        <span class="cf">ROW_NUMBER</span>() <span class="ck">OVER</span> (<span class="ck">ORDER BY</span> <span class="ct">salary</span>)  <span class="ck">AS</span> rn,
+        <span class="cf">COUNT</span>(*)     <span class="ck">OVER</span> ()                   <span class="ck">AS</span> total
+    <span class="ck">FROM</span> <span class="ct">employees</span>
+)
+<span class="ck">SELECT</span> <span class="cf">AVG</span>(<span class="ct">salary</span>) <span class="ck">AS</span> median_salary
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rn <span class="ck">IN</span> (
+    <span class="cf">FLOOR</span>((<span class="ct">total</span> + <span class="cn">1</span>) / <span class="cn">2</span>),  <span class="cc">-- lower middle index</span>
+    <span class="cf">CEIL</span> ((<span class="ct">total</span> + <span class="cn">1</span>) / <span class="cn">2</span>)   <span class="cc">-- upper middle index (same as lower when odd count)</span>
+);
+<span class="cc">-- For odd n=5: FLOOR=3, CEIL=3 → single middle row
+-- For even n=6: FLOOR=3, CEIL=4 → AVG of rows 3 and 4 = true median</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Median Per Department</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> ranked <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">dept_id</span>,
+        <span class="ct">salary</span>,
+        <span class="cf">ROW_NUMBER</span>() <span class="ck">OVER</span> (<span class="ck">PARTITION BY</span> <span class="ct">dept_id</span> <span class="ck">ORDER BY</span> <span class="ct">salary</span>) <span class="ck">AS</span> rn,
+        <span class="cf">COUNT</span>(*)     <span class="ck">OVER</span> (<span class="ck">PARTITION BY</span> <span class="ct">dept_id</span>)                  <span class="ck">AS</span> total
+    <span class="ck">FROM</span> <span class="ct">employees</span>
+)
+<span class="ck">SELECT</span>
+    <span class="ct">dept_id</span>,
+    <span class="cf">AVG</span>(<span class="ct">salary</span>) <span class="ck">AS</span> median_salary
+<span class="ck">FROM</span> ranked
+<span class="ck">WHERE</span> rn <span class="ck">IN</span> (
+    <span class="cf">FLOOR</span>((<span class="ct">total</span> + <span class="cn">1</span>) / <span class="cn">2</span>),
+    <span class="cf">CEIL</span> ((<span class="ct">total</span> + <span class="cn">1</span>) / <span class="cn">2</span>)
+)
+<span class="ck">GROUP BY</span> <span class="ct">dept_id</span>;  <span class="cc">-- needed because even-count depts pick two rows</span></pre></div>
+    <div class="box sk"><div class="bxt">The maths</div><p>For <strong>n = 5</strong> (odd): <code>FLOOR(6/2) = 3</code>, <code>CEIL(6/2) = 3</code> &rarr; picks row 3, the true middle. For <strong>n = 6</strong> (even): <code>FLOOR(7/2) = 3</code>, <code>CEIL(7/2) = 4</code> &rarr; picks rows 3 &amp; 4, <code>AVG</code> of those two = exact median.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Median = <code>AVG</code> of rows where <code>rn IN (FLOOR((n+1)/2), CEIL((n+1)/2))</code>. One CTE to add row numbers + total count; one outer query to average the middle rows.</p></div>
+  </div>
+
+  <!-- ── Q23 ── -->
+  <div class="sec" id="q23">
+    <div class="snum">Q23 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Running total and percentage of grand total — in one query</h2>
+    <p>Table: <code>transactions(user_id, created_at, amount)</code>. Each row should show: amount, cumulative total per user, this row as % of user&rsquo;s total, and % of the overall grand total.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Q6 covered the running total in isolation. This question adds the second layer that trips senior candidates: combining a partitioned window (<code>per user</code>) with an unpartitioned window (<code>grand total</code>) in the same <code>SELECT</code>. Every analytics dashboard needs both.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Running Total + % of User Total + % of Grand Total</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">SELECT</span>
+    <span class="ct">user_id</span>,
+    <span class="ct">created_at</span>,
+    <span class="ct">amount</span>,
+
+    <span class="cc">-- Cumulative sum per user (resets at each new user)</span>
+    <span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">OVER</span> (
+        <span class="ck">PARTITION BY</span> <span class="ct">user_id</span>
+        <span class="ck">ORDER BY</span>     <span class="ct">created_at</span>
+        <span class="ck">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>
+    )                                                      <span class="ck">AS</span> running_total,
+
+    <span class="cc">-- This row's amount as % of this user's lifetime total</span>
+    <span class="cf">ROUND</span>(
+        <span class="ct">amount</span>
+        / <span class="cf">NULLIF</span>(<span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">OVER</span> (<span class="ck">PARTITION BY</span> <span class="ct">user_id</span>), <span class="cn">0</span>)
+        * <span class="cn">100</span>, <span class="cn">2</span>
+    )                                                      <span class="ck">AS</span> pct_of_user_total,
+
+    <span class="cc">-- This row's amount as % of ALL transactions (no partition = entire table)</span>
+    <span class="cf">ROUND</span>(
+        <span class="ct">amount</span>
+        / <span class="cf">NULLIF</span>(<span class="cf">SUM</span>(<span class="ct">amount</span>) <span class="ck">OVER</span> (), <span class="cn">0</span>)
+        * <span class="cn">100</span>, <span class="cn">2</span>
+    )                                                      <span class="ck">AS</span> pct_of_grand_total
+
+<span class="ck">FROM</span> <span class="ct">transactions</span>
+<span class="ck">ORDER BY</span> <span class="ct">user_id</span>, <span class="ct">created_at</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Key difference between the two window specs</div><p><code>SUM() OVER (PARTITION BY user_id)</code> = sum just for that user (denominator for % of user total). <code>SUM() OVER ()</code> = empty window = sum across the <em>entire</em> result set = grand total. No <code>ORDER BY</code> in the frame = full partition sum, not cumulative.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Empty <code>OVER ()</code> = whole table. <code>OVER (PARTITION BY x)</code> with no <code>ORDER BY</code> = full group sum. Always wrap divisors in <code>NULLIF(…, 0)</code>.</p></div>
+  </div>
+
+  <!-- ── Q24 ── -->
+  <div class="sec" id="q24">
+    <div class="snum">Q24 <span class="snum-badges"><span class="sbadge adv">Advanced</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Islands &amp; Gaps — find all consecutive login streaks per user</h2>
+    <p>Table: <code>logins(user_id, login_date DATE)</code> — one or more rows per day. Find every streak of 3+ consecutive calendar days per user.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Q17 (subscription gap) uses <code>DATEDIFF</code> between two subscription periods. The &ldquo;islands&rdquo; version is harder: you have potentially hundreds of raw rows and must <em>group</em> consecutive ones without knowing their boundaries in advance. This is one of the most asked advanced SQL patterns at product companies (retention analytics, streak features, daily active user funnels).</p></div>
+    <div class="box sk"><div class="bxt">The trick</div><p>For consecutive dates, <code>date - ROW_NUMBER() days</code> produces the <strong>same value</strong> for every date in a streak — that constant is the &ldquo;island key&rdquo;. Non-consecutive dates produce different constants and land in different groups.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Islands &amp; Gaps</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">WITH</span> deduped <span class="ck">AS</span> (
+    <span class="cc">-- one row per (user, day) even if multiple logins that day</span>
+    <span class="ck">SELECT DISTINCT</span> <span class="ct">user_id</span>, <span class="ct">login_date</span>
+    <span class="ck">FROM</span> <span class="ct">logins</span>
+),
+numbered <span class="ck">AS</span> (
+    <span class="ck">SELECT</span>
+        <span class="ct">user_id</span>,
+        <span class="ct">login_date</span>,
+        <span class="cc">-- Subtract sequential rank from the date.</span>
+        <span class="cc">-- Consecutive dates produce the SAME constant → same island.</span>
+        <span class="cf">DATE_SUB</span>(<span class="ct">login_date</span>,
+            <span class="ck">INTERVAL</span> (
+                <span class="cf">ROW_NUMBER</span>() <span class="ck">OVER</span> (<span class="ck">PARTITION BY</span> <span class="ct">user_id</span> <span class="ck">ORDER BY</span> <span class="ct">login_date</span>) - <span class="cn">1</span>
+            ) <span class="ck">DAY</span>
+        )                        <span class="ck">AS</span> island_key
+    <span class="ck">FROM</span> deduped
+)
+<span class="ck">SELECT</span>
+    <span class="ct">user_id</span>,
+    <span class="cf">MIN</span>(<span class="ct">login_date</span>)  <span class="ck">AS</span> streak_start,
+    <span class="cf">MAX</span>(<span class="ct">login_date</span>)  <span class="ck">AS</span> streak_end,
+    <span class="cf">COUNT</span>(*)         <span class="ck">AS</span> streak_days
+<span class="ck">FROM</span> numbered
+<span class="ck">GROUP BY</span> <span class="ct">user_id</span>, <span class="ct">island_key</span>
+<span class="ck">HAVING</span> <span class="cf">COUNT</span>(*) &gt;= <span class="cn">3</span>        <span class="cc">-- only streaks of 3+ consecutive days</span>
+<span class="ck">ORDER BY</span> <span class="ct">user_id</span>, streak_start;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Worked example (user 7, dates shown)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">login_date    rn    rn-1   island_key (date - (rn-1) days)
+2024-01-01     1     0     2024-01-01   ← streak 1 starts
+2024-01-02     2     1     2024-01-01   ←
+2024-01-03     3     2     2024-01-01   ←
+2024-01-05     4     3     2024-01-02   ← gap! new island
+2024-01-06     5     4     2024-01-02   ← streak 2 starts</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Island key = <code>date - ROW_NUMBER() days</code>. Group by <code>(user_id, island_key)</code>, then <code>MIN/MAX/COUNT</code> to get streak boundaries. Add <code>DISTINCT</code> on the input if multiple events per day exist.</p></div>
+  </div>
+
+  <div class="ch-lbl">Section C — Write Patterns</div>
+
+  <!-- ── Q25 ── -->
+  <div class="sec" id="q25">
+    <div class="snum">Q25 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>UPSERT — INSERT … ON DUPLICATE KEY UPDATE</h2>
+    <p>Every senior backend engineer writes upse rts daily. Interviewers test whether you know the three variants and their edge cases.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Every real-world system has counters, stock levels, or user settings that must be created if absent or updated if present. Writing this as two round-trips (SELECT then INSERT or UPDATE) introduces a race condition. The correct approach is a single atomic statement.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Variant 1: UPSERT with increment</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- page_views(page_id PK, view_count, last_viewed_at)</span>
+<span class="ck">INSERT INTO</span> <span class="ct">page_views</span> (<span class="ct">page_id</span>, <span class="ct">view_count</span>, <span class="ct">last_viewed_at</span>)
+<span class="ck">VALUES</span> (<span class="cn">42</span>, <span class="cn">1</span>, <span class="cf">NOW</span>())
+<span class="ck">ON DUPLICATE KEY UPDATE</span>
+    <span class="ct">view_count</span>     = <span class="ct">view_count</span> + <span class="cf">VALUES</span>(<span class="ct">view_count</span>),
+    <span class="ct">last_viewed_at</span> = <span class="cf">VALUES</span>(<span class="ct">last_viewed_at</span>);
+<span class="cc">-- VALUES(col) = the value that was in the attempted INSERT row
+-- On first visit: inserts (42, 1, now). On repeat: increments count.</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Variant 2: Bulk UPSERT (overwrite)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Replace stock levels from a nightly feed
+-- product_stock(product_id, warehouse_id, qty)  PK: (product_id, warehouse_id)</span>
+<span class="ck">INSERT INTO</span> <span class="ct">product_stock</span> (<span class="ct">product_id</span>, <span class="ct">warehouse_id</span>, <span class="ct">qty</span>, <span class="ct">updated_at</span>)
+<span class="ck">VALUES</span>
+    (<span class="cn">101</span>, <span class="cn">1</span>, <span class="cn">50</span>, <span class="cf">NOW</span>()),
+    (<span class="cn">102</span>, <span class="cn">1</span>, <span class="cn">30</span>, <span class="cf">NOW</span>()),
+    (<span class="cn">101</span>, <span class="cn">2</span>, <span class="cn">20</span>, <span class="cf">NOW</span>())
+<span class="ck">ON DUPLICATE KEY UPDATE</span>
+    <span class="ct">qty</span>        = <span class="cf">VALUES</span>(<span class="ct">qty</span>),    <span class="cc">-- overwrite with new value</span>
+    <span class="ct">updated_at</span> = <span class="cf">NOW</span>();           <span class="cc">-- always refresh timestamp</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — Variant 3: INSERT IGNORE (skip silently)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Only insert if not already subscribed — no update needed</span>
+<span class="ck">INSERT IGNORE INTO</span> <span class="ct">user_subscriptions</span> (<span class="ct">user_id</span>, <span class="ct">plan_id</span>, <span class="ct">subscribed_at</span>)
+<span class="ck">VALUES</span> (<span class="cn">99</span>, <span class="cs">'pro'</span>, <span class="cf">NOW</span>());
+<span class="cc">-- Duplicate key → row silently skipped, no error, no update</span></pre></div>
+    <div class="tw"><table>
+      <tr><th>Statement</th><th>On duplicate key</th><th>Use when</th></tr>
+      <tr><td><code>ON DUPLICATE KEY UPDATE</code></td><td>Updates specified columns</td><td>Counter increment, last-seen timestamp, stock sync</td></tr>
+      <tr><td><code>INSERT IGNORE</code></td><td>Silently skips the row</td><td>Idempotent seed data, de-duplication inserts</td></tr>
+      <tr><td><code>REPLACE INTO</code></td><td>DELETE old row + INSERT new</td><td>Rarely — auto_increment changes, cascades fire</td></tr>
+    </table></div>
+    <div class="box am"><div class="bxt">Race condition warning</div><p>Always prefer <code>ON DUPLICATE KEY UPDATE</code> over application-level SELECT-then-INSERT/UPDATE. The database-level atomic statement eliminates the read-write race condition under concurrent load.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>INSERT INTO … VALUES … ON DUPLICATE KEY UPDATE col = VALUES(col)</code>. <code>VALUES(col)</code> references the value from the attempted INSERT row. Use <code>INSERT IGNORE</code> when you only want to create, never overwrite.</p></div>
+  </div>
+
+  <!-- ── Q26 ── -->
+  <div class="sec" id="q26">
+    <div class="snum">Q26 <span class="snum-badges"><span class="sbadge mid">Intermediate</span><span class="sbadge ok">✦ New</span></span></div>
+    <h2>Conditional UPDATE — CASE WHEN in SET, and UPDATE with JOIN</h2>
+    <p>Apply different logic to different rows in a single <code>UPDATE</code> statement — no loops, no multiple round-trips.</p>
+    <div class="box sk"><div class="bxt">Why this matters</div><p>Junior engineers reach for application-level loops or multiple UPDATE calls. Senior engineers know how to express conditional logic inside a single SQL statement. Interviewers look for this instinct when discussing batch jobs, pricing rules, or tier recalculations.</p></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — CASE WHEN inside SET</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Apply tiered discounts to all active customers in one pass</span>
+<span class="ck">UPDATE</span> <span class="ct">customers</span>
+<span class="ck">SET</span>
+    <span class="ct">discount_pct</span> = <span class="ck">CASE</span>
+        <span class="ck">WHEN</span> <span class="ct">total_orders</span> &gt;= <span class="cn">50</span> <span class="ck">THEN</span> <span class="cn">20</span>
+        <span class="ck">WHEN</span> <span class="ct">total_orders</span> &gt;= <span class="cn">20</span> <span class="ck">THEN</span> <span class="cn">15</span>
+        <span class="ck">WHEN</span> <span class="ct">total_orders</span> &gt;= <span class="cn">10</span> <span class="ck">THEN</span> <span class="cn">10</span>
+        <span class="ck">ELSE</span>                       <span class="cn">5</span>
+    <span class="ck">END</span>,
+    <span class="ct">updated_at</span>   = <span class="cf">NOW</span>()
+<span class="ck">WHERE</span> <span class="ct">status</span> = <span class="cs">'active'</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — UPDATE with JOIN (apply from another table)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Category-based price adjustment using a JOIN</span>
+<span class="ck">UPDATE</span> <span class="ct">products</span> p
+<span class="ck">JOIN</span> <span class="ct">categories</span> c <span class="ck">ON</span> <span class="ct">c.id</span> = <span class="ct">p.category_id</span>
+<span class="ck">SET</span> <span class="ct">p.price</span> = <span class="ct">p.price</span> * <span class="ck">CASE</span>
+    <span class="ck">WHEN</span> <span class="ct">c.name</span> = <span class="cs">'Electronics'</span> <span class="ck">THEN</span> <span class="cn">1.05</span>   <span class="cc">-- 5% increase</span>
+    <span class="ck">WHEN</span> <span class="ct">c.name</span> = <span class="cs">'Clothing'</span>    <span class="ck">THEN</span> <span class="cn">0.95</span>   <span class="cc">-- 5% decrease</span>
+    <span class="ck">ELSE</span>                          <span class="cn">1.00</span>   <span class="cc">-- no change</span>
+<span class="ck">END</span>
+<span class="ck">WHERE</span> <span class="ct">p.is_active</span> = <span class="cn">1</span>;</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">SQL — UPDATE from a subquery (recalculate derived column)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">-- Sync orders.total_amount from order_items (recalculate derived column)</span>
+<span class="ck">UPDATE</span> <span class="ct">orders</span> o
+<span class="ck">JOIN</span> (
+    <span class="ck">SELECT</span> <span class="ct">order_id</span>, <span class="cf">SUM</span>(<span class="ct">qty</span> * <span class="ct">price</span>) <span class="ck">AS</span> calc_total
+    <span class="ck">FROM</span>   <span class="ct">order_items</span>
+    <span class="ck">GROUP BY</span> <span class="ct">order_id</span>
+) totals <span class="ck">ON</span> <span class="ct">totals.order_id</span> = <span class="ct">o.id</span>
+<span class="ck">SET</span> <span class="ct">o.total_amount</span> = <span class="ct">totals.calc_total</span>,
+    <span class="ct">o.updated_at</span>   = <span class="cf">NOW</span>();
+<span class="cc">-- No WHERE needed — JOIN already limits to matching orders</span></pre></div>
+    <div class="box am"><div class="bxt">Batch large updates</div><p>On multi-million-row tables, a single UPDATE locks all matching rows until it completes. Use <code>LIMIT N</code> in a loop (application-side) or a cursor (stored procedure) to process in batches of 5,000–10,000 rows and avoid long lock chains.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>UPDATE t SET col = CASE WHEN … END WHERE …</code> — one pass, no loop. For data from another table: <code>UPDATE t1 JOIN t2 ON … SET t1.col = t2.col</code>.</p></div>
+  </div>
+
   <p style="margin-top:56px;padding-top:24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text3);">
-    MySQL interview prep · Part 1 · 19 questions ·
+    MySQL interview prep · Part 1 · 26 questions ·
     <a href="mysql-interview-prep-part2.html" style="color:var(--emerald);">Continue to Part 2 — Technical Q&amp;A</a>
   </p>
 
@@ -701,7 +980,7 @@ ranked <span class="ck">AS</span> (
         navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + id));
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.12, rootMargin: '-60px 0px -40% 0px' });
   sections.forEach(s => io.observe(s));
 </script>
 <script src="assets/theme-toggle.js" defer></script>
