@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Interview Prep — Technical Q&amp;A</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+<link rel="stylesheet" href="assets/theme-ui.css">
+<link rel="stylesheet" href="assets/theme-docs.css">
+<style>
+:root{
+  --bg:#07080c;--bg2:#0e0f14;--bg3:#14161c;--bg4:#1b1d25;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#e3e0d6;--text2:#8c8880;--text3:#46433e;
+  --emerald:#10b981;--indigo:#818cf8;--amber:#f59e0b;
+  --sky:#38bdf8;--rose:#f43f5e;--lime:#84cc16;--git:#f05033;
+  --mono:'IBM Plex Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;}
+.layout{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sb{width:268px;min-width:268px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-top{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.sb-badge{display:inline-block;background:var(--git);color:#0a0000;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+.sb-top h1{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.3;}
+.sb-top p{font-size:12px;color:var(--text2);margin-top:4px;}
+.nav-s{padding:0 14px;margin-bottom:4px;}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text3);padding:0 8px;margin-bottom:5px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;font-size:12px;color:var(--text2);transition:all .15s;text-decoration:none;border:1px solid transparent;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--bg3);color:var(--emerald);border-color:var(--border);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.ni.active .ndot{background:var(--emerald);}
+.sb-home{display:block;padding:10px 24px;color:var(--text2);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;border-bottom:1px solid var(--border);transition:color .15s;}
+.sb-home:hover{color:var(--text);}
+
+/* ── MAIN ── */
+.main{flex:1;max-width:920px;padding:48px 56px;}
+
+/* ── HERO ── */
+.hero{padding:40px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;scroll-margin-top:24px;}
+.htag{font-family:var(--mono);font-size:11px;color:var(--git);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.htag::before{content:'';display:block;width:28px;height:1px;background:var(--git);}
+.hero h1{font-family:var(--serif);font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px;}
+.hero h1 em{font-style:italic;color:var(--indigo);}
+.hero p{font-size:16px;color:var(--text2);max-width:580px;line-height:1.7;}
+.hmeta{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap;}
+.hm{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);}
+.hm span,.hm a{color:var(--lime);}
+.hm a{text-decoration:none;}
+.hm a:hover{text-decoration:underline;}
+
+/* ── PROGRESS ── */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:48px;}
+.prow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px;}
+.pbar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--git),var(--amber));border-radius:99px;width:100%;}
+
+/* ── SECTIONS ── */
+.sec{margin-bottom:64px;scroll-margin-top:24px;}
+.snum{font-family:var(--mono);font-size:11px;color:var(--git);letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.snum-badges{display:flex;gap:6px;}
+.sbadge{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase;}
+.sbadge.new{background:rgba(16,185,129,.1);color:var(--emerald);border:1px solid rgba(16,185,129,.28);}
+.sbadge.adv{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.28);}
+.sbadge.mid{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+.sec h2{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.2;margin-bottom:18px;}
+p{margin-bottom:14px;color:var(--text2);}
+strong{color:var(--text);font-weight:500;}
+
+/* ── CALLOUT BOXES ── */
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0;background:var(--bg2);}
+.box.em{border-color:var(--emerald);}
+.box.in{border-color:var(--indigo);}
+.box.am{border-color:var(--amber);}
+.box.sk{border-color:var(--sky);}
+.box.ro{border-color:var(--rose);}
+.box.gt{border-color:var(--git);}
+.bxt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.box.em .bxt{color:var(--emerald);}
+.box.in .bxt{color:var(--indigo);}
+.box.am .bxt{color:var(--amber);}
+.box.sk .bxt{color:var(--sky);}
+.box.ro .bxt{color:var(--rose);}
+.box.gt .bxt{color:var(--git);}
+.box p{margin:0;font-size:14px;line-height:1.65;}
+
+/* ── INSIGHT ── */
+.insight{background:linear-gradient(135deg,#0d0b1e 0%,#0c0806 100%);border:1px solid var(--indigo);border-radius:12px;padding:18px 20px;margin:20px 0;}
+.insight h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;}
+.insight p{color:var(--text2);font-size:13.5px;margin:0;line-height:1.65;}
+
+/* ── CODE BLOCKS ── */
+.cb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin:20px 0;overflow:hidden;}
+.cb-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.cb-lang{font-family:var(--mono);font-size:10px;color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot:nth-child(1){background:rgba(244,63,94,.4);}
+.dot:nth-child(2){background:rgba(245,158,11,.4);}
+.dot:nth-child(3){background:rgba(16,185,129,.4);}
+pre{padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:#b5b0a8;white-space:pre-wrap;word-break:break-word;}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--emerald);}
+.ck{color:var(--indigo);}
+.cf{color:var(--emerald);}
+.cs{color:var(--amber);}
+.cn{color:#fb923c;}
+.ct{color:var(--sky);}
+.cc{color:#47443d;font-style:italic;}
+.cg{color:#4ade80;}
+.cr{color:var(--rose);}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;margin:18px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border2);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+td strong{color:var(--text);}
+td code{font-size:11px;}
+
+/* ── CHAPTER DIVIDERS ── */
+.ch-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin:52px 0 24px;display:flex;align-items:center;gap:16px;}
+.ch-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── POINT LIST ── */
+.pts{list-style:none;padding:0;margin:10px 0;}
+.pts li{display:flex;gap:10px;padding:7px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'▸';color:var(--sky);flex-shrink:0;font-size:11px;margin-top:3px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+
+/* ── MOBILE ── */
+.mob-nav{display:none;}
+@media(max-width:768px){
+  .mob-nav{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+  .mob-nav-left,.mob-nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .mob-btn{font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);white-space:nowrap;transition:color .15s;}
+  .mob-btn:hover{color:var(--text);}
+  .mob-btn--accent{color:var(--git);border-color:var(--git);}
+  .mob-theme{font-family:var(--mono);font-size:11px;color:var(--text2);padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+  .sb{display:none;}
+  .main{padding:28px 20px;}
+  .hero h1{font-size:34px;}
+}
+@media print{.sb{display:none;}body{background:white;color:black;}}
+</style>
+</head>
+<body>
+
+<!-- ── Mobile top bar ── -->
+<header class="mob-nav" aria-label="Mobile navigation">
+  <div class="mob-nav-left">
+    <a href="index.html" class="mob-btn">&#8962; Home</a>
+    <a href="interview-git-technical.html" class="mob-btn mob-btn--accent">&#8592; Q&amp;A</a>
+  </div>
+  <div class="mob-nav-right">
+    <button type="button" class="mob-theme" data-theme-toggle aria-label="Switch theme">&#9788; Theme</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sb">
+  <a href="index.html" class="sb-home">&#8592; Home</a>
+  <button type="button" class="theme-toggle theme-toggle--sb" data-theme-toggle aria-pressed="false" aria-label="Switch theme"><span class="theme-toggle__icon" aria-hidden="true">&#9728;</span><span class="theme-toggle__text">Light</span></button>
+  <div class="sb-top">
+    <div class="sb-badge">GIT</div>
+    <h1>Technical Q&amp;A</h1>
+    <p>20 topics &middot; 5 chapters</p>
+  </div>
+
+  <div class="nav-s">
+    <div class="nav-lbl">Ch 1 &mdash; Internals</div>
+    <a class="ni active" href="#t1"><div class="ndot"></div>T1 &middot; Objects &amp; SHA</a>
+    <a class="ni" href="#t2"><div class="ndot"></div>T2 &middot; Staging area &amp; index</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 2 &mdash; Branching &amp; History</div>
+    <a class="ni" href="#t3"><div class="ndot"></div>T3 &middot; merge vs rebase vs squash</a>
+    <a class="ni" href="#t4"><div class="ndot"></div>T4 &middot; reset vs revert vs restore</a>
+    <a class="ni" href="#t5"><div class="ndot"></div>T5 &middot; HEAD &amp; refs</a>
+    <a class="ni" href="#t6"><div class="ndot"></div>T6 &middot; Interactive rebase</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 3 &mdash; Collaboration</div>
+    <a class="ni" href="#t7"><div class="ndot"></div>T7 &middot; Conflict resolution</a>
+    <a class="ni" href="#t8"><div class="ndot"></div>T8 &middot; cherry-pick</a>
+    <a class="ni" href="#t9"><div class="ndot"></div>T9 &middot; git stash</a>
+    <a class="ni" href="#t10"><div class="ndot"></div>T10 &middot; fetch vs pull</a>
+    <a class="ni" href="#t11"><div class="ndot"></div>T11 &middot; Tags</a>
+    <a class="ni" href="#t12"><div class="ndot"></div>T12 &middot; Hooks &amp; automation</a>
+    <a class="ni" href="#t13"><div class="ndot"></div>T13 &middot; Submodules vs subtrees</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 4 &mdash; Workflows</div>
+    <a class="ni" href="#t14"><div class="ndot"></div>T14 &middot; Branching strategies</a>
+    <a class="ni" href="#t15"><div class="ndot"></div>T15 &middot; git bisect</a>
+    <a class="ni" href="#t16"><div class="ndot"></div>T16 &middot; Monorepo Git</a>
+    <a class="ni" href="#t17"><div class="ndot"></div>T17 &middot; CI/CD &amp; GitOps</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 5 &mdash; Advanced</div>
+    <a class="ni" href="#t18"><div class="ndot"></div>T18 &middot; git reflog</a>
+    <a class="ni" href="#t19"><div class="ndot"></div>T19 &middot; Secrets &amp; GPG signing</a>
+    <a class="ni" href="#t20"><div class="ndot"></div>T20 &middot; Git performance</a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="htag">Git &middot; Interview prep</div>
+    <h1>Technical<br><em>Q&amp;A</em></h1>
+    <p>Interview-style answers with comparison tables, code examples, and quick-recall lines &mdash; five chapters covering Git internals, branching &amp; history, collaboration workflows, team strategies, and advanced recovery and performance topics.</p>
+    <div class="hmeta">
+      <div class="hm">&#128172; <span>20 topics &middot; 5 chapters</span></div>
+      <div class="hm">&#127891; <span>Senior SWE level &middot; 6&ndash;7 yrs</span></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="pcard">
+    <div class="prow"><span>Interview prep</span><span>Git &mdash; Technical Q&amp;A</span></div>
+    <div class="pbar"><div class="pfill"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">20 topics &middot; Chapters: Internals &middot; Branching &middot; Collaboration &middot; Workflows &middot; Advanced</p>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 1 — INTERNALS
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch1">Chapter 1 &mdash; Internals</div>
+
+  <div class="sec" id="t1">
+    <div class="snum">T1 <span class="snum-badges"><span class="sbadge adv">Core</span></span></div>
+    <h2>Git objects &amp; SHA &mdash; how Git stores everything</h2>
+    <p>Git is a <strong>content-addressable filesystem</strong>. Every piece of data is stored as an object named by the <strong>SHA-1 hash of its content</strong> (moving to SHA-256). There are four object types; together they form Git's immutable object graph.</p>
+    <div class="tw"><table>
+      <tr><th>Object</th><th>What it stores</th><th>Points to</th></tr>
+      <tr><td><strong>blob</strong></td><td>Raw file content (no filename, no permissions)</td><td>Nothing</td></tr>
+      <tr><td><strong>tree</strong></td><td>Directory listing: names, modes, blob/tree SHAs</td><td>blobs, other trees</td></tr>
+      <tr><td><strong>commit</strong></td><td>Author, timestamp, message, parent SHAs</td><td>One tree + parent commits</td></tr>
+      <tr><td><strong>tag</strong></td><td>Annotated tag metadata: tagger, message, GPG sig</td><td>Any object (usually a commit)</td></tr>
+    </table></div>
+    <p>The <code>.git/objects/</code> directory holds all objects. Loose objects are stored at <code>objects/ab/cdef…</code> (first 2 hex chars = directory). Git periodically packs them into <code>.git/objects/pack/</code> for space efficiency.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Inspecting objects</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># See the type of any object</span>
+git cat-file -t HEAD              <span class="cc"># → commit</span>
+git cat-file -t HEAD^{tree}       <span class="cc"># → tree</span>
+
+<span class="cc"># Pretty-print object content</span>
+git cat-file -p HEAD              <span class="cc"># → tree sha, parent, author, message</span>
+git cat-file -p HEAD^{tree}       <span class="cc"># → list of blobs and subtrees</span>
+
+<span class="cc"># Hash a file manually (same as what git would store)</span>
+git hash-object README.md         <span class="cc"># → sha1 of the blob</span>
+
+<span class="cc"># Count objects and space</span>
+git count-objects -vH</pre></div>
+    <div class="box gt"><div class="bxt">Say this in the interview</div><p>"Git never stores diffs &mdash; it stores complete snapshots as an object DAG. A commit points to a tree (directory snapshot), trees point to blobs (file content) or subtrees. SHA identity means identical files across commits share the same blob. That's why Git is fast and disk-efficient."</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>blob = file content · tree = directory · commit = snapshot + metadata · tag = named pointer. SHA is computed from content, so two identical files are one blob. <code>git cat-file -p &lt;sha&gt;</code> to inspect any object.</p></div>
+  </div>
+
+  <div class="sec" id="t2">
+    <div class="snum">T2</div>
+    <h2>Staging area &amp; index &mdash; the three states of a file</h2>
+    <p>Every tracked file in Git lives in one of three states: <strong>modified</strong> (changed in working tree), <strong>staged</strong> (added to index, ready to commit), or <strong>committed</strong> (safely in the object database).</p>
+    <div class="tw"><table>
+      <tr><th>Location</th><th>Name</th><th>Command to move forward</th></tr>
+      <tr><td>Working tree</td><td>Modified</td><td><code>git add &lt;file&gt;</code></td></tr>
+      <tr><td>Index / staging area</td><td>Staged</td><td><code>git commit</code></td></tr>
+      <tr><td>.git/objects</td><td>Committed</td><td>&mdash;</td></tr>
+    </table></div>
+    <p>The <strong>index</strong> (<code>.git/index</code>) is a binary file that maps file paths to blob SHAs and metadata. <code>git status</code> compares: HEAD tree vs. index (staged diff), and index vs. working tree (unstaged diff).</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Precision staging</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Stage only specific hunks interactively</span>
+git add -p                        <span class="cc"># y/n/s/e per hunk</span>
+
+<span class="cc"># See what's staged vs committed</span>
+git diff --staged                 <span class="cc"># index vs HEAD</span>
+git diff                          <span class="cc"># working tree vs index</span>
+
+<span class="cc"># Unstage without losing working tree changes</span>
+git restore --staged &lt;file&gt;
+
+<span class="cc"># See index content (raw)</span>
+git ls-files --stage</pre></div>
+    <div class="box em"><div class="bxt">Interview tip</div><p><code>git add -p</code> is the answer to "how do you make atomic commits when you've mixed concerns in one file?" — it lets you stage individual hunks from a single file so each commit does exactly one thing.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Three areas: working tree → index (staging) → object store. <code>git diff</code> = unstaged. <code>git diff --staged</code> = staged. <code>git add -p</code> for surgical staging. The index is a performance cache so Git doesn't re-hash unchanged files on every commit.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 2 — BRANCHING & HISTORY
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch2">Chapter 2 &mdash; Branching &amp; History</div>
+
+  <div class="sec" id="t3">
+    <div class="snum">T3 <span class="snum-badges"><span class="sbadge adv">Core</span></span></div>
+    <h2>merge vs rebase vs squash &mdash; when to use each</h2>
+    <p>All three integrate changes from one branch into another, but they produce different history shapes and have different trade-offs around collaboration and bisectability.</p>
+    <div class="tw"><table>
+      <tr><th>Strategy</th><th>History shape</th><th>Commit preservation</th><th>Best for</th></tr>
+      <tr><td><strong>merge</strong></td><td>Adds a merge commit, preserves branch topology</td><td>All feature commits intact</td><td>Long-lived shared branches, audit trails</td></tr>
+      <tr><td><strong>rebase</strong></td><td>Linear &mdash; replays commits on top of target</td><td>Commits rewritten (new SHAs)</td><td>Feature branches before PR, keeping <code>main</code> linear</td></tr>
+      <tr><td><strong>squash merge</strong></td><td>Single new commit on target</td><td>Feature history discarded</td><td>Small features where history is noise</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; All three approaches</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Merge (preserves branch topology)</span>
+git checkout main
+git merge feature/login            <span class="cc"># creates merge commit</span>
+git merge --no-ff feature/login    <span class="cc"># force merge commit even if fast-forward possible</span>
+
+<span class="cc"># Rebase (linear history)</span>
+git checkout feature/login
+git rebase main                    <span class="cc"># replay feature commits on top of main</span>
+git checkout main
+git merge feature/login            <span class="cc"># now a fast-forward, no merge commit</span>
+
+<span class="cc"># Squash merge (single commit)</span>
+git checkout main
+git merge --squash feature/login
+git commit -m "feat: add login"    <span class="cc"># one commit with all changes</span></pre></div>
+    <div class="box am"><div class="bxt">Golden rule</div><p><strong>Never rebase shared branches.</strong> Rebase rewrites SHAs. If teammates have pulled the old SHAs, their history diverges. Only rebase local feature branches that haven't been pushed, or use <code>--force-with-lease</code> on branches you exclusively own.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>merge = preserves context, adds merge commit · rebase = linear history, rewrites SHAs, never on shared branches · squash = clean target history, loses individual feature commits. For bisectability, rebase wins. For auditing, merge wins.</p></div>
+  </div>
+
+  <div class="sec" id="t4">
+    <div class="snum">T4 <span class="snum-badges"><span class="sbadge adv">Core</span></span></div>
+    <h2>reset vs revert vs restore &mdash; undoing things correctly</h2>
+    <p>Three different commands for three different undo scenarios. Getting these wrong in a shared repo is dangerous.</p>
+    <div class="tw"><table>
+      <tr><th>Command</th><th>Moves HEAD?</th><th>Changes index?</th><th>Changes working tree?</th><th>Safe for shared branches?</th></tr>
+      <tr><td><code>git reset --soft HEAD~1</code></td><td>Yes</td><td>No</td><td>No</td><td>No &mdash; rewrites history</td></tr>
+      <tr><td><code>git reset --mixed HEAD~1</code></td><td>Yes</td><td>Yes (unstages)</td><td>No</td><td>No &mdash; rewrites history</td></tr>
+      <tr><td><code>git reset --hard HEAD~1</code></td><td>Yes</td><td>Yes</td><td>Yes (discards changes)</td><td>Never &mdash; destructive</td></tr>
+      <tr><td><code>git revert HEAD</code></td><td>Yes (new commit)</td><td>Yes</td><td>Yes</td><td>Yes &mdash; safe, additive</td></tr>
+      <tr><td><code>git restore &lt;file&gt;</code></td><td>No</td><td>No</td><td>Yes (discards file changes)</td><td>N/A (local only)</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Practical examples</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Undo last commit, keep changes staged (to re-commit with better message)</span>
+git reset --soft HEAD~1
+
+<span class="cc"># Undo last commit, keep changes but unstage them</span>
+git reset HEAD~1               <span class="cc"># --mixed is default</span>
+
+<span class="cc"># Nuclear: discard last commit AND all changes (irreversible without reflog)</span>
+git reset --hard HEAD~1
+
+<span class="cc"># Safe undo on shared branch: creates a new "undo" commit</span>
+git revert abc1234             <span class="cc"># or HEAD for latest</span>
+git revert HEAD~3..HEAD        <span class="cc"># revert a range</span>
+
+<span class="cc"># Discard working tree changes for a file</span>
+git restore src/config.js
+
+<span class="cc"># Unstage a file (restore from HEAD into index)</span>
+git restore --staged src/config.js</pre></div>
+    <div class="box ro"><div class="bxt">Dangerous pattern</div><p><code>git reset --hard</code> followed by <code>git push --force</code> on a shared branch. Anyone who had already pulled now has a diverged history. Use <code>git revert</code> on shared branches — always.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>soft = move HEAD only · mixed = HEAD + unstage · hard = HEAD + unstage + discard. revert = safe undo by creating inverse commit. restore = discard working tree changes (not a history operation). Use reset only on local/private branches.</p></div>
+  </div>
+
+  <div class="sec" id="t5">
+    <div class="snum">T5</div>
+    <h2>HEAD, detached HEAD, and refs &mdash; the pointer system</h2>
+    <p><code>HEAD</code> is a special ref stored in <code>.git/HEAD</code>. Normally it contains a <em>symbolic ref</em> like <code>ref: refs/heads/main</code>, meaning it points to a branch, which in turn points to a commit. In <strong>detached HEAD</strong> state, <code>.git/HEAD</code> contains a raw commit SHA directly.</p>
+    <div class="tw"><table>
+      <tr><th>Ref type</th><th>Location</th><th>Description</th></tr>
+      <tr><td><strong>HEAD</strong></td><td><code>.git/HEAD</code></td><td>Current position (symbolic or detached)</td></tr>
+      <tr><td><strong>Branch</strong></td><td><code>.git/refs/heads/&lt;name&gt;</code></td><td>41-byte text file containing a commit SHA</td></tr>
+      <tr><td><strong>Remote tracking</strong></td><td><code>.git/refs/remotes/origin/&lt;name&gt;</code></td><td>Last known state of remote branch</td></tr>
+      <tr><td><strong>Tag</strong></td><td><code>.git/refs/tags/&lt;name&gt;</code></td><td>Lightweight: SHA; Annotated: points to tag object</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; HEAD and refs</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># See what HEAD points to</span>
+cat .git/HEAD                 <span class="cc"># → ref: refs/heads/main (attached)</span>
+cat .git/HEAD                 <span class="cc"># → abc1234… (detached)</span>
+
+<span class="cc"># Enter detached HEAD (useful for inspecting old commits)</span>
+git checkout abc1234
+
+<span class="cc"># Relative refs</span>
+git log HEAD~3..HEAD          <span class="cc"># last 3 commits</span>
+git show HEAD^                <span class="cc"># parent of HEAD (same as HEAD~1)</span>
+git show HEAD^^               <span class="cc"># grandparent</span>
+
+<span class="cc"># In detached HEAD: save work before leaving</span>
+git switch -c rescue/experiment   <span class="cc"># create branch from current detached HEAD</span>
+
+<span class="cc"># A branch is just a file</span>
+cat .git/refs/heads/main      <span class="cc"># → commit SHA, 41 chars</span></pre></div>
+    <div class="box sk"><div class="bxt">Key insight</div><p>A branch in Git is just a 41-byte text file containing a commit SHA. Creating a branch is O(1) — Git writes one file. This is why branching in Git is "cheap" compared to older VCS systems that copied entire directory trees.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>HEAD → branch → commit (normal). HEAD → commit directly (detached). Detached HEAD = no branch moves when you commit; new commits become unreachable after you switch away. Always create a branch to preserve work from detached HEAD state.</p></div>
+  </div>
+
+  <div class="sec" id="t6">
+    <div class="snum">T6 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>Interactive rebase &mdash; rewriting commit history cleanly</h2>
+    <p><code>git rebase -i</code> opens an editor with a list of commits and action verbs. You can reorder, combine, edit, or drop commits before pushing. It's the primary tool for cleaning up messy local history before a PR review.</p>
+    <div class="tw"><table>
+      <tr><th>Action</th><th>What it does</th></tr>
+      <tr><td><code>pick</code></td><td>Keep the commit as-is</td></tr>
+      <tr><td><code>reword</code></td><td>Keep changes, edit the commit message</td></tr>
+      <tr><td><code>edit</code></td><td>Stop for amending (add files, split commit)</td></tr>
+      <tr><td><code>squash</code></td><td>Combine with previous commit, merge messages</td></tr>
+      <tr><td><code>fixup</code></td><td>Combine with previous commit, discard this message</td></tr>
+      <tr><td><code>drop</code></td><td>Remove the commit entirely</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Interactive rebase workflow</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Rewrite the last 5 commits</span>
+git rebase -i HEAD~5
+
+<span class="cc"># Squash all feature commits into one before merging</span>
+git rebase -i main             <span class="cc"># opens editor with all commits ahead of main</span>
+<span class="cc"># In editor: pick first, squash/fixup the rest</span>
+
+<span class="cc"># After rewriting, push safely (you OWN this branch)</span>
+git push --force-with-lease    <span class="cc"># safer than --force: fails if remote changed</span>
+
+<span class="cc"># Abort if things go wrong</span>
+git rebase --abort
+
+<span class="cc"># Continue after resolving a conflict mid-rebase</span>
+git add &lt;resolved-file&gt;
+git rebase --continue
+
+<span class="cc"># Auto-squash: prefix commits with fixup! or squash! then:</span>
+git rebase -i --autosquash HEAD~10</pre></div>
+    <div class="box am"><div class="bxt">--force-with-lease vs --force</div><p><code>--force</code> overwrites whatever is on the remote unconditionally. <code>--force-with-lease</code> checks that the remote ref matches what you last fetched — if someone else pushed in the meantime, the push is rejected. Always prefer <code>--force-with-lease</code> when force-pushing feature branches.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Interactive rebase = time machine for your own commits. pick/reword/edit/squash/fixup/drop. Only rewrite commits that haven't been shared. Use <code>--force-with-lease</code> not <code>--force</code>. <code>--autosquash</code> with <code>fixup!</code>-prefixed commits automates routine cleanup.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 3 — COLLABORATION
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch3">Chapter 3 &mdash; Collaboration</div>
+
+  <div class="sec" id="t7">
+    <div class="snum">T7</div>
+    <h2>Conflict resolution &mdash; markers, strategies, and tooling</h2>
+    <p>A conflict occurs when Git can't auto-merge because two branches changed the same region of a file differently. Git marks the file with conflict markers and waits for manual resolution.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">text &mdash; Conflict markers</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+const timeout = 5000;           <span class="cc">// your version (current branch)</span>
+=======
+const timeout = 3000;           <span class="cc">// incoming version (merging branch)</span>
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/faster-timeout</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Resolution commands</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Use diff3 style to see the common ancestor (best for context)</span>
+git config merge.conflictstyle diff3
+
+<span class="cc"># Accept entirely one side (useful for binary files or clear ownership)</span>
+git checkout --ours   src/config.js   <span class="cc"># keep HEAD version</span>
+git checkout --theirs src/config.js   <span class="cc"># keep incoming version</span>
+
+<span class="cc"># Or with git restore (modern syntax)</span>
+git restore --ours   src/config.js
+git restore --theirs src/config.js
+
+<span class="cc"># Open a visual merge tool</span>
+git mergetool                         <span class="cc"># uses configured tool (vimdiff, kdiff3, VS Code)</span>
+
+<span class="cc"># After resolving, stage and continue</span>
+git add src/config.js
+git merge --continue                  <span class="cc"># or: git rebase --continue</span>
+
+<span class="cc"># List all conflicted files</span>
+git diff --name-only --diff-filter=U</pre></div>
+    <div class="box em"><div class="bxt">VS Code as mergetool</div><p><code>git config merge.tool vscode</code> and <code>git config mergetool.vscode.cmd 'code --wait $MERGED'</code>. VS Code shows incoming/current/result in a three-pane view with clickable "Accept" buttons &mdash; much faster than editing conflict markers by hand.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>diff3 = 3-way view (ours/base/theirs). <code>--ours</code> = HEAD branch, <code>--theirs</code> = the branch being merged in. After resolving: <code>git add</code> then <code>--continue</code>. Never commit with unresolved conflict markers still in the file.</p></div>
+  </div>
+
+  <div class="sec" id="t8">
+    <div class="snum">T8</div>
+    <h2>git cherry-pick &mdash; applying specific commits across branches</h2>
+    <p><code>git cherry-pick</code> applies the diff introduced by a specific commit (or range of commits) onto the current branch as a new commit. The new commit gets a different SHA even if content is identical.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; cherry-pick patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Pick a single commit</span>
+git cherry-pick abc1234
+
+<span class="cc"># Pick a range (abc1234 exclusive, def5678 inclusive)</span>
+git cherry-pick abc1234..def5678
+
+<span class="cc"># -n: stage changes but don't auto-commit (lets you combine or modify)</span>
+git cherry-pick -n abc1234
+git cherry-pick -n abc1234 def5678    <span class="cc"># combine two commits into one</span>
+
+<span class="cc"># -x: append the original SHA to the commit message (for traceability)</span>
+git cherry-pick -x abc1234
+<span class="cc"># commit message becomes: "fix: typo (cherry picked from commit abc1234)"</span>
+
+<span class="cc"># Typical hotfix workflow: fix on main, cherry-pick to release branch</span>
+git checkout main
+git cherry-pick &lt;hotfix-sha&gt;
+
+git checkout release/2.1
+git cherry-pick &lt;hotfix-sha&gt;         <span class="cc"># same fix on release branch</span>
+
+<span class="cc"># Resolve conflict during cherry-pick</span>
+git cherry-pick --continue
+git cherry-pick --abort</pre></div>
+    <div class="box gt"><div class="bxt">When to use cherry-pick</div><p>Hotfixes that need to land on multiple maintained branches. When you want one commit from a feature branch without merging the whole branch. Avoid for large ranges &mdash; a merge or rebase is cleaner. Cherry-pick doesn't record the branch relationship, so <code>-x</code> is important for audit trails.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>cherry-pick = apply one commit's diff to current branch as a new commit. New SHA even if content is same. Use <code>-x</code> to record origin in message. Use <code>-n</code> to stage without committing (for combining). Common pattern: fix on main, cherry-pick to release branches.</p></div>
+  </div>
+
+  <div class="sec" id="t9">
+    <div class="snum">T9</div>
+    <h2>git stash &mdash; shelving work without committing</h2>
+    <p><code>git stash</code> saves the working tree and index state onto a stack so you can switch context, then re-apply the saved state later. Stashes are local &mdash; they don't push to remote.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Stash commands</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Save with a descriptive message</span>
+git stash push -m "WIP: auth middleware refactor"
+
+<span class="cc"># Also stash untracked files</span>
+git stash push -u -m "includes new files"
+
+<span class="cc"># Stash only specific files</span>
+git stash push -m "partial" -- src/auth.js src/middleware.js
+
+<span class="cc"># Interactive: choose which hunks to stash</span>
+git stash push -p
+
+<span class="cc"># List all stashes</span>
+git stash list
+<span class="cc"># stash@{0}: On main: WIP: auth middleware refactor</span>
+<span class="cc"># stash@{1}: On main: includes new files</span>
+
+<span class="cc"># Apply and keep on stack</span>
+git stash apply stash@{0}
+
+<span class="cc"># Apply and remove from stack (most common)</span>
+git stash pop
+
+<span class="cc"># Create a branch from a stash (best when stash conflicts with current state)</span>
+git stash branch feature/auth-wip stash@{0}
+
+<span class="cc"># Drop specific stash</span>
+git stash drop stash@{1}
+git stash clear                      <span class="cc"># remove all stashes</span></pre></div>
+    <div class="box em"><div class="bxt">Stash branch pattern</div><p>If <code>git stash pop</code> conflicts with current branch state, use <code>git stash branch &lt;name&gt;</code>. This checks out the commit where the stash was created, applies the stash there, and creates a branch from it &mdash; guaranteed no conflicts.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>stash = LIFO stack of WIP saves. <code>push -u</code> includes untracked. <code>push -p</code> interactive. <code>pop</code> = apply + remove. <code>apply</code> = apply + keep. <code>branch</code> = safest recovery from stash. Always use <code>-m</code> message so you remember what each stash is.</p></div>
+  </div>
+
+  <div class="sec" id="t10">
+    <div class="snum">T10</div>
+    <h2>fetch vs pull &mdash; remote tracking and upstream</h2>
+    <p><code>git fetch</code> downloads remote objects and updates remote-tracking refs (<code>origin/main</code>) without touching your working tree or local branches. <code>git pull</code> is <code>git fetch</code> + <code>git merge</code> (or rebase if configured).</p>
+    <div class="tw"><table>
+      <tr><th></th><th><code>git fetch</code></th><th><code>git pull</code></th></tr>
+      <tr><td><strong>Updates remote-tracking refs</strong></td><td>Yes</td><td>Yes</td></tr>
+      <tr><td><strong>Updates local branch</strong></td><td>No</td><td>Yes (merge or rebase)</td></tr>
+      <tr><td><strong>Can create conflicts</strong></td><td>No</td><td>Yes</td></tr>
+      <tr><td><strong>Safe to run anytime</strong></td><td>Always</td><td>Only on clean working tree</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Fetch and pull patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Fetch all remotes, then inspect before integrating</span>
+git fetch --all --prune            <span class="cc"># --prune removes deleted remote branches</span>
+git log HEAD..origin/main          <span class="cc"># see what's on remote but not local</span>
+git diff HEAD origin/main          <span class="cc"># see the diff</span>
+
+<span class="cc"># Pull with rebase instead of merge (keeps linear history)</span>
+git pull --rebase
+
+<span class="cc"># Make rebase the default for all pulls</span>
+git config --global pull.rebase true
+
+<span class="cc"># Set upstream for a new branch</span>
+git push -u origin feature/login   <span class="cc"># -u = --set-upstream</span>
+git branch -u origin/main          <span class="cc"># set upstream for current branch</span>
+
+<span class="cc"># See upstream relationships</span>
+git branch -vv</pre></div>
+    <div class="box sk"><div class="bxt">Best practice</div><p>Prefer <code>git fetch</code> then explicit <code>git merge</code> or <code>git rebase</code> over <code>git pull</code>. You see what's coming before integrating. In CI, always use <code>git fetch</code> &mdash; <code>git pull</code> in CI is an antipattern that can cause unexpected merges.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>fetch = download only, never touch local branches. pull = fetch + merge (or rebase). <code>pull.rebase true</code> keeps history linear. <code>--prune</code> cleans up stale remote-tracking refs. <code>-u</code> on push sets the upstream relationship.</p></div>
+  </div>
+
+  <div class="sec" id="t11">
+    <div class="snum">T11</div>
+    <h2>Tags &mdash; lightweight vs annotated, semver, CI/CD triggers</h2>
+    <p>Tags are named pointers to commits. <strong>Lightweight tags</strong> are just a file with a SHA (like a branch that never moves). <strong>Annotated tags</strong> are full Git objects with a tagger, timestamp, message, and optional GPG signature &mdash; these are the ones to use for releases.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>Lightweight</th><th>Annotated</th></tr>
+      <tr><td><strong>Stored as</strong></td><td>Ref file (SHA only)</td><td>Tag object in object store</td></tr>
+      <tr><td><strong>Has message/tagger</strong></td><td>No</td><td>Yes</td></tr>
+      <tr><td><strong>GPG signable</strong></td><td>No</td><td>Yes</td></tr>
+      <tr><td><strong>Visible in <code>git describe</code></strong></td><td>Yes (with <code>--tags</code>)</td><td>Yes (by default)</td></tr>
+      <tr><td><strong>Use for releases</strong></td><td>No</td><td>Yes</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Tagging workflow</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Create annotated tag (always for releases)</span>
+git tag -a v2.3.1 -m "Release v2.3.1: fix auth timeout"
+
+<span class="cc"># Tag a specific commit (not HEAD)</span>
+git tag -a v2.3.0 abc1234 -m "Release v2.3.0"
+
+<span class="cc"># Tags are not pushed by default — push explicitly</span>
+git push origin v2.3.1             <span class="cc"># push single tag</span>
+git push origin --tags             <span class="cc"># push all tags</span>
+git push origin --follow-tags      <span class="cc"># push only annotated tags reachable from pushed commits</span>
+
+<span class="cc"># List and inspect</span>
+git tag -l "v2.*"
+git show v2.3.1
+
+<span class="cc"># Delete (local and remote)</span>
+git tag -d v2.3.1
+git push origin :refs/tags/v2.3.1
+
+<span class="cc"># git describe: human-readable version from nearest tag</span>
+git describe --tags                <span class="cc"># → v2.3.1-4-gabcdef1</span></pre></div>
+    <div class="box em"><div class="bxt">CI/CD integration</div><p>GitHub Actions triggers: <code>on: push: tags: ['v*']</code>. A push of a <code>v*</code> tag triggers the release pipeline. Combined with <code>git push --follow-tags</code> in your release script, this creates a clean "tag = deploy" workflow with zero extra config per release.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Annotated tags for releases (have metadata + signable). Lightweight tags for local bookmarks. Tags must be pushed explicitly (<code>--follow-tags</code> is cleanest). Semver: MAJOR.MINOR.PATCH — bump MAJOR on breaking, MINOR on feature, PATCH on fix.</p></div>
+  </div>
+
+  <div class="sec" id="t12">
+    <div class="snum">T12</div>
+    <h2>Git hooks &amp; automation &mdash; Husky, lint-staged, commitlint</h2>
+    <p>Git hooks are shell scripts in <code>.git/hooks/</code> that run at specific lifecycle events. They're not committed by default — <strong>Husky</strong> solves this by managing hooks through <code>package.json</code> so every developer gets the same hooks after <code>npm install</code>.</p>
+    <div class="tw"><table>
+      <tr><th>Hook</th><th>When it runs</th><th>Common use</th></tr>
+      <tr><td><code>pre-commit</code></td><td>Before commit is created</td><td>Lint, format, test affected files</td></tr>
+      <tr><td><code>commit-msg</code></td><td>After message is written</td><td>Enforce conventional commit format</td></tr>
+      <tr><td><code>pre-push</code></td><td>Before push to remote</td><td>Run full test suite, type checks</td></tr>
+      <tr><td><code>prepare-commit-msg</code></td><td>Before editor opens</td><td>Auto-insert ticket ID from branch name</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash / json &mdash; Husky + lint-staged + commitlint setup</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Install</span>
+npm install --save-dev husky lint-staged @commitlint/cli @commitlint/config-conventional
+
+<span class="cc"># Initialize Husky</span>
+npx husky init
+
+<span class="cc"># .husky/pre-commit</span>
+npx lint-staged
+
+<span class="cc"># .husky/commit-msg</span>
+npx --no -- commitlint --edit $1
+
+<span class="cc"># package.json — lint-staged config</span>
+{
+  <span class="cs">"lint-staged"</span>: {
+    <span class="cs">"*.{ts,js}"</span>: [<span class="cs">"eslint --fix"</span>, <span class="cs">"prettier --write"</span>],
+    <span class="cs">"*.{css,json}"</span>: <span class="cs">"prettier --write"</span>
+  }
+}
+
+<span class="cc"># commitlint.config.js</span>
+module.exports = { extends: [<span class="cs">'@commitlint/config-conventional'</span>] };
+
+<span class="cc"># Skip hooks for a specific commit (avoid in normal workflow)</span>
+git commit --no-verify -m "chore: emergency patch"</pre></div>
+    <div class="box gt"><div class="bxt">lint-staged advantage</div><p>lint-staged only lints <em>staged</em> files, not the whole codebase. In a large repo, running ESLint on 3 changed files takes milliseconds vs. 30 seconds for the full codebase. Developers only wait for what they actually changed.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Hooks live in <code>.git/hooks/</code> (not committed). Husky manages hooks via package.json. pre-commit → lint-staged (fast, only staged files). commit-msg → commitlint (conventional commits). pre-push → full tests. <code>--no-verify</code> bypasses hooks (use only for genuine emergencies).</p></div>
+  </div>
+
+  <div class="sec" id="t13">
+    <div class="snum">T13 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>Submodules vs subtrees &mdash; embedding external repos</h2>
+    <p>Both let you include one Git repository inside another. They have fundamentally different models for ownership and workflow complexity.</p>
+    <div class="tw"><table>
+      <tr><th></th><th>Submodule</th><th>Subtree</th></tr>
+      <tr><td><strong>How embedded</strong></td><td>Separate repo, pinned to a SHA, referenced in <code>.gitmodules</code></td><td>Files copied into a subdirectory, history merged</td></tr>
+      <tr><td><strong>Clone experience</strong></td><td>Requires <code>git clone --recurse-submodules</code></td><td>Normal clone — subtree content is just files</td></tr>
+      <tr><td><strong>Updates</strong></td><td><code>git submodule update --remote</code></td><td><code>git subtree pull --prefix=lib/foo ...</code></td></tr>
+      <tr><td><strong>Push changes back</strong></td><td><code>git push</code> inside submodule dir</td><td><code>git subtree push --prefix=lib/foo ...</code></td></tr>
+      <tr><td><strong>History</strong></td><td>Separate history, clean separation</td><td>Mixed into parent repo history</td></tr>
+      <tr><td><strong>Best for</strong></td><td>Shared libraries actively developed by sub-team</td><td>Third-party code you rarely update</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Submodule and subtree commands</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">── SUBMODULES ──</span>
+git submodule add https://github.com/org/lib.git lib/shared
+git clone --recurse-submodules https://github.com/org/main.git
+git submodule update --init --recursive   <span class="cc"># after cloning without --recurse</span>
+git submodule update --remote             <span class="cc"># pull latest from tracked branch</span>
+git submodule foreach git pull origin main <span class="cc"># update all submodules</span>
+
+<span class="cc">── SUBTREES ──</span>
+<span class="cc"># Add (one-time)</span>
+git subtree add --prefix=lib/shared https://github.com/org/lib.git main --squash
+
+<span class="cc"># Pull updates from upstream</span>
+git subtree pull --prefix=lib/shared https://github.com/org/lib.git main --squash
+
+<span class="cc"># Push changes back to upstream</span>
+git subtree push --prefix=lib/shared https://github.com/org/lib.git main</pre></div>
+    <div class="box am"><div class="bxt">Submodule pitfall</div><p>Submodules are the #1 source of "why doesn't this work after cloning?" issues. Developers forget <code>--recurse-submodules</code>, or submodule SHAs go stale. If your team isn't actively developing the embedded code, subtrees are simpler — there's nothing to forget after a clone.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Submodule = separate repo, pointer in parent, extra clone step required. Subtree = files copied in, normal clone, messier history. Rule of thumb: submodule if you own and actively develop the embedded repo; subtree if you just consume a third-party library.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 4 — WORKFLOWS
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch4">Chapter 4 &mdash; Workflows</div>
+
+  <div class="sec" id="t14">
+    <div class="snum">T14 <span class="snum-badges"><span class="sbadge adv">Core</span></span></div>
+    <h2>Branching strategies &mdash; Git Flow, GitHub Flow, Trunk-Based</h2>
+    <p>The branching strategy determines how features, releases, and hotfixes flow through the repository. The right choice depends on release cadence, team size, and deployment model.</p>
+    <div class="tw"><table>
+      <tr><th>Strategy</th><th>Branches</th><th>Release cadence</th><th>Best for</th></tr>
+      <tr><td><strong>Git Flow</strong></td><td>main, develop, feature/*, release/*, hotfix/*</td><td>Scheduled releases</td><td>Versioned products, mobile apps, enterprise</td></tr>
+      <tr><td><strong>GitHub Flow</strong></td><td>main + short-lived feature branches</td><td>Continuous deployment</td><td>SaaS, web apps, small teams</td></tr>
+      <tr><td><strong>Trunk-Based</strong></td><td>Single main + feature flags, very short branches (&lt;1 day)</td><td>Multiple deploys per day</td><td>High-velocity teams, mature CI/CD pipelines</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Git Flow pattern</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Git Flow: feature branch workflow</span>
+git checkout develop
+git checkout -b feature/payment-gateway
+<span class="cc"># ... work ...</span>
+git checkout develop
+git merge --no-ff feature/payment-gateway
+
+<span class="cc"># Create release branch</span>
+git checkout -b release/2.4.0 develop
+<span class="cc"># ... bug fixes only ...</span>
+git checkout main
+git merge --no-ff release/2.4.0
+git tag -a v2.4.0 -m "Release v2.4.0"
+
+<span class="cc"># Hotfix</span>
+git checkout -b hotfix/2.4.1 main
+<span class="cc"># ... fix ...</span>
+git checkout main
+git merge --no-ff hotfix/2.4.1
+git tag -a v2.4.1 -m "Hotfix v2.4.1"
+git checkout develop
+git merge --no-ff hotfix/2.4.1   <span class="cc"># don't lose the fix</span></pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; GitHub Flow (simpler)</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># GitHub Flow: branch from main, PR, merge, deploy</span>
+git checkout -b feature/add-dark-mode
+<span class="cc"># ... work, push, open PR ...</span>
+git push -u origin feature/add-dark-mode
+<span class="cc"># PR reviewed → merge to main → auto-deploy</span></pre></div>
+    <div class="box gt"><div class="bxt">Trunk-Based key requirement</div><p>Trunk-Based Development only works with mature CI/CD (fast tests, green main enforced), feature flags to hide incomplete work, and a team culture of small, frequent commits. Without these, you get broken main regularly.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Git Flow = complex, for versioned releases with long QA cycles. GitHub Flow = simple, for continuous deployment. Trunk-Based = maximum velocity, requires feature flags + strong CI. Most teams using k8s/SaaS should use GitHub Flow or Trunk-Based, not Git Flow.</p></div>
+  </div>
+
+  <div class="sec" id="t15">
+    <div class="snum">T15 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>git bisect &mdash; binary search for the commit that introduced a bug</h2>
+    <p><code>git bisect</code> performs a binary search through commit history to find the exact commit that introduced a regression. For 1000 commits, it takes at most 10 steps instead of checking all 1000.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Manual and automated bisect</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">── MANUAL ──</span>
+git bisect start
+git bisect bad                      <span class="cc"># current commit is broken</span>
+git bisect good v2.3.0              <span class="cc"># this tag/SHA was working</span>
+<span class="cc"># Git checks out a commit halfway between good and bad</span>
+<span class="cc"># Test manually, then:</span>
+git bisect good                     <span class="cc"># or: git bisect bad</span>
+<span class="cc"># Repeat until Git reports: "abc1234 is the first bad commit"</span>
+git bisect reset                    <span class="cc"># return to HEAD</span>
+
+<span class="cc">── AUTOMATED (best practice) ──</span>
+<span class="cc"># Write a test script that exits 0 (good) or non-zero (bad)</span>
+cat test-regression.sh
+#!/bin/bash
+npm test -- --testPathPattern="auth.test" --silent
+<span class="cc"># exit code 0 = pass = good commit</span>
+<span class="cc"># exit code 1 = fail = bad commit</span>
+
+git bisect start
+git bisect bad HEAD
+git bisect good v2.3.0
+git bisect run ./test-regression.sh  <span class="cc"># fully automated — Git runs the script at each step</span>
+git bisect reset</pre></div>
+    <div class="box em"><div class="bxt">Automated bisect advantage</div><p>With <code>git bisect run</code>, Git runs the script at each step automatically and prints the culprit commit without any manual interaction. For a bug reproducible by a test, the whole process takes seconds. The script must be committed before bisecting or use an absolute path.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>bisect = binary search, O(log n) steps. start → bad (broken HEAD) → good (last known working) → Git checks out midpoints. Manual: mark good/bad each step. Automated: <code>git bisect run &lt;script&gt;</code> — script exits 0 for good, non-zero for bad. Always <code>git bisect reset</code> when done.</p></div>
+  </div>
+
+  <div class="sec" id="t16">
+    <div class="snum">T16 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>Monorepo Git &mdash; sparse checkout, partial clone, shallow clone, worktrees</h2>
+    <p>Large monorepos with thousands of files or years of history can make routine Git operations slow. Git provides targeted solutions: sparse checkout (limit working tree), partial clone (limit object download), shallow clone (limit history), and worktrees (multiple checkouts).</p>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>What it limits</th><th>Command</th></tr>
+      <tr><td><strong>Sparse checkout</strong></td><td>Working tree (only checkout specific paths)</td><td><code>git sparse-checkout</code></td></tr>
+      <tr><td><strong>Partial clone</strong></td><td>Object download (skip blobs/trees until needed)</td><td><code>git clone --filter=blob:none</code></td></tr>
+      <tr><td><strong>Shallow clone</strong></td><td>History depth (only recent commits)</td><td><code>git clone --depth=1</code></td></tr>
+      <tr><td><strong>Worktree</strong></td><td>N/A (multiple checkouts from one repo)</td><td><code>git worktree add</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Monorepo Git techniques</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">── SPARSE CHECKOUT: work on only packages/api ──</span>
+git clone --no-checkout https://github.com/org/monorepo.git
+cd monorepo
+git sparse-checkout init --cone
+git sparse-checkout set packages/api shared/utils
+git checkout main
+
+<span class="cc">── PARTIAL CLONE: skip large blobs at clone time ──</span>
+git clone --filter=blob:none https://github.com/org/monorepo.git
+<span class="cc"># Blobs are downloaded lazily on demand</span>
+
+<span class="cc">── SHALLOW CLONE: CI/CD speed ──</span>
+git clone --depth=1 https://github.com/org/monorepo.git
+<span class="cc"># Only the latest commit; no history. Fast but bisect won't work.</span>
+git fetch --deepen=100              <span class="cc"># extend history when needed</span>
+
+<span class="cc">── WORKTREE: work on two branches simultaneously ──</span>
+git worktree add ../hotfix-2.1 hotfix/2.1
+<span class="cc"># ../hotfix-2.1 is a separate directory checked out to hotfix/2.1</span>
+<span class="cc"># No stashing needed. Each worktree has its own working tree + index.</span>
+git worktree list
+git worktree remove ../hotfix-2.1</pre></div>
+    <div class="box sk"><div class="bxt">Worktree use case</div><p>Worktrees eliminate the <code>git stash / switch / stash pop</code> dance when you need to context-switch mid-feature. Open a second terminal, <code>git worktree add ../fix fix/bug</code>, fix the bug, push, close the terminal. Your feature branch is undisturbed.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>sparse-checkout = limit files in working tree (monorepo navigation). partial clone = defer blob download (huge repos). shallow clone = no history (CI speed, but no bisect). worktree = multiple checked-out branches simultaneously from one repo. Combine partial clone + sparse-checkout for fastest monorepo experience.</p></div>
+  </div>
+
+  <div class="sec" id="t17">
+    <div class="snum">T17 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>CI/CD &amp; Git &mdash; GitHub Actions, branch protection, CODEOWNERS, GitOps</h2>
+    <p>Modern CI/CD is deeply integrated with Git events. Knowing how to configure branch protection rules, CODEOWNERS, and GitOps patterns is expected at senior level.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">yaml &mdash; GitHub Actions: PR + release pipeline</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># .github/workflows/ci.yml</span>
+name: CI
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    tags: [<span class="cs">'v*'</span>]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: <span class="cn">0</span>           <span class="cc"># full history for git describe/bisect</span>
+      - uses: actions/setup-node@v4
+        with: { node-version: <span class="cs">'20'</span> }
+      - run: npm ci
+      - run: npm test
+
+  release:
+    needs: test
+    if: startsWith(github.ref, <span class="cs">'refs/tags/v'</span>)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run build
+      - run: gh release create ${{ github.ref_name }} ./dist/*.tar.gz
+        env: { GITHUB_TOKEN: <span class="cs">'${{ secrets.GITHUB_TOKEN }}'</span> }</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">text &mdash; CODEOWNERS</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># .github/CODEOWNERS</span>
+*                    @org/core-team         <span class="cc"># default: everyone</span>
+src/payments/        @org/payments-team     <span class="cc"># payments team owns this dir</span>
+*.yml                @org/devops            <span class="cc"># devops owns all CI files</span>
+docs/                @org/tech-writers</pre></div>
+    <div class="tw"><table>
+      <tr><th>Branch protection rule</th><th>Effect</th></tr>
+      <tr><td>Require PR reviews before merging</td><td>No direct push to main; N approvals required</td></tr>
+      <tr><td>Dismiss stale reviews on new push</td><td>Approval re-required after any new commit</td></tr>
+      <tr><td>Require status checks to pass</td><td>CI must be green before merge is allowed</td></tr>
+      <tr><td>Require CODEOWNER review</td><td>Relevant team must approve changes to their paths</td></tr>
+      <tr><td>Require signed commits</td><td>Only GPG-verified commits allowed</td></tr>
+    </table></div>
+    <div class="box gt"><div class="bxt">GitOps pattern</div><p>In GitOps, the Git repo is the source of truth for infrastructure state. A tool like ArgoCD watches the repo; any commit to the infra config repo triggers a reconciliation to apply the desired state to the cluster. No imperative <code>kubectl apply</code> in pipelines &mdash; just git push.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>GitHub Actions triggers: push, pull_request, push tags. Branch protection = enforce review + green CI. CODEOWNERS = route reviews to the right team automatically. GitOps = git repo as infra truth; ArgoCD/Flux reconciles cluster state to repo state.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 5 — ADVANCED
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch5">Chapter 5 &mdash; Advanced</div>
+
+  <div class="sec" id="t18">
+    <div class="snum">T18 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>git reflog &mdash; recovering lost commits, branches, and rebases</h2>
+    <p>The reflog is Git's safety net. It records every position HEAD and branch refs have pointed to — even after <code>reset --hard</code>, branch deletion, or a bad rebase. Reflog entries expire after 90 days by default.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Reflog recovery scenarios</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">── SCENARIO 1: Recover from git reset --hard ──</span>
+git reset --hard HEAD~3             <span class="cc"># oops, lost 3 commits</span>
+git reflog                          <span class="cc"># find the commit before reset</span>
+<span class="cc"># HEAD@{1}: commit: feat: add payment flow (sha: abc1234)</span>
+git reset --hard abc1234            <span class="cc"># restore to that commit</span>
+
+<span class="cc">── SCENARIO 2: Recover a deleted branch ──</span>
+git branch -D feature/old-work      <span class="cc"># accidentally deleted</span>
+git reflog | grep "feature/old-work"
+<span class="cc"># HEAD@{5}: checkout: moving from feature/old-work to main (sha: def5678)</span>
+git checkout -b feature/old-work def5678   <span class="cc"># recreate from that SHA</span>
+
+<span class="cc">── SCENARIO 3: Recover from a bad rebase ──</span>
+git rebase main                     <span class="cc"># went wrong, commits look mangled</span>
+git reflog                          <span class="cc"># find the pre-rebase HEAD position</span>
+<span class="cc"># HEAD@{2}: rebase finished: refs/heads/feature/login (sha: ghi9012)</span>
+<span class="cc"># HEAD@{3}: checkout: moving from main to feature/login (sha: abc1234)</span>
+git reset --hard HEAD@{3}           <span class="cc"># restore pre-rebase state</span>
+
+<span class="cc">── Reading the reflog ──</span>
+git reflog                          <span class="cc"># HEAD reflog</span>
+git reflog show feature/login       <span class="cc"># specific branch reflog</span>
+git reflog --date=iso               <span class="cc"># show absolute timestamps</span></pre></div>
+    <div class="box em"><div class="bxt">Reflog scope</div><p>Reflog is <strong>local only</strong>. It's stored in <code>.git/logs/</code> and doesn't clone or push. If you've already garbage-collected (<code>git gc</code>) or the entry has expired (90-day default), the commit may be unrecoverable. Always have remote backups of important branches.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>reflog = local audit log of every HEAD position. Survives reset --hard, branch deletion, bad rebase. Entries expire in 90 days. Use <code>git reflog</code> to find the SHA, then <code>git reset --hard &lt;sha&gt;</code> or <code>git checkout -b &lt;name&gt; &lt;sha&gt;</code> to recover. Local only — not on remote.</p></div>
+  </div>
+
+  <div class="sec" id="t19">
+    <div class="snum">T19 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>Secrets &amp; GPG signing &mdash; removing sensitive data, signed commits</h2>
+    <p>Once a secret is pushed to Git history, it's in every clone forever — unless you rewrite history. This requires force-push and re-cloning by all collaborators. Prevention is far better than cure.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Removing secrets from history</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">── git-filter-repo (recommended — faster, safer than filter-branch) ──</span>
+pip install git-filter-repo
+
+<span class="cc"># Remove a specific file from all history</span>
+git filter-repo --path secrets.env --invert-paths
+
+<span class="cc"># Replace a secret value everywhere in history</span>
+git filter-repo --replace-text replacements.txt
+<span class="cc"># replacements.txt:</span>
+<span class="cc"># AKIAIOSFODNN7EXAMPLE==>REDACTED_AWS_KEY</span>
+
+<span class="cc">── BFG Repo Cleaner (Java-based alternative) ──</span>
+bfg --delete-files secrets.env
+bfg --replace-text passwords.txt
+
+<span class="cc"># After either tool, force-push ALL branches and tags</span>
+git push --force --all
+git push --force --tags
+
+<span class="cc">── Rotate the compromised secret immediately ──</span>
+<span class="cc"># History rewrite does NOT invalidate credentials already seen</span>
+
+<span class="cc">── Detect secrets before they're committed ──</span>
+<span class="cc"># Install gitleaks as a pre-commit hook</span>
+gitleaks protect --staged
+<span class="cc"># or in CI:</span>
+gitleaks detect --source=. --report-format=sarif</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; GPG commit signing</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Generate GPG key</span>
+gpg --full-generate-key
+
+<span class="cc"># List keys and find your key ID</span>
+gpg --list-secret-keys --keyid-format=long
+<span class="cc"># → sec   4096R/3AA5C34371567BD2</span>
+
+<span class="cc"># Configure Git to use it</span>
+git config --global user.signingkey 3AA5C34371567BD2
+git config --global commit.gpgsign true    <span class="cc"># sign all commits</span>
+git config --global tag.gpgsign true       <span class="cc"># sign all tags</span>
+
+<span class="cc"># Add GPG public key to GitHub: Settings → SSH and GPG keys</span>
+gpg --armor --export 3AA5C34371567BD2
+
+<span class="cc"># Verify a signed commit</span>
+git log --show-signature -1</pre></div>
+    <div class="box ro"><div class="bxt">Secret rotation is mandatory</div><p>Rewriting history removes the secret from future clones, but anyone who cloned before the rewrite has it. GitHub, npm, AWS all have automated secret scanning that will alert you when a secret is detected. Even after rewriting history, assume the credential is compromised and rotate it immediately.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>git-filter-repo &gt; filter-branch (faster, safer). Remove files: <code>--path --invert-paths</code>. Replace values: <code>--replace-text</code>. Always rotate credentials after exposure. gitleaks for pre-commit detection. GPG signing: <code>commit.gpgsign true</code> + key uploaded to GitHub = "Verified" badge on commits.</p></div>
+  </div>
+
+  <div class="sec" id="t20">
+    <div class="snum">T20 <span class="snum-badges"><span class="sbadge adv">Advanced</span></span></div>
+    <h2>Git performance &mdash; gc, commit-graph, maintenance, large repos</h2>
+    <p>In repos with years of history or thousands of files, routine operations (clone, fetch, log, status) can become slow. Git provides several mechanisms to tune performance without changing workflow.</p>
+    <div class="tw"><table>
+      <tr><th>Problem</th><th>Cause</th><th>Fix</th></tr>
+      <tr><td>Slow <code>git log</code> / <code>git merge-base</code></td><td>No commit-graph cache</td><td><code>git commit-graph write --reachable --changed-paths</code></td></tr>
+      <tr><td>Slow <code>git status</code></td><td>Many loose objects, no index v4</td><td><code>git gc</code>, enable <code>core.fsmonitor</code></td></tr>
+      <tr><td>Huge <code>.git/objects</code></td><td>Large binary files committed</td><td>Git LFS, <code>git filter-repo</code> to purge, <code>git gc --aggressive</code></td></tr>
+      <tr><td>Slow clone</td><td>Full history + all blobs</td><td><code>--depth=1</code>, <code>--filter=blob:none</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">bash &mdash; Performance commands</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc"># Manual GC: pack loose objects, prune dangling</span>
+git gc                             <span class="cc"># auto threshold: 6700 loose objects</span>
+git gc --aggressive                <span class="cc"># slower, more compact (use monthly)</span>
+git prune                          <span class="cc"># remove unreachable objects explicitly</span>
+
+<span class="cc"># Commit-graph: accelerates log, merge-base, reachability queries</span>
+git commit-graph write --reachable --changed-paths
+<span class="cc"># Enable auto-update:</span>
+git config core.commitGraph true
+git config fetch.writeCommitGraph true
+
+<span class="cc"># fsmonitor: OS-level file watching for faster git status</span>
+git config core.fsmonitor true     <span class="cc"># uses fsmonitor daemon (Git 2.37+)</span>
+
+<span class="cc"># Scheduled maintenance (combines gc, commit-graph, pack-refs, etc.)</span>
+git maintenance start              <span class="cc"># registers OS cron job</span>
+git maintenance run --task=gc
+git maintenance run --task=commit-graph
+
+<span class="cc"># Diagnose repo size</span>
+git count-objects -vH              <span class="cc"># object count and disk usage</span>
+git rev-list --all --objects | sort -k 2 | uniq -f 1 -d | \
+  git cat-file --batch-check='%(objectsize) %(rest)' | \
+  sort -rn | head -20              <span class="cc"># find largest objects in history</span>
+
+<span class="cc"># Git LFS: store large files outside object store</span>
+git lfs track "*.psd" "*.mp4"
+git add .gitattributes             <span class="cc"># commit the tracking config</span></pre></div>
+    <div class="box gt"><div class="bxt">Commit-graph impact</div><p>The commit-graph is a binary cache of reachability data. On repos with 100k+ commits, operations like <code>git log --graph</code> and <code>git merge-base</code> can go from seconds to milliseconds. Enable <code>fetch.writeCommitGraph true</code> so it updates automatically on every fetch.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>gc = pack loose objects + prune. commit-graph = reachability cache (massive speedup for log/merge-base). fsmonitor = OS file watch for faster status. maintenance = scheduled gc + commit-graph + pack-refs. For huge repos: LFS for binaries, partial clone + sparse checkout for checkout speed.</p></div>
+  </div>
+
+</main>
+</div>
+
+<script>
+(function(){
+  const links = document.querySelectorAll('.ni');
+  if(!links.length) return;
+  const secs = Array.from(links).map(l => document.querySelector(l.getAttribute('href'))).filter(Boolean);
+  function setActive(id){
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+    });
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) setActive(e.target.id); });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  secs.forEach(s => obs.observe(s));
+})();
+</script>
+<script src="assets/theme-toggle.js" defer></script>
+</body>
+</html>

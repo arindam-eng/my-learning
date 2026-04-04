@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JS Core — Technical Q&amp;A</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+<link rel="stylesheet" href="assets/theme-ui.css">
+<link rel="stylesheet" href="assets/theme-docs.css">
+<style>
+:root{
+  --bg:#07080c;--bg2:#0e0f14;--bg3:#14161c;--bg4:#1b1d25;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#e3e0d6;--text2:#8c8880;--text3:#46433e;
+  --emerald:#10b981;--indigo:#818cf8;--amber:#f59e0b;
+  --sky:#38bdf8;--rose:#f43f5e;--lime:#84cc16;--jscolor:#f97316;
+  --mono:'IBM Plex Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;}
+.layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sb{width:268px;min-width:268px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-top{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:18px;}
+.sb-badge{display:inline-block;background:var(--jscolor);color:#fff;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+.sb-top h1{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.3;}
+.sb-top p{font-size:12px;color:var(--text2);margin-top:4px;}
+.nav-s{padding:0 14px;margin-bottom:4px;}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text3);padding:0 8px;margin-bottom:5px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;font-size:12px;color:var(--text2);transition:all .15s;text-decoration:none;border:1px solid transparent;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--bg3);color:var(--emerald);border-color:var(--border);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.ni.active .ndot{background:var(--emerald);}
+.sb-home{display:block;padding:10px 24px;color:var(--text2);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;border-bottom:1px solid var(--border);transition:color .15s;}
+.sb-home:hover{color:var(--text);}
+
+/* MAIN */
+.main{flex:1;max-width:920px;padding:48px 56px;}
+
+/* HERO */
+.hero{padding:40px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;scroll-margin-top:24px;}
+.htag{font-family:var(--mono);font-size:11px;color:var(--jscolor);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.htag::before{content:'';display:block;width:28px;height:1px;background:var(--jscolor);}
+.hero h1{font-family:var(--serif);font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px;}
+.hero h1 em{font-style:italic;color:var(--indigo);}
+.hero p{font-size:16px;color:var(--text2);max-width:580px;line-height:1.7;}
+.hmeta{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap;}
+.hm{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);}
+.hm span,.hm a{color:var(--lime);}
+.hm a{text-decoration:none;}
+.hm a:hover{text-decoration:underline;}
+
+/* PROGRESS */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:48px;}
+.prow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px;}
+.pbar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--jscolor),var(--amber));border-radius:99px;width:100%;}
+
+/* SECTIONS */
+.sec{margin-bottom:64px;scroll-margin-top:24px;}
+.snum{font-family:var(--mono);font-size:11px;color:var(--jscolor);letter-spacing:.1em;margin-bottom:10px;}
+.sec h2{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.2;margin-bottom:18px;}
+p{margin-bottom:14px;color:var(--text2);}
+strong{color:var(--text);font-weight:500;}
+
+/* CALLOUT BOXES */
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0;background:var(--bg2);}
+.box.em{border-color:var(--emerald);}
+.box.in{border-color:var(--indigo);}
+.box.am{border-color:var(--amber);}
+.box.sk{border-color:var(--sky);}
+.box.ro{border-color:var(--rose);}
+.bxt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.box.em .bxt{color:var(--emerald);}
+.box.in .bxt{color:var(--indigo);}
+.box.am .bxt{color:var(--amber);}
+.box.sk .bxt{color:var(--sky);}
+.box.ro .bxt{color:var(--rose);}
+.box p{margin:0;font-size:14px;line-height:1.65;}
+
+/* INSIGHT — Quick recall / key interview line */
+.insight{background:linear-gradient(135deg,#0d0b1e 0%,#060c08 100%);border:1px solid var(--indigo);border-radius:12px;padding:18px 20px;margin:20px 0;}
+.insight h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;}
+.insight p{color:var(--text2);font-size:13.5px;margin:0;line-height:1.65;}
+
+/* CODE */
+.cb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin:20px 0;overflow:hidden;}
+.cb-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.cb-lang{font-family:var(--mono);font-size:10px;color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot:nth-child(1){background:rgba(244,63,94,.4);}
+.dot:nth-child(2){background:rgba(245,158,11,.4);}
+.dot:nth-child(3){background:rgba(16,185,129,.4);}
+pre{padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:#b5b0a8;white-space:pre-wrap;word-break:break-word;}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--emerald);}
+.ck{color:var(--indigo);}
+.cf{color:var(--emerald);}
+.cs{color:var(--amber);}
+.cn{color:#fb923c;}
+.ct{color:var(--sky);}
+.cc{color:#47443d;font-style:italic;}
+.cg{color:#84cc16;}
+.cr{color:#f43f5e;}
+
+/* TABLE */
+.tw{overflow-x:auto;margin:18px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border2);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+td strong{color:var(--text);}
+td code{font-size:11px;}
+
+/* CHAPTER DIVIDERS */
+.ch-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin:52px 0 24px;display:flex;align-items:center;gap:16px;}
+.ch-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* POINT LIST */
+.pts{list-style:none;padding:0;margin:10px 0;}
+.pts li{display:flex;gap:10px;padding:7px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'▸';color:var(--sky);flex-shrink:0;font-size:11px;margin-top:3px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+
+/* MOBILE */
+.mob-nav{display:none;}
+@media(max-width:768px){
+  .mob-nav{
+    display:flex;align-items:center;justify-content:space-between;gap:6px;
+    padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);
+    position:sticky;top:0;z-index:200;
+  }
+  .mob-nav-left,.mob-nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .mob-btn{
+    font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;
+    padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);
+    white-space:nowrap;transition:color .15s,background .15s;
+  }
+  .mob-btn:hover{color:var(--text);background:var(--bg4);}
+  .mob-btn--accent{color:var(--jscolor);border-color:var(--jscolor);}
+  .mob-theme{
+    font-family:var(--mono);font-size:11px;color:var(--text2);
+    padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);
+    cursor:pointer;white-space:nowrap;transition:color .15s,background .15s;
+  }
+  .mob-theme:hover{color:var(--text);}
+  .sb{display:none;}
+  .main{padding:28px 20px;}
+  .hero h1{font-size:34px;}
+}
+@media print{.sb{display:none;}body{background:white;color:black;}}
+</style>
+</head>
+<body>
+
+<header class="mob-nav" aria-label="Mobile navigation">
+  <div class="mob-nav-left">
+    <a href="index.html" class="mob-btn">&#8962; Home</a>
+    <a href="interview-nodejs-technical.html" class="mob-btn mob-btn--accent">Node.js Q&amp;A</a>
+  </div>
+  <div class="mob-nav-right">
+    <button type="button" class="mob-theme" data-theme-toggle aria-label="Switch theme">&#9788; Theme</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<nav class="sb">
+  <a href="index.html" class="sb-home">&#8592; Home</a>
+  <a href="interview-nodejs-technical.html" class="sb-home">&#8592; Node.js Q&amp;A</a>
+  <button type="button" class="theme-toggle theme-toggle--sb" data-theme-toggle aria-pressed="false" aria-label="Switch theme"><span class="theme-toggle__icon" aria-hidden="true">☀</span><span class="theme-toggle__text">Light</span></button>
+  <div class="sb-top">
+    <div class="sb-badge">JS CORE</div>
+    <h1>Technical Q&amp;A</h1>
+    <p>21 questions · 8 chapters</p>
+  </div>
+  <div class="nav-s">
+    <div class="nav-lbl">Ch 1 — Scope &amp; Closures</div>
+    <a class="ni active" href="#js1"><div class="ndot"></div>JS1 · var / let / const</a>
+    <a class="ni" href="#js2"><div class="ndot"></div>JS2 · Closures</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 2 — Prototypes &amp; OOP</div>
+    <a class="ni" href="#js3"><div class="ndot"></div>JS3 · Prototypal Inheritance</a>
+    <a class="ni" href="#js6"><div class="ndot"></div>JS6 · this Keyword</a>
+    <a class="ni" href="#js7"><div class="ndot"></div>JS7 · call / apply / bind</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 3 — Async JavaScript</div>
+    <a class="ni" href="#js4"><div class="ndot"></div>JS4 · Event Loop</a>
+    <a class="ni" href="#js5"><div class="ndot"></div>JS5 · Promises &amp; Async/Await</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 4 — Functional Programming</div>
+    <a class="ni" href="#js8"><div class="ndot"></div>JS8 · Currying &amp; Composition</a>
+    <a class="ni" href="#js9"><div class="ndot"></div>JS9 · Deep vs Shallow Copy</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 5 — ES6+ &amp; Advanced</div>
+    <a class="ni" href="#js10"><div class="ndot"></div>JS10 · ES6+ Features</a>
+    <a class="ni" href="#js11"><div class="ndot"></div>JS11 · Generators &amp; Iterators</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 6 — Patterns &amp; Performance</div>
+    <a class="ni" href="#js12"><div class="ndot"></div>JS12 · Memory Management</a>
+    <a class="ni" href="#js13"><div class="ndot"></div>JS13 · Design Patterns</a>
+    <a class="ni" href="#js14"><div class="ndot"></div>JS14 · Event Delegation</a>
+    <a class="ni" href="#js15"><div class="ndot"></div>JS15 · Performance</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 7 — Type System</div>
+    <a class="ni" href="#js16"><div class="ndot"></div>JS16 · Type Coercion</a>
+    <a class="ni" href="#js17"><div class="ndot"></div>JS17 · Strict Mode</a>
+    <a class="ni" href="#js18"><div class="ndot"></div>JS18 · Error Handling</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 8 — Objects &amp; Modules</div>
+    <a class="ni" href="#js19"><div class="ndot"></div>JS19 · defineProperty &amp; Descriptors</a>
+    <a class="ni" href="#js20"><div class="ndot"></div>JS20 · Immutability</a>
+    <a class="ni" href="#js21"><div class="ndot"></div>JS21 · CJS vs ESM</a>
+  </div>
+</nav>
+
+<main class="main">
+
+  <div class="hero" id="overview">
+    <div class="htag">JS Core · Senior SWE Interview Prep</div>
+    <h1>JS Core<br><em>Technical Q&amp;A</em></h1>
+    <p>21 deep-dive questions on closures, prototypes, async, type coercion, error handling, modules, and browser performance — answered at senior engineer level.</p>
+    <div class="hmeta">
+      <div class="hm">&#128218; <span><a href="interview-nodejs-technical.html">Node.js Q&amp;A</a></span></div>
+      <div class="hm">&#128172; <span>21 questions · 8 chapters</span></div>
+    </div>
+  </div>
+
+  <div class="pcard">
+    <div class="prow"><span>Coverage</span><span>21/21 topics</span></div>
+    <div class="pbar"><div class="pfill"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">8 chapters · Scope · OOP · Async · Functional · ES6+ · Patterns · Type System · Objects &amp; Modules</p>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 1 — SCOPE & CLOSURES
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch1">Chapter 1 — Scope &amp; Closures</div>
+
+  <div class="sec" id="js1">
+    <div class="snum">JS1</div>
+    <h2>What is the difference between var, let, and const? Explain hoisting and the Temporal Dead Zone (TDZ).</h2>
+    <p><strong>Hoisting</strong> = JS moves declarations to the top of their scope at compile time — but only the declaration, not the value. <strong>TDZ</strong> = the period between entering a block and the <code>let</code>/<code>const</code> declaration line where accessing the variable throws a ReferenceError.</p>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>var</th><th>let</th><th>const</th></tr>
+      <tr><td><strong>Scope</strong></td><td>Function</td><td>Block</td><td>Block</td></tr>
+      <tr><td><strong>Hoisted?</strong></td><td>Yes (as <code>undefined</code>)</td><td>Yes (TDZ — unusable)</td><td>Yes (TDZ — unusable)</td></tr>
+      <tr><td><strong>Re-declare</strong></td><td>Yes</td><td>No</td><td>No</td></tr>
+      <tr><td><strong>Re-assign</strong></td><td>Yes</td><td>Yes</td><td>No</td></tr>
+      <tr><td><strong>Window property</strong></td><td>Yes</td><td>No</td><td>No</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — hoisting &amp; TDZ</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// var is hoisted and initialized as undefined</span>
+console.log(x); <span class="cg">// undefined — no error</span>
+<span class="ck">var</span> x = <span class="cn">5</span>;
+
+<span class="cc">// let/const are hoisted but in TDZ — unusable</span>
+console.log(y); <span class="cr">// ReferenceError: Cannot access 'y' before initialization</span>
+<span class="ck">let</span> y = <span class="cn">10</span>;
+
+<span class="cc">// var leaks out of blocks</span>
+<span class="ck">if</span> (<span class="ck">true</span>) {
+  <span class="ck">var</span> leaked = <span class="cs">'I leak!'</span>;
+  <span class="ck">let</span> safe   = <span class="cs">'block scoped'</span>;
+}
+console.log(leaked); <span class="cg">// 'I leak!'</span>
+console.log(safe);   <span class="cr">// ReferenceError</span>
+
+<span class="cc">// Classic loop bug with var</span>
+<span class="ck">for</span> (<span class="ck">var</span> i = <span class="cn">0</span>; i < <span class="cn">3</span>; i++) {
+  setTimeout(() => console.log(i)); <span class="cr">// 3, 3, 3 — bug!</span>
+}
+<span class="ck">for</span> (<span class="ck">let</span> j = <span class="cn">0</span>; j < <span class="cn">3</span>; j++) {
+  setTimeout(() => console.log(j)); <span class="cg">// 0, 1, 2 — correct</span>
+}
+
+<span class="cc">// const — binding is immutable, value is not</span>
+<span class="ck">const</span> user = { name: <span class="cs">'Alice'</span> };
+user.name = <span class="cs">'Bob'</span>;  <span class="cg">// OK — mutation of the object is fine</span>
+user = {};          <span class="cr">// TypeError — can't reassign the binding</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"I always default to <strong>const</strong>, use <strong>let</strong> when reassignment is needed, and never use <strong>var</strong> — it leaks out of blocks and causes subtle loop bugs due to function scoping. The TDZ is actually a feature: it catches use-before-declare bugs that var silently hides as undefined."</p></div>
+  </div>
+
+  <div class="sec" id="js2">
+    <div class="snum">JS2</div>
+    <h2>What are Closures? How do they work and what are their practical use cases?</h2>
+    <p>A <strong>closure</strong> is a function that retains access to variables from its <strong>lexical scope</strong> even after that outer function has returned. The inner function holds a <em>live reference</em> — not a copy — to the outer scope's variables.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — closures in practice</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Basic closure — count persists across calls</span>
+<span class="ck">function</span> <span class="cf">makeCounter</span>() {
+  <span class="ck">let</span> count = <span class="cn">0</span>;
+  <span class="ck">return</span> () => ++count;
+}
+<span class="ck">const</span> counter = <span class="cf">makeCounter</span>();
+counter(); <span class="cg">// 1</span>
+counter(); <span class="cg">// 2</span>
+counter(); <span class="cg">// 3 — count persists!</span>
+
+<span class="cc">// Use case 1: Private state (no class needed)</span>
+<span class="ck">function</span> <span class="cf">createBankAccount</span>(initial) {
+  <span class="ck">let</span> balance = initial;
+  <span class="ck">return</span> {
+    deposit:    (n) => (balance += n),
+    withdraw:   (n) => (balance -= n),
+    getBalance: ()  => balance,
+  };
+}
+<span class="ck">const</span> acc = <span class="cf">createBankAccount</span>(<span class="cn">1000</span>);
+acc.<span class="cf">deposit</span>(<span class="cn">500</span>);
+acc.<span class="cf">getBalance</span>(); <span class="cg">// 1500</span>
+acc.balance;      <span class="cr">// undefined — truly private</span>
+
+<span class="cc">// Use case 2: Memoization</span>
+<span class="ck">function</span> <span class="cf">memoize</span>(fn) {
+  <span class="ck">const</span> cache = {};
+  <span class="ck">return</span> (...args) => {
+    <span class="ck">const</span> key = JSON.<span class="cf">stringify</span>(args);
+    <span class="ck">if</span> (cache[key] !== <span class="ck">undefined</span>) <span class="ck">return</span> cache[key];
+    <span class="ck">return</span> (cache[key] = <span class="cf">fn</span>(...args));
+  };
+}
+
+<span class="cc">// Use case 3: Partial application via currying</span>
+<span class="ck">const</span> multiply = (a) => (b) => a * b;
+<span class="ck">const</span> double   = <span class="cf">multiply</span>(<span class="cn">2</span>); <span class="cc">// closes over a=2</span>
+<span class="cf">double</span>(<span class="cn">5</span>);  <span class="cg">// 10</span>
+<span class="cf">double</span>(<span class="cn">7</span>);  <span class="cg">// 14</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"Closures are what make the module pattern, memoization, and partial application possible. The key insight is that a closure captures a <strong>live reference</strong> to variables — so mutations are reflected. I use closures daily: factory functions, private state without classes, and React hooks (useState/useEffect) are built entirely on closure semantics."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 2 — PROTOTYPES & OOP
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch2">Chapter 2 — Prototypes &amp; OOP</div>
+
+  <div class="sec" id="js3">
+    <div class="snum">JS3</div>
+    <h2>How does Prototypal Inheritance work? Explain the prototype chain, Object.create(), and how ES6 classes relate.</h2>
+    <p>Every JS object has an internal <code>[[Prototype]]</code> link to another object. Property lookups walk this <strong>prototype chain</strong> until the property is found or <code>null</code> is reached. ES6 <strong>classes are syntactic sugar</strong> — <code>typeof MyClass</code> is still <code>"function"</code>.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — prototype chain &amp; classes</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Prototype chain via Object.create()</span>
+<span class="ck">const</span> animal = { breathes: <span class="ck">true</span> };
+<span class="ck">const</span> dog    = Object.<span class="cf">create</span>(animal);
+dog.barks = <span class="ck">true</span>;
+
+dog.barks;    <span class="cg">// true  — own property</span>
+dog.breathes; <span class="cg">// true  — from prototype</span>
+dog.<span class="cf">hasOwnProperty</span>(<span class="cs">'breathes'</span>); <span class="cg">// false</span>
+
+<span class="cc">// ES6 Class (syntactic sugar over prototypes)</span>
+<span class="ck">class</span> Animal {
+  <span class="cf">constructor</span>(name) { <span class="ck">this</span>.name = name; }
+  <span class="cf">speak</span>() { <span class="ck">return</span> <span class="cs">`${this.name} makes a sound`</span>; }
+}
+
+<span class="ck">class</span> Dog <span class="ck">extends</span> Animal {
+  <span class="cf">speak</span>() { <span class="ck">return</span> <span class="cs">`${this.name} barks! `</span> + <span class="ck">super</span>.<span class="cf">speak</span>(); }
+}
+
+<span class="ck">const</span> d = <span class="ck">new</span> Dog(<span class="cs">'Rex'</span>);
+d.<span class="cf">speak</span>(); <span class="cg">// 'Rex barks! Rex makes a sound'</span>
+
+<span class="cc">// Proof — classes are prototypes under the hood</span>
+<span class="ck">typeof</span> Dog;                 <span class="cg">// "function"  — not a class type!</span>
+<span class="ck">typeof</span> Dog.prototype.speak; <span class="cg">// "function"</span>
+
+<span class="cc">// Chain: d → Dog.prototype → Animal.prototype → Object.prototype → null</span>
+d <span class="ck">instanceof</span> Dog;    <span class="cg">// true</span>
+d <span class="ck">instanceof</span> Animal; <span class="cg">// true</span>
+d <span class="ck">instanceof</span> Object; <span class="cg">// true</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"JavaScript uses <strong>prototypal</strong> inheritance — ES6 classes are purely syntactic sugar. I prefer <strong>composition over inheritance</strong> in modern code to avoid deep class hierarchies. <code>Object.create()</code> gives you clean prototypal delegation without constructor functions."</p></div>
+  </div>
+
+  <div class="sec" id="js6">
+    <div class="snum">JS6</div>
+    <h2>Explain the <code>this</code> keyword. How is it determined, and how do arrow functions differ?</h2>
+    <p><code>this</code> is determined by <strong>how a function is called</strong>, not where it is defined. Arrow functions are the exception — they have no own <code>this</code> and inherit it from their <strong>lexical scope</strong> at definition time.</p>
+    <div class="tw"><table>
+      <tr><th>Context</th><th>Value of this</th></tr>
+      <tr><td><strong>Global scope</strong></td><td><code>window</code> / <code>global</code> / <code>undefined</code> (strict)</td></tr>
+      <tr><td><strong>Method call</strong> <code>obj.fn()</code></td><td><code>obj</code></td></tr>
+      <tr><td><strong>Regular function call</strong></td><td><code>undefined</code> (strict) or global</td></tr>
+      <tr><td><strong><code>new</code> keyword</strong></td><td>Newly created instance</td></tr>
+      <tr><td><strong>Arrow function</strong></td><td>Lexically inherited — fixed at definition</td></tr>
+      <tr><td><strong>call / apply / bind</strong></td><td>Explicitly provided value</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — this in practice</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Method call — this = obj</span>
+<span class="ck">const</span> obj = {
+  name: <span class="cs">'Alice'</span>,
+  <span class="cf">greet</span>() { console.log(<span class="ck">this</span>.name); }
+};
+obj.<span class="cf">greet</span>();   <span class="cg">// 'Alice'</span>
+<span class="ck">const</span> fn = obj.greet;
+<span class="cf">fn</span>();          <span class="cr">// undefined — lost this!</span>
+
+<span class="cc">// Arrow function fixes lost-this in callbacks</span>
+<span class="ck">class</span> Timer {
+  <span class="cf">constructor</span>() { <span class="ck">this</span>.seconds = <span class="cn">0</span>; }
+  <span class="cf">start</span>() {
+    <span class="cc">// ❌ regular function — this is undefined in strict mode</span>
+    setInterval(<span class="ck">function</span>() { <span class="ck">this</span>.seconds++; }, <span class="cn">1000</span>);
+
+    <span class="cc">// ✅ arrow — inherits this from start()</span>
+    setInterval(() => { <span class="ck">this</span>.seconds++; }, <span class="cn">1000</span>);
+  }
+}
+
+<span class="cc">// Gotcha: never use arrow functions as object methods</span>
+<span class="ck">const</span> bad = {
+  name: <span class="cs">'Bob'</span>,
+  greet: () => console.log(<span class="ck">this</span>.name) <span class="cc">// this = outer scope, not bad!</span>
+};</pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<strong>this</strong> is set at call time, not definition time — except for arrow functions, which capture it from their lexical scope permanently. I use arrow functions for callbacks inside methods, but never as object methods themselves since they can't bind to the object."</p></div>
+  </div>
+
+  <div class="sec" id="js7">
+    <div class="snum">JS7</div>
+    <h2>What is the difference between call(), apply(), and bind()? When would you use each?</h2>
+    <p>All three explicitly set <code>this</code>. <strong>call</strong> — invoke immediately, args as comma-separated values. <strong>apply</strong> — invoke immediately, args as an array. <strong>bind</strong> — returns a new function with <code>this</code> permanently fixed, does NOT invoke.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — call / apply / bind</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">function</span> <span class="cf">greet</span>(greeting, punct) {
+  <span class="ck">return</span> <span class="cs">`${greeting}, ${this.name}${punct}`</span>;
+}
+<span class="ck">const</span> user = { name: <span class="cs">'Alice'</span> };
+
+<span class="cc">// call — invoke now, spread args</span>
+<span class="cf">greet</span>.<span class="cf">call</span>(user, <span class="cs">'Hello'</span>, <span class="cs">'!'</span>); <span class="cg">// 'Hello, Alice!'</span>
+
+<span class="cc">// apply — invoke now, args as array</span>
+<span class="cf">greet</span>.<span class="cf">apply</span>(user, [<span class="cs">'Hi'</span>, <span class="cs">'?'</span>]); <span class="cg">// 'Hi, Alice?'</span>
+
+<span class="cc">// bind — returns new function, doesn't invoke</span>
+<span class="ck">const</span> boundGreet = <span class="cf">greet</span>.<span class="cf">bind</span>(user, <span class="cs">'Hey'</span>);
+<span class="cf">boundGreet</span>(<span class="cs">'.'</span>); <span class="cg">// 'Hey, Alice.'</span>
+
+<span class="cc">// Real use case 1: borrow array methods for array-like objects</span>
+<span class="ck">const</span> args = { <span class="cn">0</span>: <span class="cs">'a'</span>, <span class="cn">1</span>: <span class="cs">'b'</span>, length: <span class="cn">2</span> };
+Array.prototype.slice.<span class="cf">call</span>(args); <span class="cg">// ['a', 'b']</span>
+
+<span class="cc">// Real use case 2: bind for class event handlers</span>
+<span class="ck">class</span> Button {
+  <span class="cf">constructor</span>() {
+    <span class="ck">this</span>.count = <span class="cn">0</span>;
+    <span class="ck">this</span>.handleClick = <span class="ck">this</span>.handleClick.<span class="cf">bind</span>(<span class="ck">this</span>);
+  }
+  <span class="cf">handleClick</span>() { <span class="ck">this</span>.count++; }
+}
+
+<span class="cc">// Real use case 3: apply for spread-unfriendly APIs (legacy)</span>
+<span class="ck">const</span> nums = [<span class="cn">3</span>, <span class="cn">1</span>, <span class="cn">4</span>, <span class="cn">1</span>, <span class="cn">5</span>];
+Math.max.<span class="cf">apply</span>(<span class="ck">null</span>, nums); <span class="cg">// 5  — modern: Math.max(...nums)</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<strong>call</strong> and <strong>apply</strong> both invoke immediately — the only difference is argument format. <strong>bind</strong> is for saving a function with a fixed context for later use, like passing a class method as a callback. In modern JS, arrow functions and spread reduce the need for call/apply, but bind still shines for class method binding and partial application."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 3 — ASYNC JAVASCRIPT
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch3">Chapter 3 — Async JavaScript</div>
+
+  <div class="sec" id="js4">
+    <div class="snum">JS4</div>
+    <h2>Explain the JavaScript Event Loop — Call Stack, Microtasks, and Macrotasks.</h2>
+    <p>JS is <strong>single-threaded</strong>. The Event Loop allows non-blocking async operations. Microtasks (Promises, <code>queueMicrotask</code>) are <em>fully drained</em> before any macrotask (<code>setTimeout</code>, I/O) runs.</p>
+    <div class="tw"><table>
+      <tr><th>Priority</th><th>Type</th><th>Examples</th></tr>
+      <tr><td><strong>1st</strong></td><td>Call Stack (sync)</td><td>All synchronous code</td></tr>
+      <tr><td><strong>2nd</strong></td><td>Microtasks</td><td><code>Promise.then</code>, <code>queueMicrotask</code>, <code>MutationObserver</code></td></tr>
+      <tr><td><strong>3rd</strong></td><td>Macrotasks</td><td><code>setTimeout</code>, <code>setInterval</code>, I/O callbacks</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — execution order</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>console.log(<span class="cs">'1 — sync'</span>);
+setTimeout(() => console.log(<span class="cs">'2 — macrotask'</span>), <span class="cn">0</span>);
+Promise.resolve().<span class="cf">then</span>(() => console.log(<span class="cs">'3 — microtask'</span>));
+queueMicrotask(() => console.log(<span class="cs">'4 — microtask'</span>));
+console.log(<span class="cs">'5 — sync'</span>);
+
+<span class="cc">// Output: 1 → 5 → 3 → 4 → 2</span>
+<span class="cc">// All microtasks drain before any macrotask runs</span>
+
+setTimeout(() => console.log(<span class="cs">'timeout'</span>), <span class="cn">0</span>);
+Promise.resolve()
+  .<span class="cf">then</span>(() => { console.log(<span class="cs">'p1'</span>); <span class="ck">return</span> Promise.resolve(); })
+  .<span class="cf">then</span>(() => console.log(<span class="cs">'p2'</span>))
+  .<span class="cf">then</span>(() => console.log(<span class="cs">'p3'</span>));
+
+<span class="cc">// Output: p1 → p2 → p3 → timeout</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"The key insight is that microtasks (Promises) <strong>always fully drain before any macrotask</strong> runs — even a <code>setTimeout(0)</code>. Blocking the call stack with heavy sync computation starves both queues and freezes the UI."</p></div>
+  </div>
+
+  <div class="sec" id="js5">
+    <div class="snum">JS5</div>
+    <h2>Explain Promises — states, chaining, combinators, and how async/await works under the hood.</h2>
+    <p>A Promise represents an eventual value. States: <strong>Pending → Fulfilled | Rejected</strong> (transition is irreversible). <strong>async/await</strong> is syntactic sugar — an async function always returns a Promise; <code>await</code> pauses execution without blocking the thread.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — Promise combinators</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> p1 = Promise.<span class="cf">resolve</span>(<span class="cn">1</span>);
+<span class="ck">const</span> p2 = Promise.<span class="cf">resolve</span>(<span class="cn">2</span>);
+<span class="ck">const</span> pFail = Promise.<span class="cf">reject</span>(<span class="cs">'error'</span>);
+
+<span class="cc">// all — ALL must resolve; fails fast on any rejection</span>
+Promise.<span class="cf">all</span>([p1, p2]).<span class="cf">then</span>(([a, b]) => console.log(a, b)); <span class="cg">// 1 2</span>
+Promise.<span class="cf">all</span>([p1, pFail]).<span class="cf">catch</span>(e => console.log(e));      <span class="cr">// 'error'</span>
+
+<span class="cc">// allSettled — waits for ALL, never rejects itself</span>
+Promise.<span class="cf">allSettled</span>([p1, pFail]).<span class="cf">then</span>(results =>
+  results.<span class="cf">forEach</span>(r => console.log(r.status, r.value ?? r.reason))
+);
+
+<span class="cc">// race — first to settle (resolve OR reject) wins</span>
+Promise.<span class="cf">race</span>([
+  <span class="ck">new</span> Promise(res => setTimeout(() => res(<span class="cs">'slow'</span>), <span class="cn">500</span>)),
+  <span class="ck">new</span> Promise(res => setTimeout(() => res(<span class="cs">'fast'</span>), <span class="cn">100</span>)),
+]).<span class="cf">then</span>(v => console.log(v)); <span class="cg">// 'fast'</span>
+
+<span class="cc">// any — first to RESOLVE wins, ignores rejections</span>
+Promise.<span class="cf">any</span>([pFail, p1, p2]).<span class="cf">then</span>(v => console.log(v)); <span class="cg">// 1</span>
+
+<span class="cc">// ❌ Sequential — each waits for the previous (total: 2s)</span>
+<span class="ck">const</span> a = <span class="ck">await</span> <span class="cf">fetchA</span>();
+<span class="ck">const</span> b = <span class="ck">await</span> <span class="cf">fetchB</span>();
+
+<span class="cc">// ✅ Parallel — both fire at the same time (total: ~1s)</span>
+<span class="ck">const</span> [a, b] = <span class="ck">await</span> Promise.<span class="cf">all</span>([<span class="cf">fetchA</span>(), <span class="cf">fetchB</span>()]);</pre></div>
+    <div class="tw"><table>
+      <tr><th>Combinator</th><th>Resolves when</th><th>Rejects when</th><th>Use case</th></tr>
+      <tr><td><code>Promise.all</code></td><td>All resolve</td><td>Any rejects (fast fail)</td><td>Parallel — all must succeed</td></tr>
+      <tr><td><code>Promise.allSettled</code></td><td>All settle</td><td>Never</td><td>Need all results regardless</td></tr>
+      <tr><td><code>Promise.race</code></td><td>First settles</td><td>First settles as rejection</td><td>Timeout pattern</td></tr>
+      <tr><td><code>Promise.any</code></td><td>First resolves</td><td>All reject</td><td>First success from many sources</td></tr>
+    </table></div>
+    <div class="insight"><h4>Key interview line</h4><p>"A critical mistake I see is awaiting inside loops sequentially when requests are independent — always use <strong>Promise.all</strong> for parallel execution. I use <strong>allSettled</strong> when I need all results regardless of failures, <strong>race</strong> for timeout patterns, and <strong>any</strong> for first-success-from-multiple-sources scenarios."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 4 — FUNCTIONAL PROGRAMMING
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch4">Chapter 4 — Functional Programming</div>
+
+  <div class="sec" id="js8">
+    <div class="snum">JS8</div>
+    <h2>What is Currying and Function Composition? How do they help write cleaner code?</h2>
+    <p><strong>Currying</strong> = transforming a function of N args into a chain of N single-argument functions, enabling partial application. <strong>Pipe</strong> composes functions left-to-right; <strong>compose</strong> runs right-to-left.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — currying &amp; pipe</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Currying — partial application</span>
+<span class="ck">const</span> curriedAdd = (a) => (b) => (c) => a + b + c;
+<span class="cf">curriedAdd</span>(<span class="cn">1</span>)(<span class="cn">2</span>)(<span class="cn">3</span>); <span class="cg">// 6</span>
+
+<span class="ck">const</span> add10 = <span class="cf">curriedAdd</span>(<span class="cn">10</span>); <span class="cc">// bakes in a=10</span>
+<span class="cf">add10</span>(<span class="cn">5</span>)(<span class="cn">3</span>);              <span class="cg">// 18</span>
+
+<span class="cc">// Generic curry utility</span>
+<span class="ck">const</span> curry = (fn) => {
+  <span class="ck">return function</span> <span class="cf">curried</span>(...args) {
+    <span class="ck">if</span> (args.length >= fn.length) <span class="ck">return</span> <span class="cf">fn</span>(...args);
+    <span class="ck">return</span> (...more) => <span class="cf">curried</span>(...args, ...more);
+  };
+};
+
+<span class="cc">// Pipe — left-to-right (reads naturally)</span>
+<span class="ck">const</span> pipe = (...fns) => (x) => fns.<span class="cf">reduce</span>((acc, fn) => <span class="cf">fn</span>(acc), x);
+
+<span class="ck">const</span> double = x => x * <span class="cn">2</span>;
+<span class="ck">const</span> addOne = x => x + <span class="cn">1</span>;
+<span class="ck">const</span> square = x => x * x;
+
+<span class="ck">const</span> transform = <span class="cf">pipe</span>(double, addOne, square);
+<span class="cf">transform</span>(<span class="cn">3</span>); <span class="cg">// double(3)=6 → addOne(6)=7 → square(7)=49</span>
+
+<span class="cc">// Real-world: user data pipeline</span>
+<span class="ck">const</span> processUser = <span class="cf">pipe</span>(
+  user => ({ ...user, name:  user.name.<span class="cf">trim</span>() }),
+  user => ({ ...user, email: user.email.<span class="cf">toLowerCase</span>() }),
+  user => ({ ...user, createdAt: <span class="ck">new</span> Date() })
+);</pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"Currying enables <strong>partial application</strong> — baking in some arguments to create specialised functions. Composition builds complex data pipelines from simple, single-purpose functions. I prefer <strong>pipe</strong> (left-to-right) over compose since it reads naturally. Each function in a pipeline does exactly one thing — makes unit testing trivial."</p></div>
+  </div>
+
+  <div class="sec" id="js9">
+    <div class="snum">JS9</div>
+    <h2>What is the difference between Deep Copy and Shallow Copy? What are the best ways to clone objects?</h2>
+    <p><strong>Shallow copy</strong> copies only top-level properties — nested objects are still shared references. <strong>Deep copy</strong> recursively copies all levels so the original and clone are completely independent.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — shallow vs deep copy</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> original = { a: <span class="cn">1</span>, nested: { b: <span class="cn">2</span> } };
+
+<span class="cc">// Shallow — nested is a shared reference!</span>
+<span class="ck">const</span> shallow = { ...original };
+shallow.nested.b = <span class="cn">999</span>;
+original.nested.b; <span class="cr">// 999 — original mutated!</span>
+
+<span class="cc">// JSON — simple deep copy, but loses functions/Date/Map/Set/undefined</span>
+<span class="ck">const</span> d1 = JSON.<span class="cf">parse</span>(JSON.<span class="cf">stringify</span>(original));
+d1.nested.b = <span class="cn">999</span>;
+original.nested.b; <span class="cg">// 2 — safe</span>
+
+<span class="cc">// structuredClone — modern built-in, handles Date/Map/Set (recommended)</span>
+<span class="ck">const</span> d2 = <span class="cf">structuredClone</span>(original);
+
+<span class="cc">// lodash cloneDeep — most robust, handles functions too</span>
+<span class="ck">const</span> d3 = _.<span class="cf">cloneDeep</span>(original);</pre></div>
+    <div class="tw"><table>
+      <tr><th>Method</th><th>Depth</th><th>Date / Map / Set</th><th>Functions</th></tr>
+      <tr><td><code>{ ...obj }</code></td><td>Shallow</td><td>Reference only</td><td>Reference only</td></tr>
+      <tr><td><code>JSON.parse/stringify</code></td><td>Deep</td><td>❌ Loses them</td><td>❌ Loses them</td></tr>
+      <tr><td><code>structuredClone</code></td><td>Deep</td><td>✅ Yes</td><td>❌ No</td></tr>
+      <tr><td><code>_.cloneDeep</code></td><td>Deep</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+    </table></div>
+    <div class="insight"><h4>Key interview line</h4><p>"My go-to for deep cloning in modern code is <strong>structuredClone()</strong> — it's built-in and handles Dates, Maps, and Sets. I avoid JSON.parse/stringify in production because it silently drops functions, undefined values, and Dates."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 5 — ES6+ & ADVANCED
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch5">Chapter 5 — ES6+ &amp; Advanced Features</div>
+
+  <div class="sec" id="js10">
+    <div class="snum">JS10</div>
+    <h2>What are the most important ES6+ features? Explain destructuring, optional chaining, nullish coalescing, and Symbols.</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — ES6+ essentials</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Destructuring</span>
+<span class="ck">const</span> { name, age = <span class="cn">25</span>, address: { city } } = user;
+<span class="ck">const</span> [first, , third, ...rest] = [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>, <span class="cn">4</span>, <span class="cn">5</span>];
+<span class="ck">const</span> greet = ({ name, role = <span class="cs">'user'</span> }) => <span class="cs">`Hello ${name}`</span>;
+
+<span class="cc">// Spread / Rest</span>
+<span class="ck">const</span> merged = { ...obj1, ...obj2, extra: <span class="cs">'val'</span> };
+<span class="ck">function</span> <span class="cf">sum</span>(...nums) { <span class="ck">return</span> nums.<span class="cf">reduce</span>((a, b) => a + b, <span class="cn">0</span>); }
+
+<span class="cc">// Optional chaining (?.) — safe property access</span>
+<span class="ck">const</span> city   = user?.address?.city;
+<span class="ck">const</span> len    = user?.getName?.()?.length;
+<span class="ck">const</span> first2 = arr?.[<span class="cn">0</span>]?.name;
+
+<span class="cc">// Nullish coalescing (??) vs OR (||) — critical difference!</span>
+<span class="ck">const</span> port  = config.port ?? <span class="cn">3000</span>;  <span class="cc">// fallback only for null/undefined</span>
+<span class="ck">const</span> port2 = config.port || <span class="cn">3000</span>;  <span class="cc">// fallback for 0, '', false too!</span>
+
+console.log(<span class="cn">0</span> ?? <span class="cs">'default'</span>);  <span class="cg">// 0  — 0 is not null/undefined</span>
+console.log(<span class="cn">0</span> || <span class="cs">'default'</span>);  <span class="cr">// 'default' — 0 is falsy!</span>
+
+<span class="cc">// Symbol — unique, non-enumerable keys</span>
+<span class="ck">const</span> id  = Symbol(<span class="cs">'id'</span>);
+<span class="ck">const</span> id2 = Symbol(<span class="cs">'id'</span>);
+id === id2; <span class="cr">// false — always unique</span>
+
+<span class="ck">const</span> obj = { [id]: <span class="cn">123</span>, name: <span class="cs">'test'</span> };
+Object.<span class="cf">keys</span>(obj); <span class="cg">// ['name'] — symbol hidden from iteration</span>
+
+<span class="cc">// Logical assignment operators</span>
+a ||= <span class="cs">'default'</span>;    <span class="cc">// a = a || 'default'</span>
+a &&= <span class="cf">transform</span>(a); <span class="cc">// a = a && transform(a)</span>
+a ??= <span class="cs">'fallback'</span>;   <span class="cc">// a = a ?? 'fallback'</span></pre></div>
+    <div class="box sk"><div class="bxt">Common gotcha</div><p>The <strong>?? vs ||</strong> distinction is a frequent bug source — <code>??</code> only falls back on <code>null</code>/<code>undefined</code>, while <code>||</code> falls back on any falsy value including <code>0</code> and empty string. Always prefer <code>??</code> when the fallback should only apply to absent values, not "falsy" ones.</p></div>
+    <div class="insight"><h4>Key interview line</h4><p>"Symbols are great for private-ish keys that don't appear in <code>Object.keys()</code> or JSON serialization. Optional chaining combined with <code>??</code> makes working with deeply nested API responses safe without defensive if-chains."</p></div>
+  </div>
+
+  <div class="sec" id="js11">
+    <div class="snum">JS11</div>
+    <h2>What are Generators and Iterators? How do they work and what are their practical use cases?</h2>
+    <p>An <strong>Iterator</strong> is any object with a <code>next()</code> method returning <code>{ value, done }</code>. A <strong>Generator</strong> (<code>function*</code>) can pause and resume execution via <code>yield</code> — enabling lazy, on-demand evaluation.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — generators &amp; iterators</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Basic generator</span>
+<span class="ck">function</span>* <span class="cf">count</span>() { <span class="ck">yield</span> <span class="cn">1</span>; <span class="ck">yield</span> <span class="cn">2</span>; <span class="ck">yield</span> <span class="cn">3</span>; }
+<span class="ck">const</span> gen = <span class="cf">count</span>();
+gen.<span class="cf">next</span>(); <span class="cg">// { value: 1, done: false }</span>
+gen.<span class="cf">next</span>(); <span class="cg">// { value: 2, done: false }</span>
+gen.<span class="cf">next</span>(); <span class="cg">// { value: 3, done: false }</span>
+gen.<span class="cf">next</span>(); <span class="cg">// { value: undefined, done: true }</span>
+
+<span class="cc">// Infinite sequence — lazy, never runs out of memory</span>
+<span class="ck">function</span>* <span class="cf">infiniteIds</span>() {
+  <span class="ck">let</span> id = <span class="cn">1</span>;
+  <span class="ck">while</span> (<span class="ck">true</span>) <span class="ck">yield</span> id++;
+}
+<span class="ck">const</span> ids = <span class="cf">infiniteIds</span>();
+ids.<span class="cf">next</span>().value; <span class="cg">// 1</span>
+ids.<span class="cf">next</span>().value; <span class="cg">// 2</span>
+
+<span class="cc">// Async generator — paginated API fetcher</span>
+<span class="ck">async function</span>* <span class="cf">fetchPages</span>(url) {
+  <span class="ck">let</span> page = <span class="cn">1</span>;
+  <span class="ck">while</span> (<span class="ck">true</span>) {
+    <span class="ck">const</span> data = <span class="ck">await</span> (<span class="ck">await</span> <span class="cf">fetch</span>(<span class="cs">`${url}?page=${page}`</span>)).<span class="cf">json</span>();
+    <span class="ck">if</span> (!data.length) <span class="ck">return</span>;
+    <span class="ck">yield</span> data;
+    page++;
+  }
+}
+<span class="ck">for await</span> (<span class="ck">const</span> page <span class="ck">of</span> <span class="cf">fetchPages</span>(<span class="cs">'/api/users'</span>)) {
+  console.log(<span class="cs">'Processing:'</span>, page);
+}
+
+<span class="cc">// Custom iterable with Symbol.iterator</span>
+<span class="ck">const</span> range = {
+  from: <span class="cn">1</span>, to: <span class="cn">5</span>,
+  [Symbol.iterator]() {
+    <span class="ck">let</span> cur = <span class="ck">this</span>.from, last = <span class="ck">this</span>.to;
+    <span class="ck">return</span> { next: () => cur <= last
+      ? { value: cur++, done: <span class="ck">false</span> }
+      : { done: <span class="ck">true</span> } };
+  }
+};
+[...range]; <span class="cg">// [1, 2, 3, 4, 5]</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"Generators are perfect for <strong>lazy evaluation</strong> — you only compute values when asked. Key use cases: infinite sequences, paginated API fetching with async generators, and custom iterables. Redux-Saga uses generators extensively for complex async flow control."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 6 — PATTERNS & PERFORMANCE
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch6">Chapter 6 — Patterns &amp; Performance</div>
+
+  <div class="sec" id="js12">
+    <div class="snum">JS12</div>
+    <h2>How does Memory Management work in JavaScript? What causes memory leaks and how do you detect and fix them?</h2>
+    <p>JS uses <strong>Garbage Collection</strong> (mark-and-sweep). Objects are GC'd when no live references point to them. A <strong>memory leak</strong> = memory that is no longer needed but never released because a reference still exists somewhere.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — common leak patterns &amp; fixes</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ❌ Leak 1: Forgotten event listeners</span>
+btn.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, handler);
+<span class="cc">// ✅ Fix: always remove on cleanup</span>
+btn.<span class="cf">removeEventListener</span>(<span class="cs">'click'</span>, handler);
+
+<span class="cc">// ❌ Leak 2: Closure capturing large data unnecessarily</span>
+<span class="ck">let</span> bigData = <span class="ck">new</span> Array(<span class="cn">1000000</span>).<span class="cf">fill</span>(<span class="cs">'x'</span>);
+<span class="ck">const</span> result = <span class="cf">process</span>(bigData);
+bigData = <span class="ck">null</span>; <span class="cc">// ✅ release reference after use</span>
+
+<span class="cc">// ❌ Leak 3: Growing Map/cache never cleared</span>
+<span class="ck">const</span> cache = <span class="ck">new</span> Map();
+<span class="ck">function</span> <span class="cf">store</span>(key, data) { cache.<span class="cf">set</span>(key, data); } <span class="cc">// grows forever!</span>
+<span class="cc">// ✅ Fix: use WeakMap — entries auto-GC'd when key is GC'd</span>
+<span class="ck">const</span> cache = <span class="ck">new</span> WeakMap();
+
+<span class="cc">// ❌ Leak 4: setInterval never cleared</span>
+<span class="cc">// ✅ Fix: clear on component unmount (React)</span>
+useEffect(() => {
+  <span class="ck">const</span> id = setInterval(() => <span class="cf">poll</span>(), <span class="cn">1000</span>);
+  <span class="ck">return</span> () => clearInterval(id);
+}, []);</pre></div>
+    <ul class="pts">
+      <li><strong>Detection:</strong> Chrome DevTools Memory tab — take heap snapshots over time; compare to see what's accumulating</li>
+      <li><strong>WeakMap / WeakRef:</strong> use for caches tied to object lifetimes — entries clear automatically when the key is GC'd</li>
+      <li><strong>Detached DOM nodes:</strong> remove all JS references to DOM elements after removing them from the tree</li>
+    </ul>
+    <div class="insight"><h4>Key interview line</h4><p>"The most common leaks in production: forgotten event listeners in SPAs, setInterval never cleared on unmount, and closures accidentally capturing large objects. I diagnose with Chrome DevTools <strong>heap snapshots</strong> — comparing two snapshots shows exactly what's accumulating."</p></div>
+  </div>
+
+  <div class="sec" id="js13">
+    <div class="snum">JS13</div>
+    <h2>What JavaScript Design Patterns do you use regularly? Explain Module, Observer, Proxy, and Decorator.</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — design patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// 1. Module Pattern — private state via IIFE</span>
+<span class="ck">const</span> UserModule = (() => {
+  <span class="ck">let</span> _users = [];
+  <span class="ck">return</span> {
+    add:    (u) => _users.<span class="cf">push</span>(u),
+    getAll: ()  => [..._users],
+    count:  ()  => _users.length,
+  };
+})();
+UserModule._users; <span class="cr">// undefined — truly private</span>
+
+<span class="cc">// 2. Observer Pattern — decoupled pub/sub</span>
+<span class="ck">class</span> EventEmitter {
+  <span class="cf">constructor</span>() { <span class="ck">this</span>.events = {}; }
+  <span class="cf">on</span>(event, fn)  { (<span class="ck">this</span>.events[event] ??= []).<span class="cf">push</span>(fn); }
+  <span class="cf">off</span>(event, fn) { <span class="ck">this</span>.events[event] = <span class="ck">this</span>.events[event]?.<span class="cf">filter</span>(f => f !== fn); }
+  <span class="cf">emit</span>(event, ...args) { <span class="ck">this</span>.events[event]?.forEach(fn => <span class="cf">fn</span>(...args)); }
+}
+
+<span class="cc">// 3. Proxy Pattern — intercept object operations (Vue 3's reactivity)</span>
+<span class="ck">const</span> user = <span class="ck">new</span> Proxy({}, {
+  set(target, key, value) {
+    <span class="ck">if</span> (key === <span class="cs">'age'</span> && <span class="ck">typeof</span> value !== <span class="cs">'number'</span>)
+      <span class="ck">throw new</span> TypeError(<span class="cs">'Age must be a number'</span>);
+    target[key] = value;
+    <span class="ck">return</span> <span class="ck">true</span>;
+  }
+});
+user.age = <span class="cs">'old'</span>; <span class="cr">// TypeError</span>
+user.age = <span class="cn">30</span>;    <span class="cg">// OK</span>
+
+<span class="cc">// 4. Decorator Pattern — add cross-cutting concerns without modifying original</span>
+<span class="ck">function</span> <span class="cf">withCache</span>(fn) {
+  <span class="ck">const</span> cache = <span class="ck">new</span> Map();
+  <span class="ck">return</span> (...args) => {
+    <span class="ck">const</span> key = JSON.<span class="cf">stringify</span>(args);
+    <span class="ck">if</span> (cache.<span class="cf">has</span>(key)) <span class="ck">return</span> cache.<span class="cf">get</span>(key);
+    <span class="ck">const</span> result = <span class="cf">fn</span>(...args);
+    cache.<span class="cf">set</span>(key, result);
+    <span class="ck">return</span> result;
+  };
+}
+<span class="ck">const</span> add = (a, b) => a + b;
+<span class="ck">const</span> cachedAdd = <span class="cf">withCache</span>(add);</pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<strong>Proxy</strong> is underused but incredibly powerful — Vue 3's reactivity system is built entirely on it. <strong>Decorator</strong> is how I add cross-cutting concerns like caching and auth without modifying original functions — same concept as NestJS interceptors. <strong>Observer</strong> is foundational to Redux, RxJS, and EventEmitter."</p></div>
+  </div>
+
+  <div class="sec" id="js14">
+    <div class="snum">JS14</div>
+    <h2>What is Event Delegation? How does event bubbling and capturing work, and why is delegation more performant?</h2>
+    <p><strong>Bubbling</strong> — event fires on target then travels UP through ancestors to document. <strong>Capturing</strong> — event travels DOWN from document to target first. <strong>Event Delegation</strong> — attach ONE listener on a parent to handle events from all children via bubbling.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — event delegation</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Propagation phases</span>
+<span class="cc">// Capture: document → html → body → parent → target</span>
+<span class="cc">// Bubble:  target → parent → body → html → document</span>
+
+element.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, handler, <span class="ck">true</span>);  <span class="cc">// capturing</span>
+element.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, handler, <span class="ck">false</span>); <span class="cc">// bubbling (default)</span>
+
+e.<span class="cf">stopPropagation</span>();          <span class="cc">// stop bubbling up</span>
+e.<span class="cf">preventDefault</span>();           <span class="cc">// prevent browser default</span>
+
+<span class="cc">// ❌ Bad — 1000 items = 1000 listeners, breaks for dynamic items</span>
+document.<span class="cf">querySelectorAll</span>(<span class="cs">'li'</span>).<span class="cf">forEach</span>(li =>
+  li.<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, handleClick)
+);
+
+<span class="cc">// ✅ Good — ONE listener on parent handles ALL children</span>
+document.<span class="cf">getElementById</span>(<span class="cs">'list'</span>).<span class="cf">addEventListener</span>(<span class="cs">'click'</span>, (e) => {
+  <span class="ck">const</span> li = e.target.<span class="cf">closest</span>(<span class="cs">'li'</span>); <span class="cc">// traverse up to intended target</span>
+  <span class="ck">if</span> (!li) <span class="ck">return</span>;
+
+  <span class="ck">const</span> action = li.dataset.action;
+  <span class="ck">if</span> (action === <span class="cs">'delete'</span>) <span class="cf">deleteItem</span>(li.dataset.id);
+  <span class="ck">if</span> (action === <span class="cs">'edit'</span>)   <span class="cf">editItem</span>(li.dataset.id);
+});
+<span class="cc">// Also works for dynamically added items — no re-attaching needed!</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"Instead of attaching listeners to every child, attach one to the parent and use <code>event.target</code> to identify what was clicked. Critical for <strong>dynamic lists</strong> where items are added/removed. I use <code>closest()</code> to safely traverse up to the intended target. React's synthetic event system uses delegation internally for the same reason."</p></div>
+  </div>
+
+  <div class="sec" id="js15">
+    <div class="snum">JS15</div>
+    <h2>How do you optimise JavaScript performance? Explain debounce, throttle, lazy loading, and Web Workers.</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — debounce &amp; throttle</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Debounce — execute only after user stops for N ms</span>
+<span class="ck">function</span> <span class="cf">debounce</span>(fn, delay) {
+  <span class="ck">let</span> timer;
+  <span class="ck">return</span> (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => <span class="cf">fn</span>(...args), delay);
+  };
+}
+input.<span class="cf">addEventListener</span>(<span class="cs">'input'</span>, <span class="cf">debounce</span>(<span class="cf">search</span>, <span class="cn">300</span>));
+
+<span class="cc">// Throttle — execute at most once per N ms</span>
+<span class="ck">function</span> <span class="cf">throttle</span>(fn, limit) {
+  <span class="ck">let</span> inThrottle;
+  <span class="ck">return</span> (...args) => {
+    <span class="ck">if</span> (!inThrottle) {
+      <span class="cf">fn</span>(...args);
+      inThrottle = <span class="ck">true</span>;
+      setTimeout(() => (inThrottle = <span class="ck">false</span>), limit);
+    }
+  };
+}
+window.<span class="cf">addEventListener</span>(<span class="cs">'scroll'</span>, <span class="cf">throttle</span>(<span class="cf">handleScroll</span>, <span class="cn">100</span>));</pre></div>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>Debounce</th><th>Throttle</th></tr>
+      <tr><td><strong>Fires when</strong></td><td>After user <em>stops</em> for N ms</td><td>At most once per N ms</td></tr>
+      <tr><td><strong>Use case</strong></td><td>Search input, resize end, form validation</td><td>Scroll handler, mouse move, button spam</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — Web Workers &amp; lazy loading</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Web Workers — offload CPU-heavy work off the main thread</span>
+<span class="ck">const</span> worker = <span class="ck">new</span> Worker(<span class="cs">'./worker.js'</span>);
+worker.<span class="cf">postMessage</span>({ data: hugeArray });
+worker.onmessage = (e) => console.log(<span class="cs">'Result:'</span>, e.data);
+
+<span class="cc">// worker.js — runs in separate thread, no DOM access</span>
+self.onmessage = ({ data }) => {
+  self.<span class="cf">postMessage</span>(<span class="cf">heavyComputation</span>(data.data));
+};
+
+<span class="cc">// Dynamic import — code splitting / lazy loading</span>
+<span class="ck">const</span> loadChart = <span class="ck">async</span> () => {
+  <span class="ck">const</span> { Chart } = <span class="ck">await import</span>(<span class="cs">'./ChartComponent.js'</span>);
+  <span class="ck">return</span> Chart;
+};
+
+<span class="cc">// IntersectionObserver — lazy-load when element enters viewport</span>
+<span class="ck">const</span> observer = <span class="ck">new</span> IntersectionObserver((entries) => {
+  entries.<span class="cf">forEach</span>(entry => {
+    <span class="ck">if</span> (entry.isIntersecting) {
+      <span class="cf">loadComponent</span>(entry.target);
+      observer.<span class="cf">unobserve</span>(entry.target);
+    }
+  });
+}, { threshold: <span class="cn">0.1</span> });
+
+<span class="cc">// requestAnimationFrame — smooth animations (syncs with 60fps repaint)</span>
+<span class="ck">function</span> <span class="cf">loop</span>() { <span class="cf">animate</span>(); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);</pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<strong>Debounce</strong> waits for the user to stop (search box); <strong>throttle</strong> fires at a regular rate (scroll handler). For CPU-heavy tasks I offload to <strong>Web Workers</strong> so the UI thread stays responsive. For animations, <strong>requestAnimationFrame</strong> is mandatory — it syncs with the browser's 60fps repaint cycle."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 7 — TYPE SYSTEM
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch7">Chapter 7 — Type System &amp; Coercion</div>
+
+  <div class="sec" id="js16">
+    <div class="snum">JS16</div>
+    <h2>How does Type Coercion work in JavaScript? Explain <code>==</code> vs <code>===</code>, <code>typeof</code> gotchas, and implicit conversion rules.</h2>
+    <p><strong>Type coercion</strong> = JavaScript automatically converts values to a common type during comparisons or operations. <code>==</code> triggers coercion; <code>===</code> (strict equality) does not — it checks value AND type.</p>
+    <div class="tw"><table>
+      <tr><th>Expression</th><th>Result</th><th>Why</th></tr>
+      <tr><td><code>0 == false</code></td><td><code>true</code></td><td><code>false</code> → <code>0</code>, then <code>0 == 0</code></td></tr>
+      <tr><td><code>'' == false</code></td><td><code>true</code></td><td>both coerce to <code>0</code></td></tr>
+      <tr><td><code>null == undefined</code></td><td><code>true</code></td><td>special case in spec</td></tr>
+      <tr><td><code>null == 0</code></td><td><code>false</code></td><td><code>null</code> only loosely equals <code>undefined</code></td></tr>
+      <tr><td><code>[] == false</code></td><td><code>true</code></td><td><code>[]</code> → <code>""</code> → <code>0</code>, <code>false</code> → <code>0</code></td></tr>
+      <tr><td><code>[] == ![]</code></td><td><code>true</code></td><td><code>![]</code> is <code>false</code>, then <code>[] == false</code></td></tr>
+      <tr><td><code>NaN === NaN</code></td><td><code>false</code></td><td>NaN is not equal to itself — use <code>Number.isNaN()</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — typeof gotchas &amp; coercion</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// typeof gotchas</span>
+<span class="ck">typeof</span> <span class="ck">null</span>;        <span class="cr">// 'object'  — historic bug, never fixed</span>
+<span class="ck">typeof</span> [];          <span class="cr">// 'object'  — use Array.isArray() instead</span>
+<span class="ck">typeof</span> <span class="ck">function</span>(){}; <span class="cg">// 'function' — functions are objects but get own type</span>
+<span class="ck">typeof</span> NaN;         <span class="cg">// 'number'  — NaN is technically of type number!</span>
+<span class="ck">typeof</span> <span class="ck">undefined</span>;   <span class="cg">// 'undefined'</span>
+
+<span class="cc">// Reliable type checks</span>
+Array.<span class="cf">isArray</span>([]);                       <span class="cg">// true</span>
+Object.prototype.toString.<span class="cf">call</span>(<span class="ck">null</span>);   <span class="cg">// '[object Null]'</span>
+Object.prototype.toString.<span class="cf">call</span>([]);     <span class="cg">// '[object Array]'</span>
+Number.<span class="cf">isNaN</span>(NaN);                       <span class="cg">// true  — use this, NOT global isNaN()</span>
+Number.<span class="cf">isNaN</span>(<span class="cs">'hello'</span>);                  <span class="cr">// false — global isNaN('hello') returns true!</span>
+
+<span class="cc">// Implicit coercion in operations</span>
+<span class="cn">1</span> + <span class="cs">'2'</span>;          <span class="cr">// '12'   — + with string triggers concatenation</span>
+<span class="cs">'5'</span> - <span class="cn">2</span>;          <span class="cg">// 3      — -, *, / always coerce to number</span>
+<span class="ck">true</span> + <span class="ck">true</span>;       <span class="cg">// 2      — booleans coerce to 0/1</span>
+[] + [];           <span class="cr">// ''     — both coerce to ''</span>
+[] + {};           <span class="cr">// '[object Object]'</span>
+{} + [];           <span class="cg">// 0      — {} parsed as block, +[] = 0</span>
+
+<span class="cc">// Symbol.toPrimitive — control custom coercion</span>
+<span class="ck">const</span> obj = {
+  [Symbol.toPrimitive](hint) {
+    <span class="ck">if</span> (hint === <span class="cs">'number'</span>)  <span class="ck">return</span> <span class="cn">42</span>;
+    <span class="ck">if</span> (hint === <span class="cs">'string'</span>)  <span class="ck">return</span> <span class="cs">'hello'</span>;
+    <span class="ck">return</span> <span class="ck">true</span>; <span class="cc">// default</span>
+  }
+};
++obj;        <span class="cg">// 42</span>
+<span class="cs">`${obj}`</span>;    <span class="cg">// 'hello'</span>
+obj + <span class="cs">''</span>;   <span class="cg">// 'true'</span>
+
+<span class="cc">// Object.is — stricter than ===, handles edge cases</span>
+Object.<span class="cf">is</span>(NaN, NaN);   <span class="cg">// true  — unlike ===</span>
+Object.<span class="cf">is</span>(<span class="cn">0</span>, -<span class="cn">0</span>);     <span class="cr">// false — unlike ===</span>
+<span class="cn">0</span> === -<span class="cn">0</span>;            <span class="cr">// true  — === fails to distinguish</span></pre></div>
+    <div class="box ro"><div class="bxt">Avoid at all costs</div><p>Never use <code>==</code> in production code — the coercion rules are too complex to reason about reliably. Always use <code>===</code>. The only arguably acceptable use is <code>x == null</code> which checks for both <code>null</code> and <code>undefined</code> simultaneously.</p></div>
+    <div class="insight"><h4>Key interview line</h4><p>"I always use <code>===</code> — the <code>==</code> coercion rules require memorising the Abstract Equality Comparison algorithm, and edge cases like <code>[] == ![]</code> being true make it unreliable. The three gotchas I cite are: <code>typeof null === 'object'</code>, <code>NaN !== NaN</code> (use <code>Number.isNaN</code>), and <code>+</code> with a string triggers concatenation while <code>-</code> always coerces to number."</p></div>
+  </div>
+
+  <div class="sec" id="js17">
+    <div class="snum">JS17</div>
+    <h2>What is Strict Mode? What does it change and why should you always use it?</h2>
+    <p>Strict mode (<code>'use strict'</code>) opts into a restricted variant of JavaScript that eliminates silent errors, fixes <code>this</code> binding ambiguity, and prohibits syntax reserved for future versions. ES6 modules and classes are strict by default.</p>
+    <div class="tw"><table>
+      <tr><th>Behaviour</th><th>Sloppy mode</th><th>Strict mode</th></tr>
+      <tr><td>Undeclared variable</td><td>Creates global silently</td><td><code>ReferenceError</code></td></tr>
+      <tr><td><code>this</code> in plain function</td><td><code>window</code> / <code>global</code></td><td><code>undefined</code></td></tr>
+      <tr><td>Duplicate param names</td><td>Silently allowed</td><td><code>SyntaxError</code></td></tr>
+      <tr><td>Write to read-only property</td><td>Silently fails</td><td><code>TypeError</code></td></tr>
+      <tr><td><code>delete</code> non-deletable</td><td>Silently fails</td><td><code>TypeError</code></td></tr>
+      <tr><td><code>with</code> statement</td><td>Allowed</td><td><code>SyntaxError</code></td></tr>
+      <tr><td><code>arguments</code> object</td><td>Aliased to params</td><td>Not aliased — safer</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — strict mode behaviour</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cs">'use strict'</span>; <span class="cc">// file-level, or inside a function</span>
+
+<span class="cc">// 1. No accidental globals</span>
+x = <span class="cn">5</span>; <span class="cr">// ReferenceError — x is not defined</span>
+
+<span class="cc">// 2. this is undefined in regular functions (not global)</span>
+<span class="ck">function</span> <span class="cf">show</span>() { console.log(<span class="ck">this</span>); }
+<span class="cf">show</span>(); <span class="cg">// undefined — not window</span>
+
+<span class="cc">// 3. Duplicate parameters caught at parse time</span>
+<span class="ck">function</span> <span class="cf">bad</span>(a, a) { <span class="ck">return</span> a; } <span class="cr">// SyntaxError</span>
+
+<span class="cc">// 4. Writing to read-only properties throws</span>
+<span class="ck">const</span> obj = {};
+Object.<span class="cf">defineProperty</span>(obj, <span class="cs">'x'</span>, { value: <span class="cn">1</span>, writable: <span class="ck">false</span> });
+obj.x = <span class="cn">2</span>; <span class="cr">// TypeError in strict, silently ignored otherwise</span>
+
+<span class="cc">// Where strict mode is automatic (no 'use strict' needed):</span>
+<span class="cc">// — ES6 modules (import/export)</span>
+<span class="cc">// — Class bodies</span>
+<span class="cc">// — Arrow functions inside strict contexts</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"ES6 modules and classes are strict by default, so in modern codebases you rarely write <code>'use strict'</code> manually. The most practically important change is <code>this</code> being <code>undefined</code> in plain function calls — this is why the <code>this</code> keyword behaves differently in strict mode callbacks, and why class methods lose <code>this</code> when passed as callbacks."</p></div>
+  </div>
+
+  <div class="sec" id="js18">
+    <div class="snum">JS18</div>
+    <h2>How do you handle errors in JavaScript? Explain try/catch/finally, async error handling, custom errors, and unhandled rejections.</h2>
+    <p>JavaScript has synchronous errors (thrown exceptions) and asynchronous errors (rejected Promises). They require different handling strategies. Unhandled Promise rejections crash Node.js processes in production.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — error handling patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// try/catch/finally — finally ALWAYS runs</span>
+<span class="ck">try</span> {
+  <span class="ck">const</span> data = JSON.<span class="cf">parse</span>(badJson);
+} <span class="ck">catch</span> (err) {
+  console.error(err.name, err.message); <span class="cc">// SyntaxError, Unexpected token...</span>
+} <span class="ck">finally</span> {
+  <span class="cf">cleanup</span>(); <span class="cc">// runs whether or not error was thrown</span>
+}
+
+<span class="cc">// Custom error classes — preserve stack trace, add context</span>
+<span class="ck">class</span> AppError <span class="ck">extends</span> Error {
+  <span class="cf">constructor</span>(message, statusCode) {
+    <span class="ck">super</span>(message);
+    <span class="ck">this</span>.name = <span class="cs">'AppError'</span>;
+    <span class="ck">this</span>.statusCode = statusCode;
+    Error.<span class="cf">captureStackTrace</span>(<span class="ck">this</span>, <span class="ck">this</span>.constructor); <span class="cc">// cleaner stack</span>
+  }
+}
+<span class="ck">throw new</span> <span class="cf">AppError</span>(<span class="cs">'Not found'</span>, <span class="cn">404</span>);
+
+<span class="cc">// Async error handling</span>
+<span class="cc">// ❌ Unhandled rejection — crashes Node in production</span>
+<span class="ck">async function</span> <span class="cf">fetchData</span>() {
+  <span class="ck">const</span> res = <span class="ck">await</span> <span class="cf">fetch</span>(<span class="cs">'/api'</span>); <span class="cc">// throws if network fails — uncaught!</span>
+}
+
+<span class="cc">// ✅ Caught with try/catch</span>
+<span class="ck">async function</span> <span class="cf">fetchData</span>() {
+  <span class="ck">try</span> {
+    <span class="ck">const</span> res  = <span class="ck">await</span> <span class="cf">fetch</span>(<span class="cs">'/api'</span>);
+    <span class="ck">const</span> data = <span class="ck">await</span> res.<span class="cf">json</span>();
+    <span class="ck">return</span> data;
+  } <span class="ck">catch</span> (err) {
+    <span class="cc">// catches both fetch failure AND json parse error</span>
+    <span class="ck">throw new</span> <span class="cf">AppError</span>(err.message, <span class="cn">500</span>);
+  }
+}
+
+<span class="cc">// ✅ Promise .catch() — equivalent for promise chains</span>
+<span class="cf">fetch</span>(<span class="cs">'/api'</span>).<span class="cf">then</span>(r => r.<span class="cf">json</span>()).<span class="cf">catch</span>(err => console.error(err));
+
+<span class="cc">// Global safety net — catch anything that slips through</span>
+<span class="cc">// Browser</span>
+window.<span class="cf">addEventListener</span>(<span class="cs">'unhandledrejection'</span>, (e) => {
+  console.error(<span class="cs">'Unhandled rejection:'</span>, e.reason);
+  e.<span class="cf">preventDefault</span>(); <span class="cc">// suppress console error in prod</span>
+});
+<span class="cc">// Node.js</span>
+process.<span class="cf">on</span>(<span class="cs">'unhandledRejection'</span>, (reason, promise) => {
+  console.error(<span class="cs">'Unhandled rejection'</span>, reason);
+  process.<span class="cf">exit</span>(<span class="cn">1</span>); <span class="cc">// fail fast in production</span>
+});
+
+<span class="cc">// Error types worth knowing</span>
+<span class="ck">new</span> TypeError(<span class="cs">'wrong type'</span>);       <span class="cc">// wrong type passed</span>
+<span class="ck">new</span> RangeError(<span class="cs">'out of range'</span>);    <span class="cc">// value out of allowed range</span>
+<span class="ck">new</span> ReferenceError(<span class="cs">'not defined'</span>); <span class="cc">// accessing undeclared var</span>
+<span class="ck">new</span> SyntaxError(<span class="cs">'bad syntax'</span>);     <span class="cc">// invalid code</span></pre></div>
+    <div class="box am"><div class="bxt">Common mistake</div><p>Only <code>Error</code> objects (and subclasses) have a <code>.stack</code> property. Throwing primitives — <code>throw 'something went wrong'</code> — loses stack trace context entirely. Always <code>throw new Error(...)</code>.</p></div>
+    <div class="insight"><h4>Key interview line</h4><p>"I always use custom error classes that extend <code>Error</code> — they carry <code>statusCode</code>, <code>isOperational</code>, and other context that a generic <code>Error</code> can't convey. In async code, a single <code>try/catch</code> wrapping multiple <code>await</code> calls catches all rejections in that block. In Node, I always register a <code>process.on('unhandledRejection')</code> handler that logs and exits — silent failures are worse than crashes."</p></div>
+  </div>
+
+  <!-- ══════════════════════════
+       CHAPTER 8 — OBJECTS & MODULES
+  ══════════════════════════ -->
+  <div class="ch-lbl" id="ch8">Chapter 8 — Objects &amp; Modules</div>
+
+  <div class="sec" id="js19">
+    <div class="snum">JS19</div>
+    <h2>What is Object.defineProperty()? Explain property descriptors, getters/setters, and how they relate to Proxy.</h2>
+    <p>Every object property has a <strong>descriptor</strong> — metadata controlling whether it can be written, enumerated, or reconfigured. <code>Object.defineProperty()</code> gives you fine-grained control over this, and getters/setters add computed behaviour directly on an object.</p>
+    <div class="tw"><table>
+      <tr><th>Descriptor flag</th><th>Default (<code>defineProperty</code>)</th><th>Meaning</th></tr>
+      <tr><td><code>writable</code></td><td><code>false</code></td><td>Can the value be changed with <code>=</code>?</td></tr>
+      <tr><td><code>enumerable</code></td><td><code>false</code></td><td>Does it appear in <code>for...in</code> / <code>Object.keys()</code>?</td></tr>
+      <tr><td><code>configurable</code></td><td><code>false</code></td><td>Can the descriptor itself be changed or deleted?</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — defineProperty &amp; getters/setters</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Read-only, non-enumerable property</span>
+<span class="ck">const</span> obj = {};
+Object.<span class="cf">defineProperty</span>(obj, <span class="cs">'id'</span>, {
+  value: <span class="cn">42</span>,
+  writable:     <span class="ck">false</span>,
+  enumerable:   <span class="ck">false</span>,
+  configurable: <span class="ck">false</span>
+});
+obj.id = <span class="cn">99</span>;          <span class="cr">// silently fails (TypeError in strict)</span>
+Object.<span class="cf">keys</span>(obj);     <span class="cg">// []  — not enumerable, hidden</span>
+obj.id;               <span class="cg">// 42  — still readable</span>
+
+<span class="cc">// Getter / setter — computed property</span>
+<span class="ck">const</span> person = { _name: <span class="cs">'Alice'</span> };
+Object.<span class="cf">defineProperty</span>(person, <span class="cs">'name'</span>, {
+  get() { <span class="ck">return</span> <span class="ck">this</span>._name.<span class="cf">toUpperCase</span>(); },
+  set(v) { <span class="ck">this</span>._name = v.<span class="cf">trim</span>(); },
+  enumerable: <span class="ck">true</span>,
+  configurable: <span class="ck">true</span>
+});
+person.name;          <span class="cg">// 'ALICE'</span>
+person.name = <span class="cs">'  Bob  '</span>;
+person._name;         <span class="cg">// 'Bob'</span>
+
+<span class="cc">// Shorthand get/set in object literal (same thing)</span>
+<span class="ck">const</span> circle = {
+  _r: <span class="cn">5</span>,
+  <span class="ck">get</span> <span class="cf">area</span>()  { <span class="ck">return</span> Math.PI * <span class="ck">this</span>._r ** <span class="cn">2</span>; },
+  <span class="ck">set</span> <span class="cf">radius</span>(v) { <span class="ck">this</span>._r = v; }
+};
+
+<span class="cc">// defineProperty vs Proxy</span>
+<span class="cc">// defineProperty — static, per-property, defined at declaration time</span>
+<span class="cc">// Proxy — dynamic, intercepts ALL operations, even on not-yet-existing properties</span>
+
+<span class="cc">// Object.getOwnPropertyDescriptor — inspect any property</span>
+Object.<span class="cf">getOwnPropertyDescriptor</span>([], <span class="cs">'length'</span>);
+<span class="cc">// { value: 0, writable: true, enumerable: false, configurable: false }</span>
+
+<span class="cc">// Inspect all descriptors at once</span>
+Object.<span class="cf">getOwnPropertyDescriptors</span>(person);</pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<code>Object.defineProperty</code> is how the JS engine itself defines built-in properties — <code>Array.length</code> is non-enumerable, for example. Getters/setters let you add validation or computation without changing the consumer's API. The key distinction vs <code>Proxy</code> is scope: <code>defineProperty</code> targets a specific known property; Proxy intercepts all operations dynamically, including property creation."</p></div>
+  </div>
+
+  <div class="sec" id="js20">
+    <div class="snum">JS20</div>
+    <h2>What is Immutability in JavaScript? Explain <code>const</code> vs <code>Object.freeze()</code> vs deep freeze, and why it matters.</h2>
+    <p><code>const</code> makes the <em>binding</em> immutable — you can't reassign the variable. <code>Object.freeze()</code> makes the <em>object</em> immutable — you can't add, remove, or change properties. Neither is recursive by default.</p>
+    <div class="tw"><table>
+      <tr><th>Technique</th><th>Prevents reassignment</th><th>Prevents mutation</th><th>Deep?</th></tr>
+      <tr><td><code>const</code></td><td>✅ Yes</td><td>❌ No</td><td>—</td></tr>
+      <tr><td><code>Object.freeze()</code></td><td>—</td><td>✅ Shallow</td><td>❌ No</td></tr>
+      <tr><td><code>Object.seal()</code></td><td>—</td><td>Partial (no add/delete, can change)</td><td>❌ No</td></tr>
+      <tr><td>Deep freeze (recursive)</td><td>—</td><td>✅ All levels</td><td>✅ Yes</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — immutability patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// const — only binding is locked</span>
+<span class="ck">const</span> user = { name: <span class="cs">'Alice'</span> };
+user.name = <span class="cs">'Bob'</span>;  <span class="cg">// ✅ mutation works fine</span>
+user = {};          <span class="cr">// ❌ TypeError — can't reassign const</span>
+
+<span class="cc">// Object.freeze — shallow, properties can't change</span>
+<span class="ck">const</span> config = Object.<span class="cf">freeze</span>({ db: { host: <span class="cs">'localhost'</span> } });
+config.db.host = <span class="cs">'prod'</span>; <span class="cr">// silently mutates! freeze is shallow</span>
+config.port = <span class="cn">3000</span>;     <span class="cr">// silently ignored (TypeError in strict)</span>
+
+<span class="cc">// Object.seal — can change existing, can't add or delete</span>
+<span class="ck">const</span> sealed = Object.<span class="cf">seal</span>({ x: <span class="cn">1</span> });
+sealed.x = <span class="cn">2</span>;    <span class="cg">// ✅ OK</span>
+sealed.y = <span class="cn">3</span>;    <span class="cr">// ❌ silently ignored</span>
+<span class="ck">delete</span> sealed.x;  <span class="cr">// ❌ silently ignored</span>
+
+<span class="cc">// Deep freeze — recursive</span>
+<span class="ck">function</span> <span class="cf">deepFreeze</span>(obj) {
+  Object.<span class="cf">getOwnPropertyNames</span>(obj).<span class="cf">forEach</span>(key => {
+    <span class="ck">const</span> val = obj[key];
+    <span class="ck">if</span> (<span class="ck">typeof</span> val === <span class="cs">'object'</span> && val !== <span class="ck">null</span>) <span class="cf">deepFreeze</span>(val);
+  });
+  <span class="ck">return</span> Object.<span class="cf">freeze</span>(obj);
+}
+
+<span class="cc">// Immutable update pattern (spread) — preferred in React/Redux</span>
+<span class="ck">const</span> nextState = { ...state, count: state.count + <span class="cn">1</span> };       <span class="cc">// shallow</span>
+<span class="ck">const</span> deepUpdate = { ...state, user: { ...state.user, name: <span class="cs">'Bob'</span> } }; <span class="cc">// nested</span>
+
+<span class="cc">// Check if frozen/sealed</span>
+Object.<span class="cf">isFrozen</span>(config);  <span class="cg">// true</span>
+Object.<span class="cf">isSealed</span>(sealed);  <span class="cg">// true</span></pre></div>
+    <div class="insight"><h4>Key interview line</h4><p>"<code>const</code> and <code>Object.freeze()</code> are often confused — <code>const</code> prevents rebinding, freeze prevents mutation. In React/Redux I use the <strong>spread pattern</strong> for immutable updates rather than freeze, because immutable updates produce new references which triggers re-render detection efficiently. <code>Object.freeze()</code> is useful for config objects and constants that should never change at runtime."</p></div>
+  </div>
+
+  <div class="sec" id="js21">
+    <div class="snum">JS21</div>
+    <h2>What is the difference between CommonJS (require) and ES Modules (import/export)? How do circular dependencies behave in each?</h2>
+    <p>CommonJS is Node.js's original module system — synchronous, runtime-evaluated. ES Modules (ESM) are the standard — statically analysable, async-capable, and the basis for tree shaking. They are NOT interchangeable.</p>
+    <div class="tw"><table>
+      <tr><th>Aspect</th><th>CommonJS (<code>require</code>)</th><th>ES Modules (<code>import</code>)</th></tr>
+      <tr><td><strong>Loading</strong></td><td>Synchronous, runtime</td><td>Asynchronous, parsed statically</td></tr>
+      <tr><td><strong>Exports</strong></td><td>Copy of value at require time</td><td>Live binding — reflects later changes</td></tr>
+      <tr><td><strong>Top-level await</strong></td><td>❌ Not supported</td><td>✅ Supported</td></tr>
+      <tr><td><strong>Tree shaking</strong></td><td>❌ Not possible</td><td>✅ Bundlers can eliminate unused exports</td></tr>
+      <tr><td><strong>Dynamic import</strong></td><td><code>require()</code> anywhere</td><td><code>import()</code> returns a Promise</td></tr>
+      <tr><td><strong>Default in Node</strong></td><td>.js files</td><td>.mjs or <code>"type":"module"</code> in package.json</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript — CJS vs ESM behaviour</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── CommonJS ──────────────────────────────────────</span>
+<span class="cc">// counter.js</span>
+<span class="ck">let</span> count = <span class="cn">0</span>;
+module.exports = { count, increment: () => count++ };
+
+<span class="cc">// main.js</span>
+<span class="ck">const</span> { count, increment } = <span class="cn">require</span>(<span class="cs">'./counter'</span>);
+<span class="cf">increment</span>();
+console.log(count); <span class="cr">// 0 — CJS exports a COPY at require time</span>
+
+<span class="cc">// ── ES Modules ────────────────────────────────────</span>
+<span class="cc">// counter.mjs</span>
+<span class="ck">export let</span> count = <span class="cn">0</span>;
+<span class="ck">export const</span> increment = () => count++;
+
+<span class="cc">// main.mjs</span>
+<span class="ck">import</span> { count, increment } <span class="ck">from</span> <span class="cs">'./counter.mjs'</span>;
+<span class="cf">increment</span>();
+console.log(count); <span class="cg">// 1 — ESM exports a LIVE BINDING</span>
+
+<span class="cc">// Circular dependency behaviour</span>
+<span class="cc">// CJS — returns whatever is exported SO FAR (incomplete object, often {})</span>
+<span class="cc">// ESM — live bindings handle circulars better; binding exists but may be</span>
+<span class="cc">//       undefined until the depended module fully evaluates</span>
+
+<span class="cc">// Dynamic import — lazy load in both ESM and CJS contexts</span>
+<span class="ck">const</span> { default: lodash } = <span class="ck">await import</span>(<span class="cs">'lodash'</span>); <span class="cc">// works in ESM</span>
+<span class="ck">const</span> lodash2 = <span class="cn">require</span>(<span class="cs">'lodash'</span>);                  <span class="cc">// CJS, synchronous</span>
+
+<span class="cc">// Named vs default exports — best practice</span>
+<span class="ck">export default function</span> <span class="cf">main</span>() {}      <span class="cc">// one per module</span>
+<span class="ck">export const</span> helper = () => {};         <span class="cc">// multiple named exports</span>
+<span class="ck">import</span> main, { helper } <span class="ck">from</span> <span class="cs">'./mod.js'</span>;</pre></div>
+    <div class="box sk"><div class="bxt">Interop caveat</div><p>You can <code>require()</code> an ESM module from CJS in Node 22+ using <code>require(esm)</code> experimentally, but in general ESM cannot be <code>require</code>'d — you'll get <code>ERR_REQUIRE_ESM</code>. CJS can always be imported from ESM using <code>import</code>, but only the <code>default</code> export is available.</p></div>
+    <div class="insight"><h4>Key interview line</h4><p>"The most important practical difference: CJS exports a <strong>value copy</strong> at require time — mutations in the original module are invisible to importers. ESM exports <strong>live bindings</strong> — changes are reflected. This is why tree shaking only works with ESM — bundlers can statically analyse which exports are used and eliminate the rest at build time."</p></div>
+  </div>
+
+</main>
+</div>
+
+<script src="assets/theme-toggle.js" defer></script>
+</body>
+</html>
