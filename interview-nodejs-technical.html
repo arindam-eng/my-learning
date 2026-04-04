@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node.js Interview Prep — Technical Q&amp;A</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<script>try{var k='my-learning-theme',t=localStorage.getItem(k);document.documentElement.setAttribute('data-theme',t==='light'||t==='dark'?t:'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}</script>
+<link rel="stylesheet" href="assets/theme-ui.css">
+<link rel="stylesheet" href="assets/theme-docs.css">
+<style>
+:root{
+  --bg:#07080c;--bg2:#0e0f14;--bg3:#14161c;--bg4:#1b1d25;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#e3e0d6;--text2:#8c8880;--text3:#46433e;
+  --emerald:#10b981;--indigo:#818cf8;--amber:#f59e0b;
+  --sky:#38bdf8;--rose:#f43f5e;--lime:#84cc16;--nodejs:#68a063;
+  --mono:'IBM Plex Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;}
+.layout{display:flex;min-height:100vh;}
+
+/* ── SIDEBAR ── */
+.sb{width:268px;min-width:268px;background:var(--bg2);border-right:1px solid var(--border);padding:28px 0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-top{padding:0 22px 22px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.sb-badge{display:inline-block;background:var(--nodejs);color:#0a0d06;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;padding:3px 8px;border-radius:3px;margin-bottom:8px;}
+.sb-top h1{font-family:var(--serif);font-weight:700;font-size:17px;line-height:1.3;}
+.sb-top p{font-size:12px;color:var(--text2);margin-top:4px;}
+.nav-s{padding:0 14px;margin-bottom:4px;}
+.nav-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--text3);padding:0 8px;margin-bottom:5px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;font-size:12px;color:var(--text2);transition:all .15s;text-decoration:none;border:1px solid transparent;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--bg3);color:var(--emerald);border-color:var(--border);}
+.ndot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;}
+.ni.active .ndot{background:var(--emerald);}
+.sb-home{display:block;padding:10px 24px;color:var(--text2);text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;border-bottom:1px solid var(--border);transition:color .15s;}
+.sb-home:hover{color:var(--text);}
+
+/* ── MAIN ── */
+.main{flex:1;max-width:920px;padding:48px 56px;}
+
+/* ── HERO ── */
+.hero{padding:40px 0 48px;border-bottom:1px solid var(--border);margin-bottom:48px;scroll-margin-top:24px;}
+.htag{font-family:var(--mono);font-size:11px;color:var(--nodejs);letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.htag::before{content:'';display:block;width:28px;height:1px;background:var(--nodejs);}
+.hero h1{font-family:var(--serif);font-size:50px;font-weight:700;line-height:1.06;letter-spacing:-.02em;margin-bottom:18px;}
+.hero h1 em{font-style:italic;color:var(--indigo);}
+.hero p{font-size:16px;color:var(--text2);max-width:580px;line-height:1.7;}
+.hmeta{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap;}
+.hm{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text2);}
+.hm span,.hm a{color:var(--lime);}
+.hm a{text-decoration:none;}
+.hm a:hover{text-decoration:underline;}
+
+/* ── PROGRESS ── */
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:48px;}
+.prow{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:8px;}
+.pbar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--nodejs),var(--emerald));border-radius:99px;width:100%;}
+
+/* ── SECTIONS ── */
+.sec{margin-bottom:64px;scroll-margin-top:24px;}
+.snum{font-family:var(--mono);font-size:11px;color:var(--nodejs);letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.snum-badges{display:flex;gap:6px;}
+.sbadge{font-family:var(--mono);font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase;}
+.sbadge.new{background:rgba(16,185,129,.1);color:var(--emerald);border:1px solid rgba(16,185,129,.28);}
+.sbadge.adv{background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.28);}
+.sbadge.mid{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
+.sec h2{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.2;margin-bottom:18px;}
+p{margin-bottom:14px;color:var(--text2);}
+strong{color:var(--text);font-weight:500;}
+
+/* ── CALLOUT BOXES ── */
+.box{border-left:3px solid;border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0;background:var(--bg2);}
+.box.em{border-color:var(--emerald);}
+.box.in{border-color:var(--indigo);}
+.box.am{border-color:var(--amber);}
+.box.sk{border-color:var(--sky);}
+.box.ro{border-color:var(--rose);}
+.box.nd{border-color:var(--nodejs);}
+.bxt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;}
+.box.em .bxt{color:var(--emerald);}
+.box.in .bxt{color:var(--indigo);}
+.box.am .bxt{color:var(--amber);}
+.box.sk .bxt{color:var(--sky);}
+.box.ro .bxt{color:var(--rose);}
+.box.nd .bxt{color:var(--nodejs);}
+.box p{margin:0;font-size:14px;line-height:1.65;}
+
+/* ── INSIGHT ── */
+.insight{background:linear-gradient(135deg,#0d0b1e 0%,#060c08 100%);border:1px solid var(--indigo);border-radius:12px;padding:18px 20px;margin:20px 0;}
+.insight h4{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px;}
+.insight p{color:var(--text2);font-size:13.5px;margin:0;line-height:1.65;}
+
+/* ── CODE BLOCKS ── */
+.cb{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin:20px 0;overflow:hidden;}
+.cb-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg3);}
+.cb-lang{font-family:var(--mono);font-size:10px;color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;}
+.dots{display:flex;gap:5px;}
+.dot{width:8px;height:8px;border-radius:50%;}
+.dot:nth-child(1){background:rgba(244,63,94,.4);}
+.dot:nth-child(2){background:rgba(245,158,11,.4);}
+.dot:nth-child(3){background:rgba(16,185,129,.4);}
+pre{padding:20px;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:#b5b0a8;white-space:pre-wrap;word-break:break-word;}
+code{font-family:var(--mono);font-size:12px;background:var(--bg3);border:1px solid var(--border);padding:1px 6px;border-radius:4px;color:var(--emerald);}
+.ck{color:var(--indigo);}
+.cf{color:var(--emerald);}
+.cs{color:var(--amber);}
+.cn{color:#fb923c;}
+.ct{color:var(--sky);}
+.cc{color:#47443d;font-style:italic;}
+.cg{color:#4ade80;}
+.cr{color:var(--rose);}
+
+/* ── TABLE ── */
+.tw{overflow-x:auto;margin:18px 0;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);border-bottom:1px solid var(--border2);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.55;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--bg2);}
+td strong{color:var(--text);}
+td code{font-size:11px;}
+
+/* ── CHAPTER DIVIDERS ── */
+.ch-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin:52px 0 24px;display:flex;align-items:center;gap:16px;}
+.ch-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── POINT LIST ── */
+.pts{list-style:none;padding:0;margin:10px 0;}
+.pts li{display:flex;gap:10px;padding:7px 0;font-size:14px;color:var(--text2);border-bottom:1px solid var(--border);line-height:1.6;}
+.pts li:last-child{border-bottom:none;}
+.pts li::before{content:'▸';color:var(--sky);flex-shrink:0;font-size:11px;margin-top:3px;}
+
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+
+/* ── MOBILE ── */
+.mob-nav{display:none;}
+@media(max-width:768px){
+  .mob-nav{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:10px 14px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+  .mob-nav-left,.mob-nav-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .mob-btn{font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);white-space:nowrap;transition:color .15s;}
+  .mob-btn:hover{color:var(--text);}
+  .mob-btn--accent{color:var(--nodejs);border-color:var(--nodejs);}
+  .mob-theme{font-family:var(--mono);font-size:11px;color:var(--text2);padding:5px 10px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;white-space:nowrap;}
+  .sb{display:none;}
+  .main{padding:28px 20px;}
+  .hero h1{font-size:34px;}
+}
+@media print{.sb{display:none;}body{background:white;color:black;}}
+</style>
+</head>
+<body>
+
+<!-- ── Mobile top bar ── -->
+<header class="mob-nav" aria-label="Mobile navigation">
+  <div class="mob-nav-left">
+    <a href="index.html" class="mob-btn">&#8962; Home</a>
+    <a href="nodejs-learning.html" class="mob-btn">Node.js</a>
+    <a href="interview-nodejs.html" class="mob-btn mob-btn--accent">&#8592; Q&amp;A</a>
+  </div>
+  <div class="mob-nav-right">
+    <button type="button" class="mob-theme" data-theme-toggle aria-label="Switch theme">&#9788; Theme</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sb">
+  <a href="index.html" class="sb-home">&#8592; Home</a>
+  <a href="nodejs-learning.html" class="sb-home">&#8592; Node.js track</a>
+  <button type="button" class="theme-toggle theme-toggle--sb" data-theme-toggle aria-pressed="false" aria-label="Switch theme"><span class="theme-toggle__icon" aria-hidden="true">&#9728;</span><span class="theme-toggle__text">Light</span></button>
+  <div class="sb-top">
+    <div class="sb-badge">NODE.JS</div>
+    <h1>Technical Q&amp;A</h1>
+    <p>15 topics &middot; 5 chapters</p>
+  </div>
+
+  <div class="nav-s">
+    <div class="nav-lbl">Ch 1 &mdash; Runtime</div>
+    <a class="ni active" href="#t1"><div class="ndot"></div>T1 &middot; Event loop &amp; phases</a>
+    <a class="ni" href="#t2"><div class="ndot"></div>T2 &middot; nextTick vs setImmediate</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 2 &mdash; Modules &amp; Errors</div>
+    <a class="ni" href="#t3"><div class="ndot"></div>T3 &middot; CommonJS vs ESM</a>
+    <a class="ni" href="#t4"><div class="ndot"></div>T4 &middot; Error handling</a>
+    <a class="ni" href="#t5"><div class="ndot"></div>T5 &middot; EventEmitter &amp; leaks</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 3 &mdash; I/O &amp; Concurrency</div>
+    <a class="ni" href="#t6"><div class="ndot"></div>T6 &middot; Streams &amp; backpressure</a>
+    <a class="ni" href="#t7"><div class="ndot"></div>T7 &middot; Clustering</a>
+    <a class="ni" href="#t8"><div class="ndot"></div>T8 &middot; Worker threads vs child process</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 4 &mdash; Express &amp; Security</div>
+    <a class="ni" href="#t9"><div class="ndot"></div>T9 &middot; Middleware &amp; next()</a>
+    <a class="ni" href="#t10"><div class="ndot"></div>T10 &middot; Auth &amp; JWT</a>
+    <a class="ni" href="#t11"><div class="ndot"></div>T11 &middot; API security</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 5 &mdash; Performance &amp; Prod</div>
+    <a class="ni" href="#t12"><div class="ndot"></div>T12 &middot; Performance optimisation</a>
+    <a class="ni" href="#t13"><div class="ndot"></div>T13 &middot; WebSockets &amp; Socket.io</a>
+    <a class="ni" href="#t14"><div class="ndot"></div>T14 &middot; Design patterns</a>
+    <a class="ni" href="#t15"><div class="ndot"></div>T15 &middot; Production structure</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 6 &mdash; V8 &amp; Memory</div>
+    <a class="ni" href="#t16"><div class="ndot"></div>T16 &middot; V8 internals &amp; GC</a>
+    <a class="ni" href="#t17"><div class="ndot"></div>T17 &middot; Memory profiling &amp; diagnostics</a>
+    <a class="ni" href="#t18"><div class="ndot"></div>T18 &middot; libuv thread pool</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 7 &mdash; Async &amp; Streams Depth</div>
+    <a class="ni" href="#t19"><div class="ndot"></div>T19 &middot; Async patterns depth</a>
+    <a class="ni" href="#t20"><div class="ndot"></div>T20 &middot; Stream internals</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 8 &mdash; Module System &amp; Buffer</div>
+    <a class="ni" href="#t21"><div class="ndot"></div>T21 &middot; require() internals &amp; circular deps</a>
+    <a class="ni" href="#t22"><div class="ndot"></div>T22 &middot; Buffer &amp; zero-copy</a>
+  </div>
+  <div class="nav-s" style="margin-top:4px;">
+    <div class="nav-lbl">Ch 9 &mdash; Security &amp; HTTP Internals</div>
+    <a class="ni" href="#t23"><div class="ndot"></div>T23 &middot; Prototype pollution</a>
+    <a class="ni" href="#t24"><div class="ndot"></div>T24 &middot; HTTP Agent &amp; connection pooling</a>
+    <a class="ni" href="#t25"><div class="ndot"></div>T25 &middot; AsyncLocalStorage</a>
+  </div>
+</nav>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero" id="overview">
+    <div class="htag">Node.js &middot; Interview prep</div>
+    <h1>Technical<br><em>Q&amp;A</em></h1>
+    <p>Short, interview-style answers with comparison tables, code examples, and quick-recall lines &mdash; nine chapters covering runtime internals, V8 memory, async depth, streams, module system, Buffer, prototype pollution, HTTP connection pooling, and AsyncLocalStorage.</p>
+    <div class="hmeta">
+      <div class="hm">&#128172; <span>25 topics &middot; 9 chapters</span></div>
+      <div class="hm">&#127891; <span>Senior SWE level &middot; 6&ndash;7 yrs</span></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="pcard">
+    <div class="prow"><span>Interview prep</span><span>Node.js &mdash; Technical Q&amp;A</span></div>
+    <div class="pbar"><div class="pfill"></div></div>
+    <p style="margin:10px 0 0;font-size:12px;color:var(--text2);font-family:var(--mono);">25 topics &middot; Chapters: Runtime &middot; Modules &middot; I/O &middot; Express &middot; Production &middot; V8 &amp; Memory &middot; Async Depth &middot; Module System &middot; Security</p>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 1 — RUNTIME & EVENT LOOP
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch1">Chapter 1 &mdash; Runtime &amp; Event Loop</div>
+
+  <div class="sec" id="t1">
+    <div class="snum">T1 <span class="snum-badges"><span class="sbadge adv">Core</span></span></div>
+    <h2>Event loop &amp; its six phases &mdash; how Node handles async on a single thread</h2>
+    <p>Node.js is <strong>single-threaded for JavaScript</strong> but handles concurrency via the <strong>event loop</strong>, powered by <strong>libuv</strong> &mdash; a C++ library that offloads I/O to the OS and provides a thread pool for file system and DNS calls. When async work completes, callbacks are <em>queued</em>; the event loop picks them up phase by phase.</p>
+    <div class="tw"><table>
+      <tr><th>#</th><th>Phase</th><th>What runs</th></tr>
+      <tr><td>1</td><td><strong>Timers</strong></td><td><code>setTimeout</code> / <code>setInterval</code> callbacks whose delay has elapsed</td></tr>
+      <tr><td>2</td><td><strong>Pending I/O</strong></td><td>I/O error callbacks deferred from the previous cycle</td></tr>
+      <tr><td>3</td><td><strong>Idle / Prepare</strong></td><td>Internal libuv housekeeping &mdash; not used in app code</td></tr>
+      <tr><td>4</td><td><strong>Poll</strong></td><td>Fetches new I/O events; executes I/O callbacks. The loop <em>waits here</em> if nothing else is scheduled</td></tr>
+      <tr><td>5</td><td><strong>Check</strong></td><td><code>setImmediate</code> callbacks</td></tr>
+      <tr><td>6</td><td><strong>Close callbacks</strong></td><td><code>socket.on('close')</code> and similar close handlers</td></tr>
+    </table></div>
+    <p><strong>Microtasks &mdash; the critical detail:</strong> <code>process.nextTick</code> and Promise callbacks are microtasks. They drain <em>after every phase</em> (and after every individual macrotask) before the loop advances. This gives them higher priority than any macrotask queue.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Priority order</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>console.log(<span class="cs">'1 sync'</span>);
+
+<span class="ck">setTimeout</span>(() => console.log(<span class="cs">'5 setTimeout'</span>), <span class="cn">0</span>);
+<span class="ck">setImmediate</span>(() => console.log(<span class="cs">'4 setImmediate'</span>));
+<span class="ck">Promise</span>.resolve().then(() => console.log(<span class="cs">'3 Promise'</span>));
+process.nextTick(() => console.log(<span class="cs">'2 nextTick'</span>));
+
+console.log(<span class="cs">'1 sync end'</span>);
+<span class="cc">// Output: 1 sync → 1 sync end → 2 nextTick → 3 Promise → 4 setImmediate → 5 setTimeout</span></pre></div>
+    <div class="box nd"><div class="bxt">Say this in the interview</div><p>"Node uses libuv to offload I/O so the single JS thread is never blocked <em>waiting</em>. The event loop has 6 phases &mdash; Poll is where it waits for I/O. Microtasks like <code>process.nextTick</code> and Promises are drained after <strong>every</strong> phase before moving forward, giving them higher priority than timers or setImmediate."</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Call stack → nextTick → Promises → setImmediate → setTimeout. The Poll phase is where Node blocks waiting for I/O when idle. libuv = C++ layer that makes the single thread non-blocking.</p></div>
+  </div>
+
+  <div class="sec" id="t2">
+    <div class="snum">T2</div>
+    <h2><code>process.nextTick()</code> vs <code>setImmediate()</code> &mdash; when to use each</h2>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th><code>process.nextTick()</code></th><th><code>setImmediate()</code></th></tr>
+      <tr><td><strong>Queue</strong></td><td>nextTick queue (microtask)</td><td>Check phase (macrotask)</td></tr>
+      <tr><td><strong>When runs</strong></td><td>After current op, <em>before</em> the loop moves to the next phase</td><td>Next iteration &mdash; Check phase, after I/O callbacks</td></tr>
+      <tr><td><strong>Priority</strong></td><td>Higher &mdash; fires before <code>Promise.then</code> when both queued</td><td>Lower</td></tr>
+      <tr><td><strong>Event loop starve risk</strong></td><td>Yes &mdash; recursive use blocks all I/O indefinitely</td><td>Safe for recursive use</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── Use nextTick: emit event post-constructor so listeners can attach first ──</span>
+<span class="ck">function</span> <span class="cf">MyEmitter</span>() {
+  EventEmitter.call(<span class="ck">this</span>);
+  process.nextTick(() => <span class="ck">this</span>.emit(<span class="cs">'ready'</span>)); <span class="cc">// constructor finishes first</span>
+}
+
+<span class="cc">// ── Use setImmediate: chunk CPU-heavy work so I/O still gets turns ──</span>
+<span class="ck">function</span> <span class="cf">heavyTask</span>(items) {
+  <span class="ck">if</span> (!items.length) <span class="ck">return</span>;
+  processItem(items.shift());
+  <span class="ck">setImmediate</span>(() => <span class="cf">heavyTask</span>(items)); <span class="cc">// yields to I/O between chunks</span>
+}</pre></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>nextTick</code> fires before the loop moves to the next phase &mdash; recursive use starves I/O. Use <code>setImmediate</code> for chunking CPU work. Use <code>nextTick</code> to emit events post-constructor so callers can attach listeners before the event fires.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 2 — MODULES & ERROR HANDLING
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch2">Chapter 2 &mdash; Modules &amp; Error Handling</div>
+
+  <div class="sec" id="t3">
+    <div class="snum">T3</div>
+    <h2>CommonJS (<code>require</code>) vs ES Modules (<code>import/export</code>) &mdash; key differences and production choice</h2>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>CommonJS (CJS)</th><th>ES Modules (ESM)</th></tr>
+      <tr><td><strong>Syntax</strong></td><td><code>require()</code> / <code>module.exports</code></td><td><code>import</code> / <code>export</code></td></tr>
+      <tr><td><strong>Loading</strong></td><td>Synchronous</td><td>Asynchronous</td></tr>
+      <tr><td><strong>Resolution</strong></td><td>Runtime &mdash; dynamic</td><td>Parse time &mdash; static</td></tr>
+      <tr><td><strong>Tree shaking</strong></td><td>Not possible</td><td>Supported by bundlers</td></tr>
+      <tr><td><strong><code>__dirname</code></strong></td><td>Available</td><td>Must use <code>import.meta.url</code></td></tr>
+      <tr><td><strong>Default in Node.js</strong></td><td>Yes</td><td>Requires <code>"type":"module"</code> in package.json</td></tr>
+      <tr><td><strong>Top-level await</strong></td><td>Not supported</td><td>Supported</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Interop gotchas</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── __dirname in ESM ──</span>
+<span class="ck">import</span> { fileURLToPath } <span class="ck">from</span> <span class="cs">'url'</span>;
+<span class="ck">import</span> { dirname }       <span class="ck">from</span> <span class="cs">'path'</span>;
+<span class="ck">const</span> __filename = fileURLToPath(<span class="ck">import</span>.meta.url);
+<span class="ck">const</span> __dirname  = dirname(__filename);
+
+<span class="cc">// ── ESM CAN import CJS ──</span>
+<span class="ck">import</span> pkg <span class="ck">from</span> <span class="cs">'./cjs-module.js'</span>; <span class="cg">// ✓</span>
+
+<span class="cc">// ── CJS CANNOT require() ESM ──</span>
+<span class="ck">const</span> esm = require(<span class="cs">'./esm.mjs'</span>);  <span class="cr">// ✗ throws ERR_REQUIRE_ESM</span>
+
+<span class="cc">// ── CJS workaround: dynamic import ──</span>
+(<span class="ck">async</span> () => {
+  <span class="ck">const</span> esm = <span class="ck">await import</span>(<span class="cs">'./esm.mjs'</span>); <span class="cg">// ✓</span>
+})();</pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>CJS is runtime-dynamic (no tree shaking). ESM is statically analysable (bundlers can dead-code-eliminate). CJS <em>cannot</em> <code>require()</code> an ESM file &mdash; use dynamic <code>import()</code>. For new backends, CJS is still safer for ecosystem compatibility. Libraries should ship both as dual packages with <code>exports</code> in package.json.</p></div>
+  </div>
+
+  <div class="sec" id="t4">
+    <div class="snum">T4 <span class="snum-badges"><span class="sbadge adv">Critical</span></span></div>
+    <h2>Error handling &mdash; operational vs programmer errors, async patterns, production handlers</h2>
+    <p><strong>Two classes to keep separate:</strong> <em>Operational errors</em> (expected &mdash; 404, validation failures, network timeouts) vs <em>Programmer errors</em> (bugs &mdash; <code>undefined.property</code>, wrong type). Handle operational errors gracefully; for programmer errors, log, alert, and <strong>restart the process</strong>.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Custom error + Express pipeline</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── 1. Custom AppError class ──</span>
+<span class="ck">class</span> AppError <span class="ck">extends</span> Error {
+  constructor(message, statusCode) {
+    <span class="ck">super</span>(message);
+    <span class="ck">this</span>.statusCode    = statusCode;
+    <span class="ck">this</span>.isOperational = <span class="ck">true</span>;
+    Error.captureStackTrace(<span class="ck">this</span>, <span class="ck">this</span>.constructor);
+  }
+}
+
+<span class="cc">// ── 2. Async wrapper — catches thrown errors and passes to next(err) ──</span>
+<span class="ck">const</span> asyncHandler = (fn) => (req, res, next) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+router.get(<span class="cs">'/user/:id'</span>, asyncHandler(<span class="ck">async</span> (req, res) => {
+  <span class="ck">const</span> user = <span class="ck">await</span> User.findById(req.params.id);
+  <span class="ck">if</span> (!user) <span class="ck">throw new</span> AppError(<span class="cs">'User not found'</span>, <span class="cn">404</span>);
+  res.json(user);
+}));
+
+<span class="cc">// ── 3. Express error middleware — exactly 4 params, registered last ──</span>
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || <span class="cn">500</span>).json({
+    status:  <span class="cs">'error'</span>,
+    message: err.isOperational ? err.message : <span class="cs">'Something went wrong'</span>
+  });
+});
+
+<span class="cc">// ── 4. Global handlers — production critical ──</span>
+process.on(<span class="cs">'unhandledRejection'</span>, (reason) => {
+  console.error(<span class="cs">'Unhandled Rejection:'</span>, reason);
+  server.close(() => process.exit(<span class="cn">1</span>)); <span class="cc">// graceful shutdown</span>
+});
+
+process.on(<span class="cs">'uncaughtException'</span>, (err) => {
+  console.error(<span class="cs">'Uncaught Exception:'</span>, err);
+  process.exit(<span class="cn">1</span>); <span class="cc">// MUST exit — process state is unknown</span>
+});</pre></div>
+    <div class="box am"><div class="bxt">Why always process.exit(1) on uncaughtException</div><p>After an uncaught exception the process heap may be in a corrupt state &mdash; open file handles, half-written data, stale closures. Continuing to serve requests risks silently wrong behaviour. Exit immediately; let PM2 or Kubernetes restart a clean instance within seconds.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>uncaughtException</code> = exit immediately. <code>unhandledRejection</code> = graceful shutdown (finish in-flight reqs). Express error handler needs exactly 4 params &mdash; Express uses function arity to detect it. <code>asyncHandler</code> wrapper removes the need for try/catch in every route.</p></div>
+  </div>
+
+  <div class="sec" id="t5">
+    <div class="snum">T5</div>
+    <h2>EventEmitter &mdash; Observer pattern, use cases, and memory leak prevention</h2>
+    <p>EventEmitter implements the <strong>Observer / PubSub pattern</strong>. It is the backbone of Node.js &mdash; streams, HTTP servers, and most core modules extend EventEmitter. Default max listeners per event = <strong>10</strong>; exceeding that prints a memory leak warning.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; EventEmitter &amp; leak patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> EventEmitter = require(<span class="cs">'events'</span>);
+
+<span class="ck">class</span> Database <span class="ck">extends</span> EventEmitter {
+  connect() { setTimeout(() => <span class="ck">this</span>.emit(<span class="cs">'connect'</span>, { status: <span class="cs">'ok'</span> }), <span class="cn">1000</span>); }
+}
+<span class="ck">const</span> db = <span class="ck">new</span> Database();
+db.on(<span class="cs">'connect'</span>, info => console.log(<span class="cs">'Connected:'</span>, info));
+db.connect();
+
+<span class="cc">// ── Memory leak: new listener added on every request ──</span>
+<span class="cr">// ✗ 1 000 requests = 1 000 listeners — MaxListeners warning fires</span>
+app.get(<span class="cs">'/data'</span>, (req, res) => {
+  emitter.on(<span class="cs">'data'</span>, data => res.json(data));
+});
+
+<span class="cc">// ── Fix: once() auto-removes after first fire ──</span>
+app.get(<span class="cs">'/data'</span>, (req, res) => {
+  emitter.once(<span class="cs">'data'</span>, data => res.json(data)); <span class="cg">// ✓</span>
+});
+
+<span class="cc">// ── Always clean up in class lifecycle ──</span>
+<span class="ck">class</span> Connection {
+  start() {
+    <span class="ck">this</span>.handler = data => <span class="ck">this</span>.process(data);
+    globalEmitter.on(<span class="cs">'data'</span>, <span class="ck">this</span>.handler);
+  }
+  stop() { globalEmitter.off(<span class="cs">'data'</span>, <span class="ck">this</span>.handler); } <span class="cc">// ✓</span>
+}</pre></div>
+    <div class="tw"><table>
+      <tr><th>Method</th><th>Description</th></tr>
+      <tr><td><code>.on(event, fn)</code></td><td>Add persistent listener</td></tr>
+      <tr><td><code>.once(event, fn)</code></td><td>One-time listener &mdash; auto-removed after first fire</td></tr>
+      <tr><td><code>.off(event, fn)</code></td><td>Remove a specific listener</td></tr>
+      <tr><td><code>.emit(event, ...args)</code></td><td>Trigger event synchronously</td></tr>
+      <tr><td><code>.removeAllListeners(event)</code></td><td>Clear all listeners for an event</td></tr>
+      <tr><td><code>.listenerCount(event)</code></td><td>Debug &mdash; count active listeners</td></tr>
+      <tr><td><code>.setMaxListeners(n)</code></td><td>Raise the warning threshold (default 10)</td></tr>
+    </table></div>
+    <div class="insight"><h4>Quick recall</h4><p>Always use <code>once()</code> for one-time events. Always call <code>.off()</code> in destroy/stop methods. Monitor <code>listenerCount()</code> in long-running processes. For cross-service events, prefer RabbitMQ or Kafka over in-process EventEmitter.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 3 — I/O, STREAMS & CONCURRENCY
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch3">Chapter 3 &mdash; I/O, Streams &amp; Concurrency</div>
+
+  <div class="sec" id="t6">
+    <div class="snum">T6 <span class="snum-badges"><span class="sbadge adv">Critical</span></span></div>
+    <h2>Streams &mdash; four types, <code>pipe()</code>, and backpressure</h2>
+    <p>Streams process data <strong>chunk by chunk</strong> rather than loading everything into memory. Essential for large files, video streaming, and real-time data pipelines. <strong>Backpressure</strong> = when a Writable cannot consume data as fast as a Readable produces it. <code>pipe()</code> handles this automatically by pausing the readable when the writable's internal buffer is full and resuming on the <code>drain</code> event.</p>
+    <div class="tw"><table>
+      <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+      <tr><td><strong>Readable</strong></td><td>Produce data in chunks</td><td><code>fs.createReadStream()</code></td></tr>
+      <tr><td><strong>Writable</strong></td><td>Consume data in chunks</td><td><code>fs.createWriteStream()</code></td></tr>
+      <tr><td><strong>Duplex</strong></td><td>Both readable and writable</td><td><code>net.Socket</code></td></tr>
+      <tr><td><strong>Transform</strong></td><td>Duplex that modifies data in-flight</td><td><code>zlib.createGzip()</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; pipe() vs manual backpressure</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> fs   = require(<span class="cs">'fs'</span>);
+<span class="ck">const</span> zlib = require(<span class="cs">'zlib'</span>);
+
+<span class="cr">// ✗ Without streams — loads entire file into memory</span>
+<span class="ck">const</span> data = fs.readFileSync(<span class="cs">'bigfile.txt'</span>);
+
+<span class="cg">// ✓ pipe() — memory-efficient, backpressure handled automatically</span>
+fs.createReadStream(<span class="cs">'bigfile.txt'</span>)
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream(<span class="cs">'bigfile.gz'</span>));
+
+<span class="cc">// ── Manual backpressure (what pipe does internally) ──</span>
+<span class="ck">const</span> readable = fs.createReadStream(<span class="cs">'huge.file'</span>);
+<span class="ck">const</span> writable = fs.createWriteStream(<span class="cs">'output.file'</span>);
+
+readable.on(<span class="cs">'data'</span>, (chunk) => {
+  <span class="ck">const</span> canContinue = writable.write(chunk);
+  <span class="ck">if</span> (!canContinue) {
+    readable.pause();                              <span class="cc">// slow down source</span>
+    writable.once(<span class="cs">'drain'</span>, () => readable.resume()); <span class="cc">// resume when ready</span>
+  }
+});
+readable.on(<span class="cs">'end'</span>, () => writable.end());</pre></div>
+    <div class="box em"><div class="bxt">Production preference</div><p>Prefer <code>stream.pipeline()</code> from <code>node:stream/promises</code> over <code>pipe()</code> in production &mdash; it properly propagates errors and cleans up all streams in the chain when any one fails. <code>pipe()</code> silently leaves streams open on error.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Streams = chunk-by-chunk, no buffering everything. Backpressure = fast source overwhelms slow sink. <code>pipe()</code> handles it: pause on full buffer, resume on drain. Use <code>pipeline()</code> in production for correct error propagation.</p></div>
+  </div>
+
+  <div class="sec" id="t7">
+    <div class="snum">T7</div>
+    <h2>Clustering &mdash; how it works and production usage with PM2</h2>
+    <p>Node.js uses <strong>one CPU core</strong> by default. Clustering forks multiple worker processes &mdash; typically one per core &mdash; all listening on the same port. The OS distributes connections across workers via round-robin. Each worker is an <strong>independent Node.js process</strong> with its own V8 heap and event loop; they communicate with the master via <strong>IPC</strong>.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Cluster module</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> cluster = require(<span class="cs">'cluster'</span>);
+<span class="ck">const</span> http    = require(<span class="cs">'http'</span>);
+<span class="ck">const</span> os      = require(<span class="cs">'os'</span>);
+
+<span class="ck">if</span> (cluster.isMaster) {
+  console.log(<span class="cs">`Master ${process.pid} running`</span>);
+  os.cpus().forEach(() => cluster.fork()); <span class="cc">// one worker per CPU core</span>
+
+  cluster.on(<span class="cs">'exit'</span>, (worker) => {
+    console.log(<span class="cs">`Worker ${worker.process.pid} died — restarting`</span>);
+    cluster.fork(); <span class="cc">// auto-respawn</span>
+  });
+} <span class="ck">else</span> {
+  http.createServer((req, res) => res.end(<span class="cs">`Worker: ${process.pid}`</span>)).listen(<span class="cn">3000</span>);
+}
+
+<span class="cc">// ── PM2 abstracts clustering in production ──</span>
+<span class="cc">// pm2 start app.js -i max      → fork one worker per CPU</span>
+<span class="cc">// pm2 reload app               → zero-downtime rolling reload</span>
+<span class="cc">// pm2 logs                     → aggregate logs from all workers</span></pre></div>
+    <div class="box sk"><div class="bxt">State sharing across workers</div><p>Each worker has its own memory. Never store session state, cache, or counters in-process &mdash; it will differ across workers. Move shared state to <strong>Redis</strong>. This includes Socket.io in-memory rooms, rate limiting counters, and distributed locks.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Clustering = one process per core, same port, OS round-robins connections. PM2 abstracts this + handles respawn + zero-downtime reload. Workers share nothing in memory &mdash; Redis for shared state.</p></div>
+  </div>
+
+  <div class="sec" id="t8">
+    <div class="snum">T8</div>
+    <h2>Worker Threads vs Child Process vs Clustering &mdash; decision guide</h2>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>Worker Threads</th><th>Child Process</th><th>Clustering</th></tr>
+      <tr><td><strong>Use case</strong></td><td>CPU-bound JavaScript</td><td>External programs / shell</td><td>Scale HTTP servers</td></tr>
+      <tr><td><strong>Memory</strong></td><td>Shared via SharedArrayBuffer</td><td>Separate process</td><td>Separate process</td></tr>
+      <tr><td><strong>Overhead</strong></td><td>Low</td><td>High</td><td>Medium</td></tr>
+      <tr><td><strong>Communication</strong></td><td><code>postMessage</code> / SharedArrayBuffer</td><td>IPC / stdin / stdout</td><td>IPC</td></tr>
+      <tr><td><strong>Best for</strong></td><td>Image processing, crypto, ML inference</td><td>Python scripts, FFmpeg, shell commands</td><td>Multi-core HTTP</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Worker threads &amp; child process</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── Worker Threads: CPU-heavy JS ──</span>
+<span class="ck">const</span> { Worker, isMainThread, parentPort, workerData } = require(<span class="cs">'worker_threads'</span>);
+
+<span class="ck">if</span> (isMainThread) {
+  <span class="ck">const</span> w = <span class="ck">new</span> Worker(__filename, { workerData: { nums: [<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>] } });
+  w.on(<span class="cs">'message'</span>, result => console.log(result));
+} <span class="ck">else</span> {
+  parentPort.postMessage(workerData.nums.reduce((a, b) => a + b, <span class="cn">0</span>));
+}
+
+<span class="cc">// ── Child Process: exec / spawn / fork ──</span>
+<span class="ck">const</span> { exec, spawn, fork } = require(<span class="cs">'child_process'</span>);
+
+exec(<span class="cs">'ls -la'</span>, (err, stdout) => console.log(stdout));   <span class="cc">// buffered output</span>
+<span class="ck">const</span> ls = spawn(<span class="cs">'ls'</span>, [<span class="cs">'-la'</span>]);                        <span class="cc">// streaming output</span>
+ls.stdout.on(<span class="cs">'data'</span>, chunk => console.log(chunk.toString()));
+
+<span class="ck">const</span> child = fork(<span class="cs">'./worker.js'</span>);                     <span class="cc">// Node child + IPC channel</span>
+child.send({ task: <span class="cs">'run'</span> });
+child.on(<span class="cs">'message'</span>, result => console.log(result));</pre></div>
+    <div class="tw"><table>
+      <tr><th>Need</th><th>Use</th></tr>
+      <tr><td>Scale HTTP across CPU cores</td><td>Clustering / PM2</td></tr>
+      <tr><td>CPU-heavy JavaScript (no DOM)</td><td>Worker Threads</td></tr>
+      <tr><td>Run shell / Python / FFmpeg</td><td>Child Process (<code>spawn</code> / <code>exec</code>)</td></tr>
+      <tr><td>Node.js child with two-way messaging</td><td>Child Process (<code>fork</code>)</td></tr>
+      <tr><td>Shared memory between threads</td><td>Worker Threads + SharedArrayBuffer</td></tr>
+    </table></div>
+    <div class="insight"><h4>Quick recall</h4><p>These three solve different problems. In a real app you might use all three: PM2 clustering for HTTP, Worker Threads for image resizing, Child Process spawn for calling a Python ML model. The rule: never block the event loop with CPU work.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 4 — EXPRESS, AUTH & SECURITY
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch4">Chapter 4 &mdash; Express, Auth &amp; Security</div>
+
+  <div class="sec" id="t9">
+    <div class="snum">T9</div>
+    <h2>Middleware in Express &mdash; types, order, and the silent <code>next()</code> bug</h2>
+    <p>Middleware is a function with access to <code>req</code>, <code>res</code>, <code>next</code>. Every request passes through a pipeline. <strong>Order of <code>app.use()</code> calls is critical.</strong></p>
+    <ul class="pts">
+      <li><code>next()</code> &mdash; pass control to next middleware in chain</li>
+      <li><code>next(err)</code> &mdash; skip regular middleware, jump to error handler</li>
+      <li>Not calling <code>next()</code> &mdash; request hangs silently with no response or error (most common silent bug)</li>
+    </ul>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; All middleware types &amp; correct stack order</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── 1. Application-level ──</span>
+app.use((req, res, next) => {
+  console.log(<span class="cs">`${req.method} ${req.url}`</span>);
+  next(); <span class="cc">// must call next or request hangs forever</span>
+});
+
+<span class="cc">// ── 2. Router-level ──</span>
+<span class="ck">const</span> router = express.Router();
+router.use((req, res, next) => { next(); }); <span class="cc">// scoped to this router only</span>
+router.get(<span class="cs">'/users'</span>, handler);
+app.use(<span class="cs">'/api/v1'</span>, router);
+
+<span class="cc">// ── 3. Error handler — exactly 4 params (Express checks function arity) ──</span>
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || <span class="cn">500</span>).json({ message: err.message });
+});
+
+<span class="cc">// ── Production stack: ORDER MATTERS ──</span>
+app.use(helmet());                         <span class="cc">// 1. Security headers first</span>
+app.use(cors(corsOptions));                <span class="cc">// 2. CORS</span>
+app.use(morgan(<span class="cs">'combined'</span>));             <span class="cc">// 3. Logging</span>
+app.use(express.json({ limit: <span class="cs">'10kb'</span> })); <span class="cc">// 4. Body parsing with size limit</span>
+app.use(<span class="cs">'/api'</span>, router);                  <span class="cc">// 5. Routes</span>
+app.use(errorHandler);                     <span class="cc">// 6. Error handler LAST</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Security headers first, error handler last. Error middleware needs exactly 4 params &mdash; Express uses the arity to detect it. Forgetting <code>next()</code> is the most common silent bug. For async route handlers always wrap in <code>asyncHandler</code> or the error never reaches the error middleware.</p></div>
+  </div>
+
+  <div class="sec" id="t10">
+    <div class="snum">T10 <span class="snum-badges"><span class="sbadge adv">Critical</span></span></div>
+    <h2>Authentication &amp; Authorization &mdash; JWT, refresh tokens, RBAC, secure production setup</h2>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>Session-based</th><th>JWT-based</th></tr>
+      <tr><td><strong>State</strong></td><td>Stateful &mdash; server stores session</td><td>Stateless &mdash; client stores token</td></tr>
+      <tr><td><strong>Storage</strong></td><td>Redis / DB</td><td>Client (localStorage or cookie)</td></tr>
+      <tr><td><strong>Scalability</strong></td><td>Needs shared store across instances</td><td>Scales easily &mdash; any instance can verify</td></tr>
+      <tr><td><strong>Revocation</strong></td><td>Easy &mdash; delete session record</td><td>Hard &mdash; need a token blacklist or short TTL</td></tr>
+      <tr><td><strong>Best for</strong></td><td>Monoliths / SSR apps</td><td>APIs / microservices</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; JWT + refresh token + RBAC</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── Login: issue access + refresh token ──</span>
+app.post(<span class="cs">'/login'</span>, <span class="ck">async</span> (req, res) => {
+  <span class="ck">const</span> user  = <span class="ck">await</span> User.findOne({ email: req.body.email });
+  <span class="ck">const</span> valid = <span class="ck">await</span> bcrypt.compare(req.body.password, user.password);
+  <span class="ck">if</span> (!valid) <span class="ck">return</span> res.status(<span class="cn">401</span>).json({ message: <span class="cs">'Invalid credentials'</span> });
+
+  <span class="ck">const</span> accessToken  = jwt.sign({ userId: user.id, role: user.role },
+    process.env.JWT_SECRET, { expiresIn: <span class="cs">'15m'</span> });   <span class="cg">// short-lived</span>
+  <span class="ck">const</span> refreshToken = jwt.sign({ userId: user.id },
+    process.env.JWT_REFRESH_SECRET, { expiresIn: <span class="cs">'7d'</span> });
+
+  <span class="ck">await</span> User.update({ refreshToken }, { where: { id: user.id } }); <span class="cc">// store for revocation</span>
+  res.cookie(<span class="cs">'refreshToken'</span>, refreshToken,
+    { httpOnly: <span class="ck">true</span>, secure: <span class="ck">true</span>, sameSite: <span class="cs">'strict'</span> }); <span class="cg">// inaccessible to JS</span>
+  res.json({ accessToken });
+});
+
+<span class="cc">// ── Auth middleware ──</span>
+<span class="ck">const</span> authenticate = (req, res, next) => {
+  <span class="ck">const</span> token = req.headers.authorization?.split(<span class="cs">' '</span>)[<span class="cn">1</span>];
+  <span class="ck">if</span> (!token) <span class="ck">return</span> res.status(<span class="cn">401</span>).json({ message: <span class="cs">'No token'</span> });
+  <span class="ck">try</span> {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } <span class="ck">catch</span> (err) {
+    res.status(<span class="cn">401</span>).json({
+      message: err.name === <span class="cs">'TokenExpiredError'</span> ? <span class="cs">'Token expired'</span> : <span class="cs">'Invalid token'</span>
+    });
+  }
+};
+
+<span class="cc">// ── RBAC authorization ──</span>
+<span class="ck">const</span> authorize = (...roles) => (req, res, next) => {
+  <span class="ck">if</span> (!roles.includes(req.user.role))
+    <span class="ck">return</span> res.status(<span class="cn">403</span>).json({ message: <span class="cs">'Forbidden'</span> });
+  next();
+};
+app.delete(<span class="cs">'/users/:id'</span>, authenticate, authorize(<span class="cs">'admin'</span>), handler);</pre></div>
+    <div class="box sk"><div class="bxt">Security decisions explained</div><p>Access tokens are short-lived (15 min) to limit the exposure window if stolen. Refresh tokens in <code>httpOnly</code> cookies prevent XSS theft (JavaScript cannot read them). <code>sameSite: strict</code> eliminates most CSRF. Refresh tokens validated against DB = revocable on logout. bcrypt with saltRounds 12, rate limiting on auth endpoints, account lockout after 5 failures.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Access token = short-lived (15 min), in memory. Refresh token = long-lived (7 d), in httpOnly cookie. httpOnly + sameSite:strict = XSS-safe + CSRF-safe. DB-stored refresh token = revocable.</p></div>
+  </div>
+
+  <div class="sec" id="t11">
+    <div class="snum">T11</div>
+    <h2>API security &mdash; rate limiting, XSS, CSRF, SQL injection, DDoS in one stack</h2>
+    <div class="tw"><table>
+      <tr><th>Attack</th><th>What it is</th><th>Defence</th></tr>
+      <tr><td><strong>XSS</strong></td><td>Attacker injects <code>&lt;script&gt;</code> that runs in other users' browsers, stealing cookies/sessions</td><td><code>xss-clean</code> middleware, CSP header via Helmet, <code>httpOnly</code> cookies</td></tr>
+      <tr><td><strong>CSRF</strong></td><td>Malicious site tricks your browser into sending requests to a trusted site using your session cookie</td><td><code>sameSite: strict</code> cookies, CSRF token for session-based auth</td></tr>
+      <tr><td><strong>SQL injection</strong></td><td>Malicious input alters query logic &mdash; drops tables, exfiltrates data</td><td>Parameterized queries / ORM placeholders, never string interpolation</td></tr>
+      <tr><td><strong>NoSQL injection</strong></td><td>Operator injection into MongoDB queries (<code>{ $gt: "" }</code>)</td><td><code>express-mongo-sanitize</code> strips $ and . from inputs</td></tr>
+      <tr><td><strong>DDoS</strong></td><td>Volume of requests overwhelms server; legitimate users can't get through</td><td>Cloudflare, AWS WAF, rate limiting with Redis store</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Production security middleware stack</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── SQL injection: parameterized queries ──</span>
+<span class="cr">// ✗ Vulnerable — string interpolation</span>
+<span class="ck">const</span> q = <span class="cs">`SELECT * FROM users WHERE id = ${req.query.id}`</span>;
+<span class="cg">// ✓ Parameterized</span>
+db.query(<span class="cs">'SELECT * FROM users WHERE id = ?'</span>, [req.query.id]);
+
+<span class="cc">// ── Rate limiting with Redis (distributed, survives restarts) ──</span>
+<span class="ck">const</span> apiLimiter  = rateLimit({ windowMs: <span class="cn">15</span> * <span class="cn">60</span> * <span class="cn">1000</span>, max: <span class="cn">100</span>,
+  store: <span class="ck">new</span> RedisStore({ client: redisClient }) });
+<span class="ck">const</span> authLimiter = rateLimit({ windowMs: <span class="cn">15</span> * <span class="cn">60</span> * <span class="cn">1000</span>, max: <span class="cn">5</span> }); <span class="cc">// strict on auth</span>
+app.use(<span class="cs">'/api'</span>, apiLimiter);
+app.use(<span class="cs">'/api/auth/login'</span>, authLimiter);
+
+<span class="cc">// ── Full middleware security stack (order matters) ──</span>
+app.use(helmet());                         <span class="cc">// 1. CSP, HSTS, X-Frame-Options…</span>
+app.use(cors(corsOptions));                <span class="cc">// 2. Restrict origins</span>
+app.use(mongoSanitize());                  <span class="cc">// 3. NoSQL injection prevention</span>
+app.use(xss());                            <span class="cc">// 4. XSS input sanitisation</span>
+app.use(hpp());                            <span class="cc">// 5. HTTP parameter pollution</span>
+app.use(express.json({ limit: <span class="cs">'10kb'</span> })); <span class="cc">// 6. Body size limit</span>
+app.use(<span class="cs">'/api'</span>, apiLimiter);              <span class="cc">// 7. Rate limiting</span>
+app.use(errorHandler);                     <span class="cc">// 8. Error handler last</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Helmet for headers. Parameterized queries for SQL injection. xss-clean + mongoSanitize for inputs. sameSite:strict for CSRF. Rate limiting with Redis store for distributed brute force. Body size limit (10kb) prevents payload attacks. Cloudflare at the edge for DDoS.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 5 — PERFORMANCE & PRODUCTION
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch5">Chapter 5 &mdash; Performance &amp; Production</div>
+
+  <div class="sec" id="t12">
+    <div class="snum">T12</div>
+    <h2>Performance optimisation &mdash; tools, techniques, and production checklist</h2>
+    <p><strong>Start with measurement, not guessing.</strong> Use Clinic.js to profile, then tackle the biggest wins first.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Key techniques</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── 1. Redis caching for hot data ──</span>
+app.get(<span class="cs">'/users'</span>, <span class="ck">async</span> (req, res) => {
+  <span class="ck">const</span> cached = <span class="ck">await</span> redis.get(<span class="cs">'all_users'</span>);
+  <span class="ck">if</span> (cached) <span class="ck">return</span> res.json(JSON.parse(cached));
+  <span class="ck">const</span> users = <span class="ck">await</span> User.findAll();
+  <span class="ck">await</span> redis.setex(<span class="cs">'all_users'</span>, <span class="cn">3600</span>, JSON.stringify(users));
+  res.json(users);
+});
+
+<span class="cc">// ── 2. Fix N+1 query problem ──</span>
+<span class="cr">// ✗ N+1: separate query per user — 1 + N DB round trips</span>
+<span class="ck">for</span> (<span class="ck">const</span> user <span class="ck">of</span> users) {
+  user.posts = <span class="ck">await</span> Post.findAll({ where: { userId: user.id } });
+}
+<span class="cg">// ✓ Eager loading — single JOIN, one DB round trip</span>
+<span class="ck">const</span> users = <span class="ck">await</span> User.findAll({ include: [{ model: Post }] });
+
+<span class="cc">// ── 3. Worker Threads for CPU tasks — never block event loop ──</span>
+app.get(<span class="cs">'/resize'</span>, (req, res) => {
+  <span class="ck">const</span> worker = <span class="ck">new</span> Worker(<span class="cs">'./resize.js'</span>, { workerData: req.query });
+  worker.on(<span class="cs">'message'</span>, result => res.json({ result }));
+});
+
+<span class="cc">// ── 4. Gzip compression ──</span>
+app.use(compression({ level: <span class="cn">6</span>, threshold: <span class="cn">1024</span> }));</pre></div>
+    <div class="tw"><table>
+      <tr><th>Category</th><th>Action</th></tr>
+      <tr><td><strong>Caching</strong></td><td>Redis for hot data, TTL-based invalidation, cache-aside pattern</td></tr>
+      <tr><td><strong>Database</strong></td><td>Indexes, pagination, eager loading, connection pooling</td></tr>
+      <tr><td><strong>CPU tasks</strong></td><td>Worker Threads &mdash; never block the event loop</td></tr>
+      <tr><td><strong>I/O</strong></td><td>Streams for large files; never <code>readFileSync</code> in request handlers</td></tr>
+      <tr><td><strong>Network</strong></td><td>Gzip compression, HTTP/2, keep-alive connections</td></tr>
+      <tr><td><strong>Scaling</strong></td><td>PM2 cluster mode, horizontal scaling behind a load balancer</td></tr>
+      <tr><td><strong>Profiling</strong></td><td>Clinic.js, <code>--prof</code> V8 flag, Datadog APM, <code>EXPLAIN</code> on slow queries</td></tr>
+    </table></div>
+    <div class="insight"><h4>Quick recall</h4><p>Profile first. Then: Redis cache, fix N+1 queries with eager loading / DataLoader, add DB indexes, move CPU work to Worker Threads, enable gzip. PM2 cluster for multi-core HTTP. Monitor with Datadog or New Relic.</p></div>
+  </div>
+
+  <div class="sec" id="t13">
+    <div class="snum">T13</div>
+    <h2>WebSockets vs HTTP &mdash; Socket.io with auth, rooms, and multi-server scaling</h2>
+    <div class="tw"><table>
+      <tr><th>Feature</th><th>HTTP</th><th>WebSocket</th></tr>
+      <tr><td><strong>Connection</strong></td><td>New connection per request, then closes</td><td>Persistent &mdash; stays open until explicitly closed</td></tr>
+      <tr><td><strong>Direction</strong></td><td>Half-duplex (req → res)</td><td>Full-duplex &mdash; both sides send at any time</td></tr>
+      <tr><td><strong>Overhead</strong></td><td>High &mdash; full HTTP headers on every request</td><td>Low &mdash; single TLS handshake, then framed messages</td></tr>
+      <tr><td><strong>Protocol</strong></td><td><code>http://</code> / <code>https://</code></td><td><code>ws://</code> / <code>wss://</code></td></tr>
+      <tr><td><strong>Use case</strong></td><td>REST APIs, page loads, webhooks</td><td>Chat, live dashboards, games, collaboration</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Socket.io production setup</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> io = <span class="ck">new</span> Server(server, { cors: { origin: <span class="cs">'https://myapp.com'</span> } });
+
+<span class="cc">// ── JWT auth middleware for socket connections ──</span>
+io.use(<span class="ck">async</span> (socket, next) => {
+  <span class="ck">try</span> {
+    socket.user = jwt.verify(socket.handshake.auth.token, process.env.JWT_SECRET);
+    next();
+  } <span class="ck">catch</span> { next(<span class="ck">new</span> Error(<span class="cs">'Auth failed'</span>)); }
+});
+
+io.on(<span class="cs">'connection'</span>, (socket) => {
+  socket.on(<span class="cs">'room:join'</span>,    ({ roomId }) => socket.join(roomId));
+  socket.on(<span class="cs">'message:send'</span>, <span class="ck">async</span> ({ roomId, message }) => {
+    <span class="ck">const</span> saved = <span class="ck">await</span> Message.create({ roomId, message, userId: socket.user.id });
+    io.to(roomId).emit(<span class="cs">'message:receive'</span>, saved);   <span class="cc">// broadcast to room</span>
+  });
+  socket.on(<span class="cs">'typing:start'</span>, ({ roomId }) =>
+    socket.to(roomId).emit(<span class="cs">'typing:show'</span>, { user: socket.user.name }));
+});
+
+<span class="cc">// ── Multi-server scaling: Redis adapter pub/subs events across all instances ──</span>
+<span class="ck">const</span> { createAdapter } = require(<span class="cs">'@socket.io/redis-adapter'</span>);
+io.adapter(createAdapter(pubClient, subClient)); <span class="cg">// ✓ rooms work across all servers</span></pre></div>
+    <div class="tw"><table>
+      <tr><th>Emit command</th><th>Sends to</th></tr>
+      <tr><td><code>socket.emit('e', data)</code></td><td>This client only</td></tr>
+      <tr><td><code>socket.broadcast.emit('e', data)</code></td><td>All clients except sender</td></tr>
+      <tr><td><code>io.emit('e', data)</code></td><td>All connected clients</td></tr>
+      <tr><td><code>io.to(roomId).emit('e', data)</code></td><td>All clients in a room</td></tr>
+      <tr><td><code>socket.to(roomId).emit('e', data)</code></td><td>Room members except sender</td></tr>
+    </table></div>
+    <div class="insight"><h4>Quick recall</h4><p>WebSockets = persistent full-duplex, single handshake. Socket.io adds rooms, namespaces, reconnection, long-polling fallback. Multi-server scaling problem: sockets on different instances can't talk. Fix: Redis adapter pub/subs events across all instances.</p></div>
+  </div>
+
+  <div class="sec" id="t14">
+    <div class="snum">T14</div>
+    <h2>Design patterns in Node.js &mdash; Singleton, Factory, Repository, Dependency Injection</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Core patterns</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── 1. Singleton — Node module caching gives this for free ──</span>
+<span class="ck">class</span> Database {
+  constructor() {
+    <span class="ck">if</span> (Database.instance) <span class="ck">return</span> Database.instance;
+    <span class="ck">this</span>.connection = createConnection(process.env.DB_URL);
+    Database.instance = <span class="ck">this</span>;
+  }
+}
+<span class="cc">// Note: requiring the same module twice always returns the cached export</span>
+
+<span class="cc">// ── 2. Factory — runtime polymorphism without if/else sprawl ──</span>
+<span class="ck">class</span> NotificationFactory {
+  <span class="ck">static</span> create(type) {
+    <span class="ck">const</span> map = { email: EmailNotification, sms: SMSNotification, push: PushNotification };
+    <span class="ck">if</span> (!map[type]) <span class="ck">throw new</span> Error(<span class="cs">`Unknown type: ${type}`</span>);
+    <span class="ck">return new</span> map[type]();
+  }
+}
+NotificationFactory.create(<span class="cs">'email'</span>).send(<span class="cs">'Order confirmed!'</span>);
+
+<span class="cc">// ── 3. Repository — decouple business logic from data layer ──</span>
+<span class="ck">class</span> MongoUserRepository {
+  <span class="ck">async</span> findById(id)     { <span class="ck">return</span> UserModel.findById(id); }
+  <span class="ck">async</span> create(data)     { <span class="ck">return</span> UserModel.create(data); }
+  <span class="ck">async</span> update(id, data)  { <span class="ck">return</span> UserModel.findByIdAndUpdate(id, data, { new: <span class="ck">true</span> }); }
+  <span class="ck">async</span> delete(id)       { <span class="ck">return</span> UserModel.findByIdAndDelete(id); }
+}
+
+<span class="cc">// Service has zero knowledge of MongoDB — trivial to swap or mock ──</span>
+<span class="ck">class</span> UserService {
+  constructor(userRepository) { <span class="ck">this</span>.repo = userRepository; }
+  <span class="ck">async</span> getUser(id) {
+    <span class="ck">const</span> user = <span class="ck">await this</span>.repo.findById(id);
+    <span class="ck">if</span> (!user) <span class="ck">throw new</span> AppError(<span class="cs">'Not found'</span>, <span class="cn">404</span>);
+    <span class="ck">return</span> user;
+  }
+}
+
+<span class="cc">// ── 4. Dependency Injection ──</span>
+<span class="cr">// ✗ Tightly coupled — impossible to unit test without hitting MongoDB</span>
+<span class="ck">class</span> OrderService {
+  constructor() { <span class="ck">this</span>.repo = <span class="ck">new</span> MongoUserRepository(); }
+}
+
+<span class="cg">// ✓ DI — inject dependencies, trivially mockable in tests</span>
+<span class="ck">class</span> OrderService {
+  constructor(userRepo, emailService, logger) {
+    <span class="ck">this</span>.userRepo     = userRepo;
+    <span class="ck">this</span>.emailService = emailService;
+    <span class="ck">this</span>.logger       = logger;
+  }
+}
+<span class="ck">const</span> svc = <span class="ck">new</span> OrderService(mockRepo, mockEmail, mockLogger); <span class="cc">// test</span></pre></div>
+    <div class="box em"><div class="bxt">Repository + DI combination</div><p>Repository keeps business logic completely separate from the data layer &mdash; trivial to swap databases and write unit tests with mocks. Factory handles runtime polymorphism without if/else chains. DI makes constructor dependencies explicit and testable. Node module caching gives you Singletons for free &mdash; just export an instance.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Singleton = module cache. Factory = runtime type map. Repository = data access abstraction, DB-agnostic service layer. DI = inject through constructor, never new inside a class. The combo: Repository + DI = unit-testable services with swappable DB.</p></div>
+  </div>
+
+  <div class="sec" id="t15">
+    <div class="snum">T15 <span class="snum-badges"><span class="sbadge adv">Critical</span></span></div>
+    <h2>Production-ready Node.js app &mdash; structure, env validation, logging, graceful shutdown</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Text &mdash; Folder structure</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>src/
+├── config/
+│   ├── index.js          ← Joi-validated env exports (fail fast on startup)
+│   ├── database.js       ← DB connection singleton
+│   └── redis.js          ← Redis connection
+├── controllers/          ← HTTP only: parse req, call service, send res
+├── services/             ← Business logic — no HTTP, no DB knowledge
+├── repositories/         ← Data access layer — all DB queries live here
+├── models/               ← ORM schemas / Mongoose models
+├── routes/               ← Route definitions — thin, just wires controller
+├── middlewares/          ← auth, error handler, request validator
+├── utils/
+│   ├── logger.js         ← Winston (JSON format for production)
+│   ├── AppError.js       ← Custom error class with isOperational flag
+│   └── catchAsync.js     ← Async error wrapper for route handlers
+├── validators/           ← Joi / Zod schemas for request validation
+├── jobs/                 ← Background jobs (Bull / BullMQ)
+├── app.js                ← Express setup, middleware stack, no DB logic
+└── server.js             ← Entry point: validate env, connect DB, listen</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Env validation + logging + graceful shutdown</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── Validate env on startup — fail fast and loud ──</span>
+<span class="ck">const</span> { error, value: env } = Joi.object({
+  NODE_ENV:   Joi.string().valid(<span class="cs">'development'</span>, <span class="cs">'production'</span>, <span class="cs">'test'</span>).required(),
+  MONGO_URI:  Joi.string().required(),
+  JWT_SECRET: Joi.string().min(<span class="cn">32</span>).required(),
+  PORT:       Joi.number().default(<span class="cn">3000</span>),
+}).unknown().validate(process.env);
+<span class="ck">if</span> (error) <span class="ck">throw new</span> Error(<span class="cs">`Config error: ${error.message}`</span>);
+
+<span class="cc">// ── Winston: structured JSON logging for Datadog / ELK ──</span>
+<span class="ck">const</span> logger = winston.createLogger({
+  level: <span class="cs">'info'</span>,
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
+  transports: [
+    <span class="ck">new</span> winston.transports.Console(),
+    <span class="ck">new</span> winston.transports.File({ filename: <span class="cs">'logs/error.log'</span>, level: <span class="cs">'error'</span> }),
+  ],
+});
+
+<span class="cc">// ── Graceful shutdown: SIGTERM sent by K8s / PM2 on every deploy ──</span>
+<span class="ck">const</span> gracefulShutdown = <span class="ck">async</span> (signal) => {
+  logger.info(<span class="cs">`${signal} received — shutting down`</span>);
+  server.close(<span class="ck">async</span> () => {            <span class="cc">// stop accepting new connections</span>
+    <span class="ck">await</span> mongoose.connection.close(); <span class="cc">// drain in-flight DB ops</span>
+    <span class="ck">await</span> redisClient.quit();
+    process.exit(<span class="cn">0</span>);
+  });
+  setTimeout(() => process.exit(<span class="cn">1</span>), <span class="cn">10_000</span>); <span class="cc">// force-kill after 10s</span>
+};
+process.on(<span class="cs">'SIGTERM'</span>, () => gracefulShutdown(<span class="cs">'SIGTERM'</span>));
+process.on(<span class="cs">'SIGINT'</span>,  () => gracefulShutdown(<span class="cs">'SIGINT'</span>));</pre></div>
+    <div class="tw"><table>
+      <tr><th>Category</th><th>Requirement</th></tr>
+      <tr><td><strong>Structure</strong></td><td>Separate <code>app.js</code> (setup) from <code>server.js</code> (entry); controllers → services → repositories</td></tr>
+      <tr><td><strong>Config</strong></td><td>Joi env validation on startup; fail fast if misconfigured rather than silently misbehave</td></tr>
+      <tr><td><strong>Logging</strong></td><td>Winston with JSON format + timestamp; integrates with Datadog / ELK / CloudWatch</td></tr>
+      <tr><td><strong>Shutdown</strong></td><td>SIGTERM / SIGINT handlers; drain in-flight requests; close DB connections before exit</td></tr>
+      <tr><td><strong>Docker</strong></td><td>Multi-stage build; run as non-root user; <code>.dockerignore</code></td></tr>
+      <tr><td><strong>CI/CD</strong></td><td>GitHub Actions: test → lint → build image → push → deploy</td></tr>
+      <tr><td><strong>Monitoring</strong></td><td><code>GET /health</code> endpoint for K8s liveness/readiness probes; Datadog APM; Sentry for errors</td></tr>
+      <tr><td><strong>API</strong></td><td>Version prefix (<code>/api/v1</code>); <code>x-request-id</code> header for distributed tracing</td></tr>
+    </table></div>
+    <div class="box nd"><div class="bxt">Why graceful shutdown matters</div><p>Kubernetes sends SIGTERM during every rolling deployment. Without a handler, in-flight requests get hard failures mid-response during every deploy. The <code>server.close()</code> call stops accepting <em>new</em> connections while existing ones finish. The 10-second force-kill ensures the pod actually terminates even if a handler hangs, letting K8s proceed with the rollout.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>app.js = Express setup. server.js = entry point. Joi validates env on boot &mdash; fail loud. Winston JSON → searchable in Datadog. SIGTERM → server.close() → drain DB → exit(0). Force-kill timeout prevents stuck pods blocking K8s rollouts.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 6 — V8 & MEMORY
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch6">Chapter 6 &mdash; V8 &amp; Memory</div>
+
+  <div class="sec" id="t16">
+    <div class="snum">T16 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>V8 internals &amp; garbage collection &mdash; what every Node.js senior must know</h2>
+    <p>V8 compiles JavaScript to machine code in two stages. Understanding this explains why some JS patterns are fast and others silently kill throughput.</p>
+    <div class="tw"><table>
+      <tr><th>Stage</th><th>Name</th><th>What it does</th></tr>
+      <tr><td><strong>1</strong></td><td>Ignition (interpreter)</td><td>Parses JS → bytecode. Fast startup, no optimisation yet.</td></tr>
+      <tr><td><strong>2</strong></td><td>TurboFan (JIT compiler)</td><td>Watches hot functions via profiling feedback. Compiles to optimised machine code for the observed types.</td></tr>
+      <tr><td><strong>Deopt</strong></td><td>Deoptimisation</td><td>If assumptions change (type changes), TurboFan discards the optimised code and falls back to Ignition.</td></tr>
+    </table></div>
+    <p><strong>Hidden classes (Shapes)</strong> &mdash; V8 assigns a hidden class to every object based on its property layout. Objects with the same properties in the same order share a hidden class, enabling fast property access via a fixed offset.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Hidden classes &amp; deoptimisation</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ✓ Same hidden class — V8 can use fixed offset lookup</span>
+<span class="ck">const</span> a = { x: <span class="cn">1</span>, y: <span class="cn">2</span> };
+<span class="ck">const</span> b = { x: <span class="cn">3</span>, y: <span class="cn">4</span> };
+
+<span class="cr">// ✗ Different hidden class — different property-addition order breaks sharing</span>
+<span class="ck">const</span> c = { x: <span class="cn">1</span>, y: <span class="cn">2</span> };
+<span class="ck">const</span> d = { y: <span class="cn">4</span>, x: <span class="cn">3</span> }; <span class="cc">// y first — new hidden class</span>
+
+<span class="cr">// ✗ delete kills the hidden class — fallback to slow dictionary mode</span>
+<span class="ck">delete</span> c.x;
+
+<span class="cr">// ✗ Type change forces deoptimisation</span>
+<span class="ck">function</span> add(a, b) { <span class="ck">return</span> a + b; }
+add(<span class="cn">1</span>, <span class="cn">2</span>);       <span class="cc">// TurboFan optimises for int + int</span>
+add(<span class="cs">'x'</span>, <span class="cs">'y'</span>);  <span class="cc">// type change → deopt → back to Ignition</span></pre></div>
+    <p><strong>Garbage collection &mdash; two-generation model:</strong></p>
+    <div class="tw"><table>
+      <tr><th>Generation</th><th>GC algorithm</th><th>When it runs</th><th>Pause</th></tr>
+      <tr><td><strong>Young (nursery)</strong></td><td>Scavenger (Cheney's algorithm — copy-collect)</td><td>Frequently — new allocations fill it fast</td><td>~1 ms</td></tr>
+      <tr><td><strong>Old (tenured)</strong></td><td>Mark-Sweep-Compact</td><td>Less often — only objects that survive 2+ young GCs are promoted</td><td>10–100 ms</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; process.memoryUsage() breakdown</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> m = process.memoryUsage();
+<span class="cc">// rss          — Resident Set Size: total memory held by the process (heap + stack + C++ objects)</span>
+<span class="cc">// heapTotal    — total V8 heap capacity allocated (committed pages)</span>
+<span class="cc">// heapUsed     — V8 heap actually in use by JS objects right now</span>
+<span class="cc">// external     — C++ objects bound to JS (e.g. Buffer data lives here, not in heapUsed)</span>
+<span class="cc">// arrayBuffers — subset of external used by ArrayBuffer / SharedArrayBuffer</span>
+
+<span class="cc">// Memory leak signal: heapUsed grows on every request and never shrinks after GC</span>
+<span class="cc">// Tune heap ceiling:  node --max-old-space-size=4096 app.js  (4 GB old gen limit)</span></pre></div>
+    <div class="box am"><div class="bxt">Inline caching (IC) states</div><p><strong>Monomorphic</strong> — one type seen, fully optimised. <strong>Polymorphic</strong> — 2–4 types, still fast. <strong>Megamorphic</strong> — 5+ types, V8 gives up optimising, uses generic slow path. Keep hot functions monomorphic: always call them with the same argument shapes.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Ignition → bytecode. TurboFan → optimised machine code for observed types. Type change = deopt. <code>delete</code> = dictionary mode. Young GC ~1 ms; Old GC 10–100 ms. <code>heapUsed</code> growing without bound = memory leak. <code>external</code> = Buffer data. <code>--max-old-space-size</code> = old gen ceiling.</p></div>
+  </div>
+
+  <div class="sec" id="t17">
+    <div class="snum">T17 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>Memory profiling &amp; diagnostics &mdash; finding leaks and CPU bottlenecks in production</h2>
+    <p>Knowing tools exist is not enough. Seniors are expected to describe the exact workflow for diagnosing a leak or CPU spike they received a 3 AM alert for.</p>
+    <div class="tw"><table>
+      <tr><th>Tool</th><th>What it diagnoses</th><th>How to trigger</th></tr>
+      <tr><td><code>--inspect</code></td><td>Heap snapshot, CPU profile, live object graph</td><td><code>node --inspect app.js</code> → open <code>chrome://inspect</code></td></tr>
+      <tr><td><code>--prof</code></td><td>V8 CPU profile (tick-based sampler)</td><td><code>node --prof app.js</code> → <code>node --prof-process isolate-*.log</code></td></tr>
+      <tr><td><code>clinic doctor</code></td><td>Event loop blockage, async overhead, I/O wait</td><td><code>clinic doctor -- node app.js</code></td></tr>
+      <tr><td><code>clinic flame</code></td><td>CPU flame graph &mdash; hot functions</td><td><code>clinic flame -- node app.js</code></td></tr>
+      <tr><td><code>--report-on-signal</code></td><td>Diagnostic report on demand without killing process</td><td><code>kill -SIGUSR2 &lt;pid&gt;</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Workflow &mdash; diagnosing a memory leak</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Step 1: Attach inspector to running process (no restart needed)</span>
+<span class="cc">// Start with:  node --inspect=0.0.0.0:9229 app.js</span>
+<span class="cc">// OR signal:   kill -SIGUSR1 &lt;pid&gt;  (enables inspector on running process)</span>
+
+<span class="cc">// Step 2: chrome://inspect → Open dedicated DevTools for Node</span>
+<span class="cc">// Step 3: Memory tab → Take heap snapshot (baseline)</span>
+<span class="cc">// Step 4: Trigger the leaky operation (e.g. send 100 requests)</span>
+<span class="cc">// Step 5: Force GC → Take second heap snapshot</span>
+<span class="cc">// Step 6: Switch to "Comparison" view — retained objects with no GC path = leak</span>
+
+<span class="cc">// Key terms in heap snapshot:</span>
+<span class="cc">// Shallow size  — memory the object itself occupies</span>
+<span class="cc">// Retained size — memory that would be freed if this object were collected</span>
+<span class="cc">//                 (includes everything only reachable through this object)</span>
+<span class="cc">// Dominators    — objects that retain the most memory; fix these first</span>
+
+<span class="cc">// High-resolution timing for benchmarks</span>
+<span class="ck">const</span> start = process.hrtime.bigint();
+doWork();
+<span class="ck">const</span> ns = process.hrtime.bigint() - start;
+console.log(<span class="cs">`${ns / 1_000_000n} ms`</span>);</pre></div>
+    <div class="box sk"><div class="bxt">Diagnosing event loop blockage</div><p>A blocked event loop shows up as latency spikes with no corresponding CPU usage — requests queue up but the server looks idle. Run <code>clinic doctor</code>: it instruments the event loop timer and reports the delay between expected and actual callback execution. Anything over 10 ms consistently is a problem worth investigating with <code>clinic flame</code>.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Memory leak workflow: snapshot baseline → trigger leak → force GC → snapshot again → Comparison view → sort by retained size. <code>kill -SIGUSR1 &lt;pid&gt;</code> enables inspector on live process. Retained size = what you actually free by fixing the leak. Clinic doctor = event loop delay. Clinic flame = CPU hot path.</p></div>
+  </div>
+
+  <div class="sec" id="t18">
+    <div class="snum">T18 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>libuv thread pool &mdash; size, what uses it, and how to tune it</h2>
+    <p>The event loop is single-threaded but <strong>libuv maintains a thread pool</strong> (default: 4 threads) for operations the OS cannot handle asynchronously. Understanding what lives in the thread pool and what does not is the difference between a senior and a mid-level Node.js engineer.</p>
+    <div class="tw"><table>
+      <tr><th>Uses thread pool</th><th>Does NOT use thread pool</th></tr>
+      <tr><td><code>fs.*</code> (all file system operations)</td><td>TCP / UDP network I/O (uses epoll / kqueue / IOCP directly)</td></tr>
+      <tr><td><code>dns.lookup()</code> (hostname resolution)</td><td><code>dns.resolve()</code> (uses OS async, bypasses pool)</td></tr>
+      <tr><td><code>crypto</code> — <code>pbkdf2</code>, <code>scrypt</code>, <code>randomBytes</code></td><td><code>http.get()</code> / <code>https.get()</code> (network, not pool)</td></tr>
+      <tr><td><code>zlib</code> — compress / decompress</td><td><code>setTimeout</code>, <code>setImmediate</code> (timer, not pool)</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Thread pool starvation scenario</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// Default thread pool = 4 threads</span>
+<span class="cc">// If 4 slow fs.readFile calls are in-flight, the 5th queues — even though</span>
+<span class="cc">// the event loop is completely free. This is invisible without profiling.</span>
+
+<span class="cc">// Classic trap: every request makes a dns.lookup() internally</span>
+<span class="cc">// (axios and node-fetch do this per request if you pass a hostname)</span>
+<span class="cc">// Under load: 4 threads busy → all other dns lookups queue → latency spikes</span>
+
+<span class="cc">// ── Diagnosis ──</span>
+<span class="cc">// clinic doctor will show: "I/O wait" spikes even though CPU is low</span>
+<span class="cc">// The event loop isn't blocked — the thread pool is</span>
+
+<span class="cc">// ── Fix 1: increase thread pool size ──</span>
+<span class="cc">// UV_THREADPOOL_SIZE=16 node app.js</span>
+<span class="cc">// Max useful value ≈ number of CPU cores × 4 (or I/O depth you need)</span>
+<span class="cc">// Increasing beyond available CPU cores adds context-switching overhead</span>
+
+<span class="cc">// ── Fix 2: use dns.resolve() instead of dns.lookup() ──</span>
+<span class="ck">const</span> dns = require(<span class="cs">'dns'</span>).promises;
+<span class="cc">// dns.lookup()   → thread pool (libc getaddrinfo)</span>
+<span class="cc">// dns.resolve4() → OS async resolver, bypasses thread pool entirely</span>
+
+<span class="cc">// ── Fix 3: pre-resolve hostnames and reuse IP connections ──</span>
+<span class="cc">// Use a custom HTTP agent with keepAlive:true — reuse existing TCP connections</span>
+<span class="cc">// so dns.lookup() only runs once per connection, not per request</span></pre></div>
+    <div class="box am"><div class="bxt">The interview trick question</div><p>"Why is my Node.js app slow even though the event loop shows no blockage?" — Thread pool starvation. The event loop is free, but all 4 libuv threads are occupied with <code>fs</code> or <code>dns.lookup()</code> calls. New requests aren't blocked at the JS layer; they're blocked waiting for a thread. <code>UV_THREADPOOL_SIZE</code> is the fix.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Thread pool size = 4 by default. fs + dns.lookup + crypto + zlib = thread pool. Network I/O = OS async, NOT thread pool. Starvation = event loop free but I/O queuing. Fix: <code>UV_THREADPOOL_SIZE=16</code>. Use <code>dns.resolve4()</code> instead of <code>dns.lookup()</code> to skip the pool for DNS.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 7 — ASYNC & STREAMS DEPTH
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch7">Chapter 7 &mdash; Async &amp; Streams Depth</div>
+
+  <div class="sec" id="t19">
+    <div class="snum">T19 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>Async patterns depth &mdash; Promise combinators, AbortController, async generators</h2>
+    <div class="tw"><table>
+      <tr><th>Combinator</th><th>Resolves when</th><th>Rejects when</th><th>Use case</th></tr>
+      <tr><td><code>Promise.all</code></td><td>All resolve</td><td><strong>Any one rejects</strong> (fast-fail)</td><td>Parallel independent tasks where all must succeed</td></tr>
+      <tr><td><code>Promise.allSettled</code></td><td>All settle (resolve or reject)</td><td>Never rejects</td><td>Fan-out where you need all results including failures</td></tr>
+      <tr><td><code>Promise.race</code></td><td>First to settle (win or lose)</td><td>First to reject</td><td>Timeout pattern, first-available-server</td></tr>
+      <tr><td><code>Promise.any</code></td><td>First to <em>resolve</em></td><td>All reject (AggregateError)</td><td>Try multiple CDN mirrors, use whichever responds first</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; AbortController, async generators, unhandled rejection</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── AbortController: cancellable async operations ──</span>
+<span class="ck">const</span> controller = <span class="ck">new</span> AbortController();
+<span class="ck">const</span> { signal } = controller;
+
+setTimeout(() => controller.abort(), <span class="cn">3000</span>); <span class="cc">// cancel after 3s</span>
+
+<span class="ck">try</span> {
+  <span class="ck">const</span> res = <span class="ck">await</span> fetch(url, { signal });   <span class="cc">// fetch respects AbortSignal</span>
+  <span class="ck">const</span> data = <span class="ck">await</span> res.json();
+} <span class="ck">catch</span> (err) {
+  <span class="ck">if</span> (err.name === <span class="cs">'AbortError'</span>) console.log(<span class="cs">'Request timed out'</span>);
+}
+
+<span class="cc">// Pass signal to your own long ops too</span>
+<span class="ck">async function</span> longOp(signal) {
+  <span class="ck">for</span> (<span class="ck">let</span> i = <span class="cn">0</span>; i &lt; <span class="cn">1000</span>; i++) {
+    signal.throwIfAborted(); <span class="cc">// throws AbortError if cancelled</span>
+    <span class="ck">await</span> processItem(i);
+  }
+}
+
+<span class="cc">// ── Async generators: produce values lazily over time ──</span>
+<span class="ck">async function</span>* paginatedUsers(pageSize) {
+  <span class="ck">let</span> page = <span class="cn">0</span>, hasMore = <span class="ck">true</span>;
+  <span class="ck">while</span> (hasMore) {
+    <span class="ck">const</span> rows = <span class="ck">await</span> db.query(<span class="cs">'SELECT * FROM users LIMIT ? OFFSET ?'</span>,
+                               [pageSize, page * pageSize]);
+    <span class="ck">yield</span>* rows;
+    hasMore = rows.length === pageSize;
+    page++;
+  }
+}
+
+<span class="ck">for await</span> (<span class="ck">const</span> user <span class="ck">of</span> paginatedUsers(<span class="cn">100</span>)) {
+  <span class="cc">// processes one page at a time — never loads all rows into memory</span>
+  <span class="ck">await</span> processUser(user);
+}
+
+<span class="cc">// ── Unhandled rejection behaviour change ──</span>
+<span class="cc">// Node 14: warning printed, process continues (dangerous silent failures)</span>
+<span class="cc">// Node 15+: unhandled rejection = process.exit(1) by default</span>
+<span class="cc">// Best practice: always handle rejections; global handler as last resort:</span>
+process.on(<span class="cs">'unhandledRejection'</span>, (reason) => {
+  logger.error(<span class="cs">'Unhandled rejection'</span>, { reason });
+  server.close(() => process.exit(<span class="cn">1</span>));
+});</pre></div>
+    <div class="box em"><div class="bxt">Promise.allSettled vs Promise.all — the real-world distinction</div><p>Use <code>Promise.all</code> when all tasks must succeed — e.g. fetching required data before rendering. Use <code>Promise.allSettled</code> for fan-out notifications (send email + SMS + push) where a failure of one channel shouldn't prevent the others from reporting their result. <code>allSettled</code> always resolves; inspect each result's <code>status</code> field (<code>'fulfilled'</code> or <code>'rejected'</code>) individually.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>all</code> = fast-fail on any rejection. <code>allSettled</code> = always resolves, check each status. <code>race</code> = first to settle. <code>any</code> = first to resolve. AbortController + AbortSignal = cooperative cancellation. Async generators = lazy async sequence, great for pagination. Node 15+ exits on unhandled rejection — always have a global handler.</p></div>
+  </div>
+
+  <div class="sec" id="t20">
+    <div class="snum">T20 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>Stream internals &mdash; flowing vs paused, highwater mark, pipeline() vs pipe()</h2>
+    <p>Your existing T6 covers the surface. Seniors must know the <em>mechanism</em> that makes streams work.</p>
+    <p><strong>Readable stream modes:</strong> A Readable starts in <strong>paused mode</strong>. It switches to <strong>flowing mode</strong> when you attach a <code>'data'</code> event listener, call <code>.resume()</code>, or pipe it. In flowing mode data is emitted as fast as produced. In paused mode you must call <code>.read()</code> explicitly to consume chunks.</p>
+    <div class="tw"><table>
+      <tr><th>Concept</th><th>What it is</th><th>Default</th></tr>
+      <tr><td><strong>Highwater mark</strong></td><td>Target buffer size in bytes (Readable) or objects (object mode). When internal buffer reaches this, <code>.write()</code> returns <code>false</code> — triggering backpressure</td><td>16 KB (bytes), 16 (object mode)</td></tr>
+      <tr><td><strong>Flowing mode</strong></td><td>Data emitted automatically as <code>'data'</code> events</td><td>Off until listener attached or <code>.resume()</code> called</td></tr>
+      <tr><td><strong>Paused mode</strong></td><td>Data pulled manually with <code>.read(n)</code></td><td>Default initial state</td></tr>
+      <tr><td><strong>Object mode</strong></td><td>Stream passes JS objects, not Buffers/strings</td><td>Off; enable with <code>{ objectMode: true }</code></td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; pipeline() vs pipe(), Transform stream, object mode</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> { pipeline } = require(<span class="cs">'node:stream/promises'</span>);
+<span class="ck">const</span> { Transform } = require(<span class="cs">'node:stream'</span>);
+
+<span class="cr">// ✗ pipe() — does NOT propagate errors; source error leaves destination open</span>
+readable.pipe(transform).pipe(writable);
+<span class="cc">// if readable errors, writable is never .destroy()-ed → file descriptor leak</span>
+
+<span class="cg">// ✓ pipeline() — destroys all streams in chain on any error</span>
+<span class="ck">await</span> pipeline(readable, transform, writable);
+<span class="cc">// on error: all streams in chain are destroyed automatically</span>
+
+<span class="cc">// ── Custom Transform stream ──</span>
+<span class="ck">class</span> UpperCase <span class="ck">extends</span> Transform {
+  _transform(chunk, encoding, callback) {
+    <span class="ck">this</span>.push(chunk.toString().toUpperCase());
+    callback(); <span class="cc">// signal chunk is processed — ready for next</span>
+  }
+}
+
+<span class="cc">// ── Object mode: stream JS objects not Buffers ──</span>
+<span class="ck">const</span> { Readable } = require(<span class="cs">'node:stream'</span>);
+<span class="ck">const</span> objectStream = Readable.from(
+  [{ id: <span class="cn">1</span> }, { id: <span class="cn">2</span> }, { id: <span class="cn">3</span> }],
+  { objectMode: <span class="ck">true</span> }
+);
+
+<span class="cc">// ── Readable.from() — wrap any async iterable as a stream ──</span>
+<span class="ck">async function</span>* generateRows() {
+  <span class="ck">let</span> cursor = <span class="ck">await</span> db.cursor(<span class="cs">'SELECT * FROM large_table'</span>);
+  <span class="ck">while</span> (<span class="ck">await</span> cursor.hasNext()) <span class="ck">yield await</span> cursor.next();
+}
+<span class="ck">const</span> rowStream = Readable.from(generateRows());
+<span class="ck">await</span> pipeline(rowStream, csvTransform, res); <span class="cc">// stream DB rows to HTTP response</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p>Readable starts paused; attach <code>'data'</code> listener → flowing mode. Highwater mark = buffer target (16 KB), not hard limit. <code>pipe()</code> does not propagate errors — file descriptor leaks. <code>pipeline()</code> destroys all streams on error — always prefer it. Object mode = stream any JS value. <code>Readable.from(asyncIterable)</code> = stream from async generator.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 8 — MODULE SYSTEM & BUFFER
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch8">Chapter 8 &mdash; Module System &amp; Buffer</div>
+
+  <div class="sec" id="t21">
+    <div class="snum">T21 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2><code>require()</code> internals &mdash; resolution algorithm, module cache, circular dependencies</h2>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">Text &mdash; require() resolution algorithm</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre>require('./foo')  →  exact file: ./foo.js  →  ./foo.json  →  ./foo.node
+                  →  directory:  ./foo/index.js  →  ./foo/package.json (main field)
+
+require('express') →  node_modules/express  in:
+  1. ./node_modules/
+  2. ../node_modules/
+  3. ../../node_modules/
+  ... walks up to filesystem root
+
+Built-ins (require('fs'), require('path')) → resolved first, before node_modules</pre></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Module cache &amp; circular dependencies</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── Module cache — require() is synchronous and cached ──</span>
+require(<span class="cs">'./db'</span>);  <span class="cc">// runs module code, caches the export</span>
+require(<span class="cs">'./db'</span>);  <span class="cc">// returns cached export — module code does NOT run again</span>
+
+<span class="cc">// Inspect/clear the cache (use sparingly — e.g. in tests)</span>
+console.log(Object.keys(require.cache));  <span class="cc">// all loaded module paths</span>
+<span class="ck">delete</span> require.cache[require.resolve(<span class="cs">'./config'</span>)]; <span class="cc">// force re-require</span>
+
+<span class="cc">// ── Singleton via module cache ──</span>
+<span class="cc">// db.js — exporting an instance, not a class</span>
+<span class="cc">// module.exports = new Database(); → every require('db') gets same instance</span>
+
+<span class="cc">// ── Circular dependency — what actually happens ──</span>
+<span class="cc">// a.js:  const b = require('./b');  exports.done = false;  → ...  exports.done = true</span>
+<span class="cc">// b.js:  const a = require('./a');  console.log(a.done);   ← prints false!</span>
+<span class="cc">//</span>
+<span class="cc">// When b.js requires a.js while a.js is still loading, Node returns</span>
+<span class="cc">// the PARTIAL export of a.js (only what has been assigned so far).</span>
+<span class="cc">// This does NOT throw — it silently returns an incomplete object.</span>
+<span class="cc">// Fix: restructure to avoid the cycle, or use lazy requires inside functions.</span>
+
+<span class="cc">// ── require() is synchronous — startup cost ──</span>
+<span class="cc">// Every require() reads and evaluates the file synchronously.</span>
+<span class="cc">// 1000 modules at startup = 1000 synchronous file reads.</span>
+<span class="cc">// Solution: lazy-require inside functions for rarely-used heavy modules.</span>
+<span class="ck">function</span> generatePDF() {
+  <span class="ck">const</span> pdfLib = require(<span class="cs">'puppeteer'</span>); <span class="cc">// only loads when first called</span>
+}</pre></div>
+    <div class="box nd"><div class="bxt">Monkey-patching via module cache</div><p>Because <code>require.cache</code> holds the actual exported object, you can modify it to intercept calls — useful in testing and instrumentation. Libraries like <code>sinon</code> and APM agents (Datadog, New Relic) use this to wrap exported functions without you changing your code. This is also why Jest's <code>jest.mock()</code> works: it replaces the cached module before your code requires it.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Resolution order: exact file → .js / .json / .node → index.js → walk up node_modules. Cache key = resolved absolute path. Circular deps = partial export silently. <code>require()</code> is sync = startup cost — lazy-require heavy modules. Module cache = basis for Singletons, monkey-patching, and test mocking.</p></div>
+  </div>
+
+  <div class="sec" id="t22">
+    <div class="snum">T22 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>Buffer internals &mdash; alloc vs allocUnsafe, zero-copy, TypedArray relationship</h2>
+    <p><code>Buffer</code> is Node.js's way of handling raw binary data. It predates <code>TypedArray</code>; today Buffer is a subclass of <code>Uint8Array</code>. Understanding the memory implications separates senior engineers from mid-level.</p>
+    <div class="tw"><table>
+      <tr><th>API</th><th>Memory initialised?</th><th>Performance</th><th>Use when</th></tr>
+      <tr><td><code>Buffer.alloc(n)</code></td><td>Yes — filled with zeros</td><td>Slower</td><td>Security-sensitive data; memory shown to untrusted users</td></tr>
+      <tr><td><code>Buffer.allocUnsafe(n)</code></td><td><strong>No</strong> — contains previous process memory</td><td>Faster (~10×)</td><td>Buffer you immediately overwrite (e.g. read target for fs)</td></tr>
+      <tr><td><code>Buffer.from(data)</code></td><td>Copies data into new buffer</td><td>Medium</td><td>Creating buffer from existing string/array/buffer</td></tr>
+    </table></div>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Buffer, TypedArray, zero-copy</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cr">// ✗ Security risk: allocUnsafe can expose old memory contents</span>
+<span class="ck">const</span> buf = Buffer.allocUnsafe(<span class="cn">100</span>);
+res.send(buf); <span class="cc">// might send memory from a previous request's password!</span>
+
+<span class="cg">// ✓ Safe: alloc zeros out the memory first</span>
+<span class="ck">const</span> buf = Buffer.alloc(<span class="cn">100</span>);
+
+<span class="cc">// ── Buffer IS a Uint8Array (subclass) ──</span>
+<span class="ck">const</span> buf = Buffer.from([<span class="cn">1</span>, <span class="cn">2</span>, <span class="cn">3</span>]);
+console.log(buf <span class="ck">instanceof</span> Uint8Array); <span class="cc">// true</span>
+console.log(buf <span class="ck">instanceof</span> Buffer);     <span class="cc">// true</span>
+
+<span class="cc">// ── Zero-copy: share underlying ArrayBuffer without copying ──</span>
+<span class="ck">const</span> ab  = <span class="ck">new</span> ArrayBuffer(<span class="cn">16</span>);
+<span class="ck">const</span> buf = Buffer.from(ab);   <span class="cc">// shares the same memory — no copy</span>
+<span class="ck">const</span> u8  = <span class="ck">new</span> Uint8Array(ab); <span class="cc">// also shares — writes in one are visible in others</span>
+
+<span class="cc">// Node's C++ layer uses this to pass stream data to JS without copying:</span>
+<span class="cc">// fs.read() fills a C++ buffer → wraps it as a Buffer pointing to the</span>
+<span class="cc">// same memory → your 'data' handler receives it with zero copying</span>
+
+<span class="cc">// ── Buffer lives in process.memoryUsage().external — NOT heapUsed ──</span>
+<span class="cc">// This is why a Buffer-heavy app can look low on heap but have high RSS</span>
+
+<span class="cc">// ── Encoding cheatsheet ──</span>
+Buffer.from(<span class="cs">'hello'</span>).toString(<span class="cs">'hex'</span>);    <span class="cc">// → '68656c6c6f'</span>
+Buffer.from(<span class="cs">'hello'</span>).toString(<span class="cs">'base64'</span>); <span class="cc">// → 'aGVsbG8='</span>
+Buffer.from(<span class="cs">'aGVsbG8='</span>, <span class="cs">'base64'</span>).toString(); <span class="cc">// → 'hello'</span></pre></div>
+    <div class="insight"><h4>Quick recall</h4><p><code>alloc</code> = zeroed = safe. <code>allocUnsafe</code> = raw memory = fast but exposes old data if not overwritten immediately. Buffer is a Uint8Array subclass. <code>Buffer.from(arrayBuffer)</code> = zero-copy shared memory. Buffer data lives in <code>process.memoryUsage().external</code>, not <code>heapUsed</code>. High RSS + low heapUsed = Buffer memory.</p></div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CHAPTER 9 — SECURITY & HTTP INTERNALS
+  ══════════════════════════════════════ -->
+  <div class="ch-lbl" id="ch9">Chapter 9 &mdash; Security &amp; HTTP Internals</div>
+
+  <div class="sec" id="t23">
+    <div class="snum">T23 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>Prototype pollution &mdash; the Node.js-specific attack vector</h2>
+    <p>Prototype pollution is a JavaScript-specific vulnerability where an attacker injects properties into <code>Object.prototype</code> &mdash; making those properties appear on <em>all</em> objects in the process. In Node.js this can escalate from a denial-of-service to remote code execution in certain frameworks.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; Attack, consequences, and prevention</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="cc">// ── How it happens: unsafe deep merge of user-controlled input ──</span>
+<span class="ck">function</span> deepMerge(target, source) {
+  <span class="ck">for</span> (<span class="ck">const</span> key <span class="ck">in</span> source) {
+    <span class="ck">if</span> (<span class="ck">typeof</span> source[key] === <span class="cs">'object'</span>) {
+      target[key] = deepMerge(target[key] || {}, source[key]);
+    } <span class="ck">else</span> {
+      target[key] = source[key]; <span class="cr">// ← assigns to __proto__ if key is "__proto__"</span>
+    }
+  }
+}
+
+<span class="cc">// Attacker sends: { "__proto__": { "isAdmin": true } }</span>
+deepMerge({}, JSON.parse(<span class="cs">'{"__proto__":{"isAdmin":true}}'</span>));
+<span class="cc">// Now EVERY plain object in the process has .isAdmin === true</span>
+console.log({}.isAdmin); <span class="cc">// true — the entire process is compromised</span>
+
+<span class="cc">// ── Real consequence in Express ──</span>
+<span class="cc">// if (req.user.isAdmin) → true for EVERY request, even unauthenticated</span>
+
+<span class="cc">// ── Prevention ──</span>
+
+<span class="cc">// 1. Validate input with Joi/Zod before merging — reject unknown keys</span>
+
+<span class="cc">// 2. Use safe merge (check key is own property, skip __proto__ / constructor)</span>
+<span class="ck">function</span> safeMerge(target, source) {
+  <span class="ck">for</span> (<span class="ck">const</span> key <span class="ck">of</span> Object.keys(source)) { <span class="cc">// Object.keys, not for...in</span>
+    <span class="ck">if</span> (key === <span class="cs">'__proto__'</span> || key === <span class="cs">'constructor'</span> || key === <span class="cs">'prototype'</span>) <span class="ck">continue</span>;
+    target[key] = source[key];
+  }
+}
+
+<span class="cc">// 3. Use Object.create(null) for maps — no prototype chain at all</span>
+<span class="ck">const</span> cache = Object.create(<span class="ck">null</span>); <span class="cc">// no __proto__, no toString, no hasOwnProperty</span>
+cache[userInput] = value;           <span class="cg">// safe — there's nothing to pollute</span>
+
+<span class="cc">// 4. Object.freeze(Object.prototype) — prevents any additions (breaks some libs)</span>
+Object.freeze(Object.prototype);
+
+<span class="cc">// 5. Use express-mongo-sanitize to strip $ and . from req.body</span>
+<span class="cc">// 6. Keep lodash/merge updated — CVE-2019-10744 was a prototype pollution in _.merge</span></pre></div>
+    <div class="box ro"><div class="bxt">npm supply chain</div><p>Prototype pollution vulnerabilities regularly appear in popular npm packages (<code>lodash</code>, <code>hoek</code>, <code>jquery</code>, <code>minimist</code>). Run <code>npm audit</code> in CI. Pin dependency versions in <code>package-lock.json</code>. Use <code>socket.dev</code> or GitHub Dependabot for automated scanning. A transitive dependency 3 levels deep can introduce a pollution vector you never see directly.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Prototype pollution = injecting into <code>Object.prototype</code> via unsafe merge. All objects in the process inherit the injected properties. Prevention: <code>Object.keys()</code> instead of <code>for...in</code>, skip <code>__proto__</code> / <code>constructor</code> keys, use <code>Object.create(null)</code> for key-value maps, validate all input with Joi/Zod before merging.</p></div>
+  </div>
+
+  <div class="sec" id="t24">
+    <div class="snum">T24 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>HTTP Agent &amp; outbound connection pooling &mdash; the silent production killer</h2>
+    <p>Every Node.js app that calls external APIs (databases via HTTP, third-party services, internal microservices) is affected by this. Almost no interview prep material covers it, which is exactly why senior interviewers ask about it.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; HTTP Agent internals &amp; configuration</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> http  = require(<span class="cs">'http'</span>);
+<span class="ck">const</span> https = require(<span class="cs">'https'</span>);
+<span class="ck">const</span> axios = require(<span class="cs">'axios'</span>);
+
+<span class="cc">// ── Default globalAgent has maxSockets: Infinity ──</span>
+<span class="cc">// Under load: 1000 concurrent requests → 1000 TCP connections to same host</span>
+<span class="cc">// → OS port exhaustion (ephemeral ports run out ~28 000 on Linux defaults)</span>
+<span class="cc">// → ECONNREFUSED or ETIMEDOUT in production under load</span>
+
+<span class="cr">// ✗ Default — new TCP connection per request, no reuse, no limit</span>
+axios.get(<span class="cs">'https://api.stripe.com/charges'</span>); <span class="cc">// uses globalAgent</span>
+
+<span class="cg">// ✓ Custom agent: connection pooling + keep-alive</span>
+<span class="ck">const</span> agent = <span class="ck">new</span> https.Agent({
+  keepAlive:    <span class="ck">true</span>,   <span class="cc">// reuse TCP connections across requests</span>
+  maxSockets:   <span class="cn">50</span>,    <span class="cc">// max concurrent connections to same host:port</span>
+  maxFreeSockets: <span class="cn">10</span>,  <span class="cc">// idle connections kept alive in pool</span>
+  timeout:      <span class="cn">5000</span>,  <span class="cc">// socket inactivity timeout</span>
+  scheduling:   <span class="cs">'lifo'</span> <span class="cc">// lifo = reuse recently freed socket (better for keepAlive)</span>
+});
+
+<span class="cc">// Use with axios: pass as httpsAgent option</span>
+<span class="ck">const</span> client = axios.create({ httpsAgent: agent });
+
+<span class="cc">// Use with native https: pass agent per request</span>
+https.get({ hostname: <span class="cs">'api.stripe.com'</span>, path: <span class="cs">'/charges'</span>, agent }, callback);
+
+<span class="cc">// ── What keepAlive actually does ──</span>
+<span class="cc">// Without: TCP handshake (3-way) + TLS handshake (~100ms) per request</span>
+<span class="cc">// With:    reuse existing TCP+TLS connection — only HTTP overhead per request</span>
+<span class="cc">// Result:  ~50-150ms latency reduction per outbound call</span>
+
+<span class="cc">// ── Diagnosing connection pool exhaustion ──</span>
+<span class="cc">// Symptom: requests queue up, latency spikes, eventually ETIMEDOUT</span>
+<span class="cc">// Metric to watch: agent.sockets (active), agent.freeSockets (idle), agent.requests (queued)</span>
+<span class="ck">setInterval</span>(() => {
+  <span class="ck">const</span> host = <span class="cs">'api.stripe.com:443'</span>;
+  console.log({
+    active:  Object.keys(agent.sockets[host] || []).length,
+    idle:    (agent.freeSockets[host] || []).length,
+    queued:  (agent.requests[host]  || []).length,
+  });
+}, <span class="cn">5000</span>);</pre></div>
+    <div class="box sk"><div class="bxt">Common production incident pattern</div><p>App works fine in staging (low concurrency). Goes to production. Under load: all 50 <code>maxSockets</code> are in use, new requests queue. Queue grows if upstream service is slow. Memory grows. Eventually requests timeout. Fix: increase <code>maxSockets</code> for slow upstreams, add circuit breaker (Opossum) so slow service doesn't cascade, and add the queue-length metric to your Datadog dashboard.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>Default <code>http.globalAgent</code> = <code>maxSockets: Infinity</code> = unlimited TCP connections = port exhaustion under load. Fix: custom agent with <code>keepAlive: true</code> + bounded <code>maxSockets</code>. keepAlive = skip TCP+TLS handshake on reuse = ~100 ms latency saving per call. Monitor <code>agent.requests</code> queue length as a leading indicator of upstream slowness.</p></div>
+  </div>
+
+  <div class="sec" id="t25">
+    <div class="snum">T25 <span class="snum-badges"><span class="sbadge adv">Senior gap</span></span></div>
+    <h2>AsyncLocalStorage &mdash; request context propagation without prop drilling</h2>
+    <p><code>AsyncLocalStorage</code> (built on AsyncHooks) lets you store context that automatically propagates through all async calls spawned within a given scope &mdash; without passing it as a parameter. It is the production solution for request-scoped logging, tracing, and user context in Node.js.</p>
+    <div class="cb"><div class="cb-hdr"><span class="cb-lang">JavaScript &mdash; AsyncLocalStorage: request context</span><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></div><pre><span class="ck">const</span> { AsyncLocalStorage } = require(<span class="cs">'node:async_hooks'</span>);
+<span class="ck">const</span> requestContext = <span class="ck">new</span> AsyncLocalStorage();
+
+<span class="cc">// ── Middleware: start a new context store for every request ──</span>
+app.use((req, res, next) => {
+  <span class="ck">const</span> store = {
+    requestId: req.headers[<span class="cs">'x-request-id'</span>] || crypto.randomUUID(),
+    userId:    req.user?.id,
+    startTime: Date.now(),
+  };
+  requestContext.run(store, next); <span class="cc">// all async work from next() shares this store</span>
+});
+
+<span class="cc">// ── Anywhere deep in the call stack — no parameters needed ──</span>
+<span class="ck">class</span> UserService {
+  <span class="ck">async</span> getUser(id) {
+    <span class="ck">const</span> { requestId, userId } = requestContext.getStore();
+    logger.info(<span class="cs">'Fetching user'</span>, { requestId, caller: userId }); <span class="cg">// ← always correct</span>
+    <span class="ck">return</span> db.findById(id);
+  }
+}
+
+<span class="ck">class</span> PaymentRepository {
+  <span class="ck">async</span> charge(amount) {
+    <span class="ck">const</span> { requestId } = requestContext.getStore();
+    <span class="cc">// requestId automatically flows through .then(), await, setTimeout, etc.</span>
+    <span class="ck">return</span> stripeClient.create(amount, { idempotencyKey: requestId });
+  }
+}
+
+<span class="cc">// ── Works across all async boundaries ──</span>
+<span class="ck">async function</span> handler(req, res) {
+  <span class="cc">// requestContext.getStore() returns the same object in:</span>
+  <span class="cc">// - await calls</span>
+  <span class="cc">// - .then() callbacks</span>
+  <span class="cc">// - setTimeout callbacks scheduled from this async tree</span>
+  <span class="cc">// - EventEmitter handlers triggered from this async tree</span>
+  <span class="ck">const</span> user = <span class="ck">await</span> userService.getUser(req.params.id);
+  res.json(user);
+}</pre></div>
+    <div class="tw"><table>
+      <tr><th></th><th>Without AsyncLocalStorage</th><th>With AsyncLocalStorage</th></tr>
+      <tr><td><strong>Pass requestId to logger</strong></td><td>Thread through every function parameter</td><td><code>requestContext.getStore().requestId</code> anywhere</td></tr>
+      <tr><td><strong>Correlate logs across services</strong></td><td>Manual — easy to forget in 1 of 20 functions</td><td>Automatic — stored once, propagates through all await chains</td></tr>
+      <tr><td><strong>Per-request DB transaction</strong></td><td>Pass <code>trx</code> parameter everywhere</td><td>Store <code>trx</code> in ALS, retrieve in repository</td></tr>
+      <tr><td><strong>Feature flags per user</strong></td><td>Thread <code>featureFlags</code> through call stack</td><td>Store once in middleware, read anywhere</td></tr>
+    </table></div>
+    <div class="box em"><div class="bxt">How it propagates</div><p>AsyncLocalStorage uses AsyncHooks under the hood. Every async resource (Promise, setTimeout, stream chunk handler, EventEmitter) tracks which async context created it. When <code>requestContext.run(store, fn)</code> is called, all async resources spawned within <code>fn</code>'s async tree — no matter how deep — inherit that store. This is propagated by V8's internal async resource tracking, not by Node.js copying data around.</p></div>
+    <div class="box nd"><div class="bxt">Interview answer</div><p>"How do you get the requestId in a repository function 5 layers deep without passing it as a parameter?" &mdash; <code>AsyncLocalStorage</code>. Create one instance per concern (logger, tracing, transaction), set the store in middleware with <code>.run()</code>, read it anywhere with <code>.getStore()</code>. It propagates automatically through all <code>await</code>, <code>Promise.then</code>, and callback boundaries within that async tree.</p></div>
+    <div class="insight"><h4>Quick recall</h4><p>AsyncLocalStorage = request-scoped global without globals. <code>store.run(value, fn)</code> = set context. <code>store.getStore()</code> = read it anywhere in that async tree. Propagates through await, .then(), setTimeout, EventEmitter automatically. Use cases: request ID, user context, DB transaction, per-request feature flags.</p></div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// Active sidebar highlight on scroll
+const sections = document.querySelectorAll('.sec[id]');
+const navItems = document.querySelectorAll('.ni[href^="#"]');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const link = document.querySelector(`.ni[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
